@@ -4,5 +4,5 @@ using UnityEngine;
 
 public class Drain : Module
 {
-    public float rate;
+    
 }

@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Station : Module
+public class ResourceObject
 {
-
+    public Resource Resource { get; private set; }
 }

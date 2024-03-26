@@ -2,7 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Station : Module
+[CreateAssetMenu]
+public class Resource : ScriptableObject
 {
-
+    public Color color;
 }
