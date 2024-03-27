@@ -37,9 +37,9 @@ public class EventManager : MonoBehaviour
             m_events.SubtractTimeFromEvents(m_event.m_executionTime);
             //Second: Update the global time by adding the time
             m_timeManager.ProgressTime(m_event.m_executionTime);
+            //Else, nothing to do here! The modules will update the simulation state automatically
         }
 
-        //Else, nothing to do here! The modules will update the simulation state automatically
     }
 
 

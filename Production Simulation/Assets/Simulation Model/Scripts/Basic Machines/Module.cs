@@ -10,10 +10,6 @@ public class Module : SimulationObject
     [SerializeField]
     public List<Resource> resources = new List<Resource>();
     [SerializeField]
-    public List<float> resourceProcessingTimes = new List<float>();
-    [SerializeField]
-    public List<float> resourceSetupTimes = new List<float>();
-    [SerializeField]
     public int capacity = 1;
 
     [SerializeField]
@@ -30,6 +26,7 @@ public class Module : SimulationObject
     //Event system: The modules schedule an event with the event manager
     [HideInInspector]
     protected EventManager e_manager;
+    private bool e_callback = false;
 
 
     public void Start()
@@ -52,10 +49,14 @@ public class Module : SimulationObject
         //Check event queue. If the current state is managed in an event, we dont execute this function.
         //The occupied state means that the module is currently paused by the time specified in the dispatched event.
 
-        if (GetSTATE()!=STATE.OCCUPIED && !disableCTRL)
+        //Also, only execute if there has been an event callback this frame
+
+        if (GetSTATE()!=STATE.OCCUPIED && !disableCTRL && resourceArray.Count != 0 && e_callback)
         {
             UpdateCTRL();
         }
+        //Rest the check
+        e_callback = false;
     }
 
 
@@ -63,13 +64,11 @@ public class Module : SimulationObject
     //Can be called by previous or succeding modules to trigger I/O controls
     public override void UpdateCTRL()
     {
-
-        //Nothing to do if there are no resources present
-        if (resourceArray.Count == 0)
+        if(disableCTRL)
         {
             return;
         }
-
+        //Nothing to do if there are no resources present
         //We want to update the network in this step. This means that if theres currently a blockage of the system, we have to notify adjacent modules.
         //We do this by using in- and output controls.
 
@@ -178,8 +177,7 @@ public class Module : SimulationObject
     //A scheduled event was performed, do the action (callback by the event system).
     public virtual void EventCallback(Event r_event)
     {
-        //Blocked is the standard state
-        SetSTATE(STATE.BLOCKED);
+        e_callback = true;
     }
 
     //Update the state based on the resourceArray state and event queue

@@ -70,7 +70,7 @@ public class SortedList : MonoBehaviour
         string s_out = "";
         foreach (var eventObj in events)
         {
-            s_out += $"Event: {eventObj.m_eventType}, ExecutionTime: {eventObj.m_executionTime}\n";
+            s_out += $"Event: {eventObj.m_eventType}, ExecutionTime: {eventObj.m_executionTime}";
         }
         return s_out;
     }

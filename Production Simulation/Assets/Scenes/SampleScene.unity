@@ -224,8 +224,6 @@ MonoBehaviour:
   - {fileID: 1668069853}
   resources:
   - {fileID: 11400000, guid: 0726eea8b00e33749b6a2a8a5599bd83, type: 2}
-  resourceProcessingTimes: []
-  resourceSetupTimes: []
   capacity: 1
   disableCTRL: 0
   producing: 1
@@ -533,11 +531,12 @@ MonoBehaviour:
   - {fileID: 1441364489}
   resources:
   - {fileID: 11400000, guid: 0726eea8b00e33749b6a2a8a5599bd83, type: 2}
-  resourceProcessingTimes: []
-  resourceSetupTimes: []
   capacity: 1
   disableCTRL: 0
   producing: 1
+  resourceProcessingTimes:
+  - 3
+  resourceSetupTimes: []
 --- !u!1 &611330097
 GameObject:
   m_ObjectHideFlags: 0
@@ -572,12 +571,10 @@ MonoBehaviour:
   - {fileID: 1462354050}
   resources:
   - {fileID: 11400000, guid: 0726eea8b00e33749b6a2a8a5599bd83, type: 2}
-  resourceProcessingTimes: []
-  resourceSetupTimes: []
   capacity: 1
   disableCTRL: 0
   producing: 0
-  creationRate: 0.2
+  creationRate: 0.05
   creationType: {fileID: 11400000, guid: 0726eea8b00e33749b6a2a8a5599bd83, type: 2}
 --- !u!212 &611330099
 SpriteRenderer:
@@ -747,11 +744,12 @@ MonoBehaviour:
   - {fileID: 77522585}
   resources:
   - {fileID: 11400000, guid: 0726eea8b00e33749b6a2a8a5599bd83, type: 2}
-  resourceProcessingTimes: []
-  resourceSetupTimes: []
   capacity: 1
   disableCTRL: 0
   producing: 1
+  resourceProcessingTimes:
+  - 6
+  resourceSetupTimes: []
 --- !u!1 &1441364488
 GameObject:
   m_ObjectHideFlags: 0
@@ -786,11 +784,12 @@ MonoBehaviour:
   - {fileID: 77522585}
   resources:
   - {fileID: 11400000, guid: 0726eea8b00e33749b6a2a8a5599bd83, type: 2}
-  resourceProcessingTimes: []
-  resourceSetupTimes: []
   capacity: 1
   disableCTRL: 0
   producing: 1
+  resourceProcessingTimes:
+  - 2
+  resourceSetupTimes: []
 --- !u!212 &1441364490
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -960,8 +959,6 @@ MonoBehaviour:
   - {fileID: 802338551}
   resources:
   - {fileID: 11400000, guid: 0726eea8b00e33749b6a2a8a5599bd83, type: 2}
-  resourceProcessingTimes: []
-  resourceSetupTimes: []
   capacity: 5
   disableCTRL: 0
   producing: 0
@@ -998,8 +995,6 @@ MonoBehaviour:
   connectedObjects: []
   resources:
   - {fileID: 11400000, guid: 0726eea8b00e33749b6a2a8a5599bd83, type: 2}
-  resourceProcessingTimes: []
-  resourceSetupTimes: []
   capacity: 200
   disableCTRL: 1
   producing: 0

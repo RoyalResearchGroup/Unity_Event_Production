@@ -10,6 +10,7 @@ public class Source : Module
 
     public override void EventCallback(Event r_event)
     {
+        base.EventCallback(r_event);
         //Finished creating, out blocked
         SetSTATE(STATE.BLOCKED);
         //Create the resource object
