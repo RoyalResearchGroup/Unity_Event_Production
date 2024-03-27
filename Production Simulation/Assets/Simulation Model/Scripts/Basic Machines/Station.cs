@@ -20,18 +20,18 @@ public class Station : Module
     public override void LateUpdate()
     {
         base.LateUpdate();
+    }
 
-        //If the buffer is not full
-        if (resourceArray.Count < resourceArray.Limit && resourceArray.Count > 0 && GetSTATE() != STATE.OCCUPIED)
-        {
-            //Get the processing time:
-            //Index:
-            int id = resources.FindIndex(r => r == resourceArray.Peek().Resource);
-            float t = resourceProcessingTimes[id];
-            //Dispatch the Event to process the resource
-            e_manager.EnqueueEvent(new Event(t, this, EVENTTYPE.PROCESS));
-            Debug.Log(e_manager.m_events.PrintEvents());
-            SetSTATE(STATE.OCCUPIED);
-        }
+
+    public override void DispatchEvent()
+    {
+        //Get the processing time:
+        //Index:
+        int id = resources.FindIndex(r => r == resourceArray.Peek().Resource);
+        float t = resourceProcessingTimes[id];
+        //Dispatch the Event to process the resource
+        e_manager.EnqueueEvent(new Event(t, this, EVENTTYPE.PROCESS));
+        Debug.Log(e_manager.m_events.PrintEvents());
+        SetSTATE(STATE.OCCUPIED);
     }
 }

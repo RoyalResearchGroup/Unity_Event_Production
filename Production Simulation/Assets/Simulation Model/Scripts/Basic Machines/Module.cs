@@ -100,8 +100,6 @@ public class Module : SimulationObject
             //Empty for now...
         }
 
-        //Our state is now available again (we moved the resource, so theres either buffer or machine space)
-        SetSTATE(STATE.AVAILABLE);
 
         //The last thing here is to dispatch the update on the out ctrl model:
         //This ensures that all machines connected from there are up to date
@@ -112,6 +110,16 @@ public class Module : SimulationObject
         {
             return;
         }
+
+        //If we found a machine acepting our resource, we move it to this machine.
+        //Use different approach based on agent
+        if (sim_in.GetSTATE() != STATE.AGENT)
+            MoveFromModule((Module)sim_in);
+        else
+        {
+            //Empty for now...
+        }
+
         //If we found a suitable machine, we just have to call the UpdateCTRL on it.
         sim_in.UpdateCTRL();
 
@@ -190,11 +198,11 @@ public class Module : SimulationObject
         else if (resourceArray.Count != resourceArray.Limit && !producing) {
             SetSTATE(STATE.AVAILABLE);
         }
-        else
+        else if(resourceArray.Count > 0 && producing)
         {
             SetSTATE(STATE.OCCUPIED);
-            //In this case, we also have to dispatch the event!
-            //e_manager...;
+            //In this case, we also have to dispatch the event! This has to be overwritten by the module instances themselves!
+            DispatchEvent();
         }
     }
 
@@ -207,8 +215,27 @@ public class Module : SimulationObject
 
         //The other module might be a buffer or take in several resources, so we keep that in mind here.
         module.DetermineState();
+        DetermineState();
     }
 
+    //Function to move a resource from this module to another one.
+    public void MoveFromModule(Module module)
+    {
+        //Remove the resource from this machine and assign it to the target machine
+        ResourceObject res = module.resourceArray.Dequeue();
+        resourceArray.Enqueue(res);
+
+        //The other module might be a buffer or take in several resources, so we keep that in mind here.
+        module.DetermineState();
+        DetermineState();
+    }
+
+
+    //Dispatch an event
+    public virtual void DispatchEvent()
+    {
+
+    }
 
 
 
