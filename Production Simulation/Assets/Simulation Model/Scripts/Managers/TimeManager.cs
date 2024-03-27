@@ -1,18 +1,15 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 public class TimeManager : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    public float time {  get; set; }
+
+    public void ProgressTime(float dt)
     {
-        
+        time += dt;
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
 }

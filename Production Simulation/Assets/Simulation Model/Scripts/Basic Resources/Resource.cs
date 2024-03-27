@@ -5,5 +5,6 @@ using UnityEngine;
 [CreateAssetMenu]
 public class Resource : ScriptableObject
 {
-    public Color color;
+    public string r_name;
+    public Color r_color;
 }

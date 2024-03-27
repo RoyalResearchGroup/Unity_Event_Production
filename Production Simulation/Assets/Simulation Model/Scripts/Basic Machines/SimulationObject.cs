@@ -2,50 +2,63 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SimulationObject : MonoBehaviour
+public enum STATE
+{
+    AVAILABLE,
+    OCCUPIED,
+    BLOCKED,
+    SETUP,
+    AGENT
+}
+
+public abstract class SimulationObject : MonoBehaviour
 {
     // A list of modules this one is connected to
     [SerializeField]
     public List<SimulationObject> connectedObjects;
 
-    private List<SimulationObject> predecessors;
-    private List<SimulationObject> successors;
+    protected List<GameObject> predecessors = new List<GameObject>();
+    protected List<GameObject> successors = new List<GameObject>();
+
+    //State management
+    private STATE currentState = STATE.AVAILABLE;
 
 
-    public void SetupLists(SimulationObject instance)
+    //Setup the environment list (all adjacent Simulation objects)
+    public void SetupLists()
     {
-        //Initialize successors based on connected modules
-        successors = new List<SimulationObject>();
-        successors.AddRange(connectedObjects);
+        foreach(SimulationObject obj in connectedObjects)
+        {
+            successors.Add(obj.gameObject);
+        }
+
 
         //Call all successors and set this instance as predecessor
-        foreach (SimulationObject suc in successors)
+        foreach (GameObject suc in successors)
         {
-            suc.AddPredecessor(instance);
+            suc.GetComponent<SimulationObject>().AddPredecessor(gameObject);
         }
     }
-
-
-    public void AddPredecessor(SimulationObject predecessor)
+    public void AddPredecessor(GameObject predecessor)
     {
         predecessors.Add(predecessor);
     }
 
 
-    public virtual SimulationObject InputCTRL()
+    //State Machine: Every Simulation object has a state machine. In case of an agent, it has a constant state AGENT
+    public STATE GetSTATE()
     {
-        return null;
+        return currentState;
     }
 
-    //Push object out of model
-    public virtual SimulationObject OutputCTRL()
+    public void SetSTATE(STATE state)
     {
-        return null;
+        currentState = state;
     }
 
+    //These methods should be overwritten by the respectable derivate
+    public abstract SimulationObject InputCTRL();
+    public abstract SimulationObject OutputCTRL(Resource r);
     //Can be called by previous or succeding models to trigger I/O controls
-    public virtual void UpdateCTRL()
-    { 
-
-    }
+    public abstract void UpdateCTRL();
 }
