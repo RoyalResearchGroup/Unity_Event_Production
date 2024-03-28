@@ -27,6 +27,8 @@ public class EventManager : MonoBehaviour
         //Here, we process the first event in the list
         if(m_events.PeekEvent() != null)
         {
+            //DEBUG
+            Debug.Log(m_events.PrintEvents());
             //Pop the first event
             Event m_event = m_events.PopEvent();
             //Notify the module it was dispatched from (generally just a state change)

@@ -14,7 +14,10 @@ public class Station : Module
     {
         base.EventCallback(r_event);
         //Finished creating, out blocked
-        SetSTATE(STATE.BLOCKED);
+        SetSTATE(STATE.AVAILABLE);
+
+        //DEBUG:
+        GetComponent<SpriteRenderer>().color = Color.white;
     }
 
     public override void LateUpdate()
@@ -31,7 +34,8 @@ public class Station : Module
         float t = resourceProcessingTimes[id];
         //Dispatch the Event to process the resource
         e_manager.EnqueueEvent(new Event(t, this, EVENTTYPE.PROCESS));
-        Debug.Log(e_manager.m_events.PrintEvents());
-        SetSTATE(STATE.OCCUPIED);
+
+        //DEBUG:
+        GetComponent<SpriteRenderer>().color = Color.yellow;
     }
 }

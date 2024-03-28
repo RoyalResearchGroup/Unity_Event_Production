@@ -39,7 +39,6 @@ public class Module : SimulationObject
 
 
     //__________________________________________________________________________
-
     //Update here: Update and event handling
     /// <summary>
     /// IMPORTANT NOTE: We do this in the LateUpdate as the EventCallback is called in the update method. This means we can check possibly queued events in our local event queue for their state.
@@ -51,7 +50,7 @@ public class Module : SimulationObject
 
         //Also, only execute if there has been an event callback this frame
 
-        if (GetSTATE()!=STATE.OCCUPIED && !disableCTRL && resourceArray.Count != 0 && e_callback)
+        if (e_callback && resourceArray.Count>0)
         {
             UpdateCTRL();
         }
@@ -64,7 +63,7 @@ public class Module : SimulationObject
     //Can be called by previous or succeding modules to trigger I/O controls
     public override void UpdateCTRL()
     {
-        if(disableCTRL)
+        if (disableCTRL)
         {
             return;
         }
@@ -79,50 +78,58 @@ public class Module : SimulationObject
 
         //IMPORTANT: When input_ctrl is called, this decides what to do based on the inputs and calls output_ctrl on the chosen machine followed by input_ctrl to check for its own 
 
-        SetSTATE(STATE.BLOCKED);
-        SimulationObject sim_out;
-        SimulationObject sim_in;
+        //Do this as long as theres available modules on the path and we have a resource in this modules buffer
 
-        //To check if a machine is ready for our current resource, we have to compare it to the list of suported resources. For now, we identify similar resources by its type.
-        Resource resource_peek = resourceArray.Peek().Resource;
-
-        if ((sim_out = OutputCTRL(resource_peek)) == null)
+        while(resourceArray.Count > 0)
         {
-            return;
+            SetSTATE(STATE.BLOCKED);
+            SimulationObject sim_out;
+            SimulationObject sim_in;
+
+            //To check if a machine is ready for our current resource, we have to compare it to the list of suported resources. For now, we identify similar resources by its type.
+            Resource resource_peek = resourceArray.Peek().Resource;
+
+            if ((sim_out = OutputCTRL(resource_peek)) == null)
+            {
+                return;
+            }
+            //Debug.Log("_________________________________________");
+            //Debug.Log("Going into: " + sim_out.gameObject.name);
+
+            //If we found a machine acepting our resource, we move it to this machine.
+            //Use different approach based on agent
+            if (sim_out.GetSTATE() != STATE.AGENT)
+                MoveToModule((Module)sim_out);
+            else
+            {
+                //Empty for now...
+            }
+
+            //The last thing here is to dispatch the update on the out ctrl model:
+            //This ensures that all machines connected from there are up to date
+            sim_out.UpdateCTRL();
+
+
+            if ((sim_in = InputCTRL()) == null)
+            {
+                return;
+            }
+
+            //Debug.Log("Drawing from: " + sim_in.gameObject.name);
+            //Debug.Log("_________________________________________");
+
+            //If we found a machine acepting our resource, we move it to this machine.
+            //Use different approach based on agent
+            if (sim_in.GetSTATE() != STATE.AGENT)
+                MoveFromModule((Module)sim_in);
+            else
+            {
+                //Empty for now...
+            }
+
+            //If we found a suitable machine, we just have to call the UpdateCTRL on it.
+            sim_in.UpdateCTRL();
         }
-
-        //If we found a machine acepting our resource, we move it to this machine.
-        //Use different approach based on agent
-        if (sim_out.GetSTATE()!=STATE.AGENT)
-            MoveToModule((Module)sim_out);
-        else
-        {
-            //Empty for now...
-        }
-
-
-        //The last thing here is to dispatch the update on the out ctrl model:
-        //This ensures that all machines connected from there are up to date
-        sim_out.UpdateCTRL();
-
-
-        if ((sim_in = InputCTRL()) == null)
-        {
-            return;
-        }
-
-        //If we found a machine acepting our resource, we move it to this machine.
-        //Use different approach based on agent
-        if (sim_in.GetSTATE() != STATE.AGENT)
-            MoveFromModule((Module)sim_in);
-        else
-        {
-            //Empty for now...
-        }
-
-        //If we found a suitable machine, we just have to call the UpdateCTRL on it.
-        sim_in.UpdateCTRL();
-
     }
 
     //Override the I/O functions
@@ -191,18 +198,20 @@ public class Module : SimulationObject
     //Update the state based on the resourceArray state and event queue
     public void DetermineState()
     {
-        //Simple for now: our current state depends on how filled the resource queue is
-        if(resourceArray.Count == resourceArray.Limit&&!producing) { 
-            SetSTATE(STATE.BLOCKED);
-        }
-        else if (resourceArray.Count != resourceArray.Limit && !producing) {
-            SetSTATE(STATE.AVAILABLE);
-        }
-        else if(resourceArray.Count > 0 && producing)
+        //Distinct between two types: producing and not producing. Not producing modules do not need to dispatch an event when a resource enters the machine.
+
+        if(producing)
         {
             SetSTATE(STATE.OCCUPIED);
             //In this case, we also have to dispatch the event! This has to be overwritten by the module instances themselves!
             DispatchEvent();
+        }
+        else
+        {
+            if(resourceArray.Count == resourceArray.Limit)
+                SetSTATE(STATE.BLOCKED);
+            else
+                SetSTATE(STATE.AVAILABLE);
         }
     }
 
@@ -232,10 +241,7 @@ public class Module : SimulationObject
 
 
     //Dispatch an event
-    public virtual void DispatchEvent()
-    {
-
-    }
+    public virtual void DispatchEvent(){}
 
 
 
