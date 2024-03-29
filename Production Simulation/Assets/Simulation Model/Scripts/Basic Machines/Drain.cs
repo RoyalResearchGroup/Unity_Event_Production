@@ -15,7 +15,7 @@ public class Drain : Module
         //Simply clear the resource buffer
         if(resourceArray.Count > 0 )
         {
-            absoluteDrain += 1;
+            absoluteDrain += resourceArray.Count;
             resourceArray.Clear();
         }
     }

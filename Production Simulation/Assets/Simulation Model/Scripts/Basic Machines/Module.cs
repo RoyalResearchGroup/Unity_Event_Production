@@ -9,6 +9,8 @@ public class Module : SimulationObject
     //A list of resources that this machine takes in and its capacity
     [SerializeField]
     public List<Resource> resources = new List<Resource>();
+    //Intern resource list (copy of the resource list)
+    public List<Resource> varResources = new List<Resource>();
     [SerializeField]
     public int capacity = 1;
 
@@ -32,6 +34,8 @@ public class Module : SimulationObject
     public void Start()
     {
         e_manager = GameObject.FindWithTag("EventManager").GetComponent<EventManager>();
+        //Fill the tamporal variable resource list
+        varResources.AddRange(resources);
         resourceArray = new LimitedQueue<ResourceObject>(capacity);
         SetupLists();
     }
@@ -63,7 +67,7 @@ public class Module : SimulationObject
     //Can be called by previous or succeding modules to trigger I/O controls
     public override void UpdateCTRL()
     {
-        if (disableCTRL)
+        if (disableCTRL || GetSTATE() == STATE.OCCUPIED)
         {
             return;
         }
@@ -140,7 +144,10 @@ public class Module : SimulationObject
         foreach(GameObject module in successors)
         {
             //Did we find a fitting module? It needs to be available and support the given resource
-            if (module.GetComponent<SimulationObject>().GetSTATE() == STATE.AVAILABLE && module.GetComponent<Module>().resources.Contains(r))
+            if ((module.GetComponent<SimulationObject>().GetSTATE() == STATE.AVAILABLE 
+                || module.GetComponent<SimulationObject>().GetSTATE() == STATE.BLOCKED) 
+                && module.GetComponent<Module>().varResources.Contains(r) 
+                && module.GetComponent<Module>().resourceArray.Count < module.GetComponent<Module>().resourceArray.Limit)
             {
                 object_out = module.GetComponent<SimulationObject>();
                 //Assign with a random possibility (choose all modules with equal possibility)
@@ -155,7 +162,6 @@ public class Module : SimulationObject
                 //if(module.GetComponent<Agent>().DetermineAction()!=ACTION.NOTHING)
                 //return ...
             }
-
         }
         return object_out;
     }
@@ -167,7 +173,9 @@ public class Module : SimulationObject
         foreach (GameObject module in predecessors)
         {
             //Did we find a fitting module? It must have a fitting resource ready.
-            if (module.GetComponent<SimulationObject>().GetSTATE() == STATE.BLOCKED && resources.Contains(module.GetComponent<Module>().resourceArray.Peek().Resource))
+            if (module.GetComponent<SimulationObject>().GetSTATE() == STATE.BLOCKED 
+                && varResources.Contains(module.GetComponent<Module>().resourceArray.Peek().Resource)
+                && resourceArray.Count < resourceArray.Limit)
             {
                 object_in = module.GetComponent<SimulationObject>();
                 //Assign with a random possibility (choose all modules with equal possibility)
@@ -202,9 +210,16 @@ public class Module : SimulationObject
 
         if(producing)
         {
-            SetSTATE(STATE.OCCUPIED);
-            //In this case, we also have to dispatch the event! This has to be overwritten by the module instances themselves!
-            DispatchEvent();
+            if(resourceArray.Count != 0)
+            {
+                SetSTATE(STATE.OCCUPIED);
+                //In this case, we also have to dispatch the event! This has to be overwritten by the module instances themselves!
+                DispatchEvent();
+            }
+            else
+            {
+                SetSTATE(STATE.AVAILABLE);
+            }
         }
         else
         {
@@ -242,6 +257,13 @@ public class Module : SimulationObject
 
     //Dispatch an event
     public virtual void DispatchEvent(){}
+
+    //Option to reset the variable resource list
+    public void ResetVRList()
+    {
+        varResources.Clear();
+        varResources.AddRange(resources);
+    }
 
 
 
