@@ -61,4 +61,23 @@ public abstract class SimulationObject : MonoBehaviour
     public abstract SimulationObject OutputCTRL(Resource r);
     //Can be called by previous or succeding models to trigger I/O controls
     public abstract void UpdateCTRL();
+    
+    
+
+
+    // Visualize connections in editor mode
+    void OnDrawGizmos()
+    {
+        if (connectedObjects != null)
+        {
+            foreach (SimulationObject module in connectedObjects)
+            {
+                if (module != null)
+                {
+                    Gizmos.color = Color.black;
+                    Gizmos.DrawLine(transform.position, module.transform.position);
+                }
+            }
+        }
+    }
 }
