@@ -1332,7 +1332,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   connectedObjects:
-  - {fileID: 1635371184}
+  - {fileID: 1635371187}
   resources:
   - {fileID: 11400000, guid: 0726eea8b00e33749b6a2a8a5599bd83, type: 2}
   capacity: 5
@@ -1415,29 +1415,14 @@ GameObject:
   m_Component:
   - component: {fileID: 1635371186}
   - component: {fileID: 1635371185}
-  - component: {fileID: 1635371184}
+  - component: {fileID: 1635371187}
   m_Layer: 0
-  m_Name: StupidAgent
+  m_Name: HeuristicAgent
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &1635371184
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1635371183}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6aa81d338f57200cf9cff9268e8fdd19, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  connectedObjects:
-  - {fileID: 584370161}
-  - {fileID: 802338551}
 --- !u!212 &1635371185
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -1506,6 +1491,22 @@ Transform:
   - {fileID: 1524851611}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1635371187
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1635371183}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 77a0fc9fbe32a147482dcb1a04ac0960, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  connectedObjects:
+  - {fileID: 584370161}
+  - {fileID: 802338551}
+  _strategy: {fileID: 11400000, guid: 77c8a582a8cc5e14e9e8e71be3feba26, type: 2}
 --- !u!1 &1668069852
 GameObject:
   m_ObjectHideFlags: 0
