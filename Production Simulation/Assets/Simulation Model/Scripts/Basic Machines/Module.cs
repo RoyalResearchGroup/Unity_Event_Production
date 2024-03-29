@@ -1,7 +1,12 @@
+using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Linq.Expressions;
 using UnityEditor;
 using UnityEditor.Tilemaps;
 using UnityEngine;
+using UnityEngine.Assertions;
+using Random = UnityEngine.Random;
 
 
 public class Module : SimulationObject
@@ -102,7 +107,7 @@ public class Module : SimulationObject
                 MoveToModule((Module)sim_out);
             else
             {
-                //Empty for now...
+                throw new System.NotSupportedException("Agent chose another agent as target!");
             }
 
             //The last thing here is to dispatch the update on the out ctrl model:
@@ -124,7 +129,7 @@ public class Module : SimulationObject
                 MoveFromModule((Module)sim_in);
             else
             {
-                //Empty for now...
+                throw new System.NotSupportedException("Agent chose another agent as target!");
             }
 
             //If we found a suitable machine, we just have to call the UpdateCTRL on it.
@@ -139,8 +144,28 @@ public class Module : SimulationObject
         SimulationObject object_out = null;
         foreach(GameObject module in successors)
         {
+            //We might prioritize Agents over simple connections (for now not relevant), take the first one aviable
+            if(module.GetComponent<SimulationObject>().GetSTATE() == STATE.AGENT)
+            {
+                Module target = module.GetComponent<Agent>().DetermineAction(false);
+                
+                if (target)
+                {
+                    // check if target is a valid target
+                    if (target.GetComponent<SimulationObject>().GetSTATE() == STATE.AVAILABLE &&
+                        target.GetComponent<Module>().resources.Contains(r))
+                    {
+                        object_out = target.GetComponent<SimulationObject>();
+                        break;
+                    }
+                    else
+                    {
+                        reportInacceptibleAgent();
+                    }
+                }
+            }
             //Did we find a fitting module? It needs to be available and support the given resource
-            if (module.GetComponent<SimulationObject>().GetSTATE() == STATE.AVAILABLE && module.GetComponent<Module>().resources.Contains(r))
+            else if (module.GetComponent<SimulationObject>().GetSTATE() == STATE.AVAILABLE && module.GetComponent<Module>().resources.Contains(r))
             {
                 object_out = module.GetComponent<SimulationObject>();
                 //Assign with a random possibility (choose all modules with equal possibility)
@@ -148,12 +173,6 @@ public class Module : SimulationObject
                 {
                     break;
                 }
-            }
-            //We might prioritize Agents over simple connections (for now not relevant), take the first one aviable
-            else if(module.GetComponent<SimulationObject>().GetSTATE() == STATE.AGENT)
-            {
-                //if(module.GetComponent<Agent>().DetermineAction()!=ACTION.NOTHING)
-                //return ...
             }
 
         }
@@ -179,15 +198,33 @@ public class Module : SimulationObject
             //We might prioritize Agents over simple connections (for now not relevant), take the first one aviable
             else if (module.GetComponent<SimulationObject>().GetSTATE() == STATE.AGENT)
             {
-                //if(module.GetComponent<Agent>().DetermineAction()!=ACTION.NOTHING)
-                //return ...
+                Module target = module.GetComponent<Agent>().DetermineAction(true);
+                
+                if (target)
+                {
+                    // check if target is a valid target
+                    if (target.GetComponent<SimulationObject>().GetSTATE() == STATE.BLOCKED && 
+                        resources.Contains(target.GetComponent<Module>().resourceArray.Peek().Resource))
+                    {
+                        object_in = target.GetComponent<SimulationObject>();
+                        break;
+                    }
+                    else
+                    {
+                        reportInacceptibleAgent();
+                    }
+                }
             }
 
         }
         return object_in;
     }
 
-
+    private void reportInacceptibleAgent()
+    {
+        throw new InvalidDataException("Agent chose a module which is unable to accept the resource!");
+        // Application.Quit();
+    }
 
     //A scheduled event was performed, do the action (callback by the event system).
     public virtual void EventCallback(Event r_event)
@@ -204,7 +241,8 @@ public class Module : SimulationObject
         {
             SetSTATE(STATE.OCCUPIED);
             //In this case, we also have to dispatch the event! This has to be overwritten by the module instances themselves!
-            DispatchEvent();
+            if(resourceArray.Count > 0)
+                DispatchEvent();
         }
         else
         {
@@ -242,22 +280,4 @@ public class Module : SimulationObject
 
     //Dispatch an event
     public virtual void DispatchEvent(){}
-
-
-
-    // Visualize connections in editor mode
-    void OnDrawGizmos()
-    {
-        if (connectedObjects != null)
-        {
-            foreach (SimulationObject module in connectedObjects)
-            {
-                if (module != null)
-                {
-                    Gizmos.color = Color.black;
-                    Gizmos.DrawLine(transform.position, module.transform.position);
-                }
-            }
-        }
-    }
 }
