@@ -4,10 +4,16 @@ using UnityEngine;
 
 public class HeuristicAgent : Agent
 {
-    [SerializeField] private Strategy _strategy;
+    [SerializeField] protected Strategy _strategy;
 
     protected override GameObject Decide(List<GameObject> options)
     {
-        return base.Decide(options);
+        if (_strategy == null)
+        {
+            Debug.LogWarning("No strategy selected. Will do nothing...");
+            return null;
+        }
+
+        return _strategy.act(options);
     }
 }
