@@ -22,6 +22,10 @@ public class Agent : SimulationObject
     public Module DetermineAction(bool callerInFront)
     {
         var options = callerInFront ? predecessors : successors;
+        if(options == null || options.Count == 0)
+        {
+            return null;
+        }
         GameObject decision = Decide(options);
         if (!decision)
             return null;
