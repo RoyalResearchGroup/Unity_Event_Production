@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
+// Base class for all agents. It is pretty stupid, so subagents should not call base.Decide().
 public class Agent : SimulationObject
 {
     // Start is called before the first frame update
@@ -19,6 +20,11 @@ public class Agent : SimulationObject
         
     }
 
+    // Successors of the agent pass callerInFront = true, predecessors pass false.
+    // This method determines the action space for the agent using a boolean value. (It could also derive the observation space from the boolean.)
+    // it then calls Decide() to choose a GameObject from the action space.
+    // if the chosen object is a module, that is returned.
+    // In case the chosen object is another agent, it is also asked for an action. This recursively repeats until an agent selects a module.
     public Module DetermineAction(bool callerInFront)
     {
         var options = callerInFront ? predecessors : successors;
@@ -50,7 +56,6 @@ public class Agent : SimulationObject
     // prioritize calling the agent rather than other connected modules, while successors act contrarily.
     // This Method should return the module that the agent has chosen. The calling module can then validate that the
     // chosen module is in a valid state and can perform MoveToModule / MoveFromModule from then on.
-    // Successors of the agent pass callerInFront = true, predecessor pass false.
     protected virtual GameObject Decide(List<GameObject> options)
     {
         GameObject chosen = null;
@@ -64,6 +69,9 @@ public class Agent : SimulationObject
         return chosen;
     }
 
+
+    // These aren't used at all, maybe we should move these methods from the SimulationObject class
+    // to the Module class.
     public override SimulationObject InputCTRL()
     {
         throw new System.NotImplementedException();
