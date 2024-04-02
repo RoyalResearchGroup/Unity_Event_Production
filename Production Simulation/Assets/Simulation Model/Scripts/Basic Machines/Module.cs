@@ -147,7 +147,7 @@ public class Module : SimulationObject
             //We might prioritize Agents over simple connections (for now not relevant), take the first one aviable
             if(module.GetComponent<SimulationObject>().GetSTATE() == STATE.AGENT)
             {
-                Module target = module.GetComponent<Agent>().DetermineAction(false);
+                Module target = module.GetComponent<Agent>().DetermineAction(gameObject, false);
                 
                 if (target)
                 {
@@ -198,7 +198,7 @@ public class Module : SimulationObject
             //We might prioritize Agents over simple connections (for now not relevant), take the first one aviable
             else if (module.GetComponent<SimulationObject>().GetSTATE() == STATE.AGENT)
             {
-                Module target = module.GetComponent<Agent>().DetermineAction(true);
+                Module target = module.GetComponent<Agent>().DetermineAction(gameObject, true);
                 
                 if (target)
                 {

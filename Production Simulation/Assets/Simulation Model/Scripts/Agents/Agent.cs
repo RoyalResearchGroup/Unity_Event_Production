@@ -25,14 +25,14 @@ public class Agent : SimulationObject
     // it then calls Decide() to choose a GameObject from the action space.
     // if the chosen object is a module, that is returned.
     // In case the chosen object is another agent, it is also asked for an action. This recursively repeats until an agent selects a module.
-    public Module DetermineAction(bool callerInFront)
+    public Module DetermineAction(GameObject caller, bool callerInFront)
     {
         var options = callerInFront ? predecessors : successors;
         if(options == null || options.Count == 0)
         {
             return null;
         }
-        GameObject decision = Decide(options);
+        GameObject decision = Decide(caller, options);
         if (!decision)
             return null;
 
@@ -45,7 +45,7 @@ public class Agent : SimulationObject
         Agent followUp;
         if (decision.TryGetComponent<Agent>(out followUp))
         {
-            return followUp.DetermineAction(callerInFront);
+            return followUp.DetermineAction(gameObject, callerInFront);
         }
 
         return null;
@@ -56,7 +56,7 @@ public class Agent : SimulationObject
     // prioritize calling the agent rather than other connected modules, while successors act contrarily.
     // This Method should return the module that the agent has chosen. The calling module can then validate that the
     // chosen module is in a valid state and can perform MoveToModule / MoveFromModule from then on.
-    protected virtual GameObject Decide(List<GameObject> options)
+    protected virtual GameObject Decide(GameObject caller, List<GameObject> options)
     {
         GameObject chosen = null;
         

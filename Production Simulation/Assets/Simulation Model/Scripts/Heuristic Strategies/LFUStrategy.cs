@@ -5,11 +5,11 @@ using UnityEngine;
 [CreateAssetMenu]
 public class LFUStrategy : Strategy
 {
-    public override GameObject act(List<GameObject> options)
+    public override GameObject act(GameObject caller, List<GameObject> options)
     {
 
         // implement LFU
 
-        return base.act(options);
+        return base.act(caller, options);
     }
 }

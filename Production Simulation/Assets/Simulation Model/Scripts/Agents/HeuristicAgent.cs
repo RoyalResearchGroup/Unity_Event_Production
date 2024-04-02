@@ -8,7 +8,7 @@ public class HeuristicAgent : Agent
     // The strategy that the agent uses
     [SerializeField] protected Strategy _strategy;
 
-    protected override GameObject Decide(List<GameObject> options)
+    protected override GameObject Decide(GameObject caller, List<GameObject> options)
     {
         if (_strategy == null)
         {
@@ -17,6 +17,6 @@ public class HeuristicAgent : Agent
             return null;
         }
 
-        return _strategy.act(options);
+        return _strategy.act(caller, options);
     }
 }
