@@ -12,10 +12,8 @@ public class Station : Module
     //callback override
     public override void EventCallback(Event r_event)
     {
+        //The base callback call is very important, especially in producing machines!
         base.EventCallback(r_event);
-        //Finished creating, out blocked
-        SetSTATE(STATE.AVAILABLE);
-
         //DEBUG:
         GetComponent<SpriteRenderer>().color = Color.white;
     }

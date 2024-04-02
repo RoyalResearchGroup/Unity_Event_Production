@@ -218,19 +218,21 @@ MonoBehaviour:
   m_GameObject: {fileID: 77522582}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1929e91486dc42a48b0b0421dbd11dc5, type: 3}
+  m_Script: {fileID: 11500000, guid: 73624794f1583ed4aa691798b4079312, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   connectedObjects:
   - {fileID: 1668069853}
   resources:
   - {fileID: 11400000, guid: 0726eea8b00e33749b6a2a8a5599bd83, type: 2}
+  blueprint: {fileID: 11400000, guid: 1be0aeffc779a784f98e7ce82953a243, type: 2}
   varResources: []
-  capacity: 1
+  capacity: 2
   disableCTRL: 0
   producing: 1
-  assembleTime: 0
-  blueprint: {fileID: 11400000, guid: 424d923850c6bdd4f8aaef8b1736ffb2, type: 2}
+  resourceProcessingTimes:
+  - 2
+  resourceSetupTimes: []
 --- !u!1 &188252126
 GameObject:
   m_ObjectHideFlags: 0
@@ -656,6 +658,7 @@ MonoBehaviour:
   - {fileID: 1441364489}
   resources:
   - {fileID: 11400000, guid: 0726eea8b00e33749b6a2a8a5599bd83, type: 2}
+  blueprint: {fileID: 11400000, guid: 424d923850c6bdd4f8aaef8b1736ffb2, type: 2}
   varResources: []
   capacity: 1
   disableCTRL: 0
@@ -759,6 +762,7 @@ MonoBehaviour:
   - {fileID: 1462354050}
   resources:
   - {fileID: 11400000, guid: 0726eea8b00e33749b6a2a8a5599bd83, type: 2}
+  blueprint: {fileID: 0}
   varResources: []
   capacity: 1
   disableCTRL: 0
@@ -997,6 +1001,7 @@ MonoBehaviour:
   - {fileID: 77522585}
   resources:
   - {fileID: 11400000, guid: 0726eea8b00e33749b6a2a8a5599bd83, type: 2}
+  blueprint: {fileID: 11400000, guid: 424d923850c6bdd4f8aaef8b1736ffb2, type: 2}
   varResources: []
   capacity: 1
   disableCTRL: 0
@@ -1162,6 +1167,7 @@ MonoBehaviour:
   - {fileID: 77522585}
   resources:
   - {fileID: 11400000, guid: 0726eea8b00e33749b6a2a8a5599bd83, type: 2}
+  blueprint: {fileID: 11400000, guid: 424d923850c6bdd4f8aaef8b1736ffb2, type: 2}
   varResources: []
   capacity: 1
   disableCTRL: 0
@@ -1345,6 +1351,7 @@ MonoBehaviour:
   - {fileID: 802338551}
   resources:
   - {fileID: 11400000, guid: 0726eea8b00e33749b6a2a8a5599bd83, type: 2}
+  blueprint: {fileID: 0}
   varResources: []
   capacity: 5
   disableCTRL: 0
@@ -1444,6 +1451,7 @@ MonoBehaviour:
   connectedObjects: []
   resources:
   - {fileID: 11400000, guid: 0726eea8b00e33749b6a2a8a5599bd83, type: 2}
+  blueprint: {fileID: 0}
   varResources: []
   capacity: 200
   disableCTRL: 1
@@ -1510,7 +1518,7 @@ Transform:
   m_GameObject: {fileID: 1668069852}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 4.431, y: 0.34, z: 0}
+  m_LocalPosition: {x: 3.002, y: 0.34, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:

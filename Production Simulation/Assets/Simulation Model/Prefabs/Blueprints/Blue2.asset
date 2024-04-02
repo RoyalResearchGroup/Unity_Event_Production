@@ -10,9 +10,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 611306c4c38c3da4c81091b56fb64eba, type: 3}
-  m_Name: BlueBP
+  m_Name: Blue2
   m_EditorClassIdentifier: 
   resources:
   - resource: {fileID: 11400000, guid: 0726eea8b00e33749b6a2a8a5599bd83, type: 2}
-    number: 1
+    number: 2
   product: {fileID: 11400000, guid: 0726eea8b00e33749b6a2a8a5599bd83, type: 2}
