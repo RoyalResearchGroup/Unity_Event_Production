@@ -9,10 +9,8 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 611306c4c38c3da4c81091b56fb64eba, type: 3}
-  m_Name: Blue2
+  m_Script: {fileID: 11500000, guid: 5ce4696d3d486ee4e85bc657992fc375, type: 3}
+  m_Name: YellowMU
   m_EditorClassIdentifier: 
-  resources:
-  - resource: {fileID: 11400000, guid: 0726eea8b00e33749b6a2a8a5599bd83, type: 2}
-    number: 2
-  product: {fileID: 11400000, guid: 0726eea8b00e33749b6a2a8a5599bd83, type: 2}
+  r_name: yellowMU
+  r_color: {r: 0, g: 0, b: 0, a: 0}

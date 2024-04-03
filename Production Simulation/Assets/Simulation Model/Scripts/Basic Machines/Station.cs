@@ -2,12 +2,22 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+[RequireComponent(typeof(BlueprintManager))]
 public class Station : Module
 {
-    [SerializeField]
-    public List<float> resourceProcessingTimes = new List<float>();
-    [SerializeField]
-    public List<float> resourceSetupTimes = new List<float>();
+    private BlueprintManager b_manager;
+
+    //Current accepting states(Mirror the blueprint managers version)
+    public List<Resource> allowedResources = new List<Resource>();
+
+    //Product buffer
+    protected List<ResourceObject> products = new List<ResourceObject>();
+
+    public override void Start()
+    {
+        base.Start();
+        b_manager = GetComponent<BlueprintManager>();
+    }
 
     //callback override
     public override void EventCallback(Event r_event)
@@ -26,14 +36,34 @@ public class Station : Module
 
     public override void DispatchEvent()
     {
-        //Get the processing time:
-        //Index:
-        int id = resources.FindIndex(r => r == resourceArray.Peek().Resource);
-        float t = resourceProcessingTimes[id];
-        //Dispatch the Event to process the resource
-        e_manager.EnqueueEvent(new Event(t, this, EVENTTYPE.PROCESS));
 
         //DEBUG:
         GetComponent<SpriteRenderer>().color = Color.yellow;
+    }
+
+
+    public override void UpdateCTRL()
+    {
+
+    }
+
+    public override void DetermineState()
+    {
+        throw new System.NotImplementedException();
+    }
+
+    public override void MoveToModule(Module module)
+    {
+        throw new System.NotImplementedException();
+    }
+
+    public override bool IsInputReady(Resource r)
+    {
+        throw new System.NotImplementedException();
+    }
+
+    public override bool IsOutputReady(List<Resource> r)
+    {
+        throw new System.NotImplementedException();
     }
 }

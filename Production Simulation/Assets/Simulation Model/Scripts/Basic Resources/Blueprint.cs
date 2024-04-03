@@ -7,5 +7,7 @@ using UnityEngine;
 public class Blueprint : ScriptableObject
 {
     public List<ResourceEntry> resources = new List<ResourceEntry>();
-    public Resource product;
+    public List<ResourceEntry> products = new List<ResourceEntry>();
+    public float processingTime;
+    public float setupTime;
 }
