@@ -61,8 +61,11 @@ public class Buffer : Module
 
     public override void UpdateCTRL()
     {
-        while (resourceBuffer.Count > 0)
+        bool action = true;
+        while (resourceBuffer.Count > 0 && action)
         {
+            bool action_in = true;
+            bool action_out = true;
             //The source can only output resources, so no input model needed
             Module mod_out;
 
@@ -71,21 +74,38 @@ public class Buffer : Module
 
             //Get a candidate for output
             mod_out = (Module)OutputCTRL(res_peek);
-            //There are no candidates, so break the loop and return.
-            if (mod_out == null) return;
 
-            //Otherwise, we can move the resource
-            MoveToModule(mod_out);
-            mod_out.UpdateCTRL();
+            //If there no candidate, the out action failed
+            if (mod_out == null)
+            {
+                DetermineState();
+                action_out  = false;
+            }
+            else
+            {
+                //Otherwise, we can move the resource
+                MoveToModule(mod_out);
+                mod_out.UpdateCTRL();
+            }
 
 
             //Check if there is an aviable input machine that could provide a new resource
             Module mod_in;
 
             mod_in = (Module)InputCTRL(allowedResources);
-            if (mod_in != null) {
+
+            //Same case for the input
+            if (mod_in == null) {
+                DetermineState();
+                action_in = false;
+            }
+            else
+            {
                 mod_in.UpdateCTRL();
             }
+
+            //If neither one of the actions was successful, break the loop
+            action = action_in && action_out;
         }
     }
 }

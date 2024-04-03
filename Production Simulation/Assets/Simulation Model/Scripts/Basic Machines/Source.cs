@@ -95,7 +95,12 @@ public class Source : Module
             //Get a candidate for output
             mod_out = (Module) OutputCTRL(res_peek);
             //There are no candidates, so break the loop and return.
-            if (mod_out == null) return;
+            if (mod_out == null) 
+            {
+                //Determine state before leaving (likely blocked)
+                DetermineState();
+                return;
+            }
 
             //Otherwise, we can move the resource
             MoveToModule(mod_out);
