@@ -67,19 +67,18 @@ public abstract class Module : SimulationObject
             {
                 Module target = module.GetComponent<Agent>().DetermineAction(gameObject, false);
                 
-                if (target)
+                if (target && target.IsInputReady(r))
                 {
+                    object_out = target.GetComponent<SimulationObject>();
                     // check if target is a valid target
-                    if (target.GetComponent<SimulationObject>().GetSTATE() == STATE.AVAILABLE &&
-                        target.GetComponent<Module>().resources.Contains(r))
+                    if (Random.value < 1 / (successors.Count))
                     {
-                        object_out = target.GetComponent<SimulationObject>();
                         break;
                     }
-                    else
-                    {
-                        reportInacceptibleAgent();
-                    }
+                }
+                else
+                {
+                    reportInacceptibleAgent();
                 }
             }
             //Did we find a fitting module? It needs to be available and support the given resource
@@ -113,23 +112,22 @@ public abstract class Module : SimulationObject
                 }
             }
             //We might prioritize Agents over simple connections (for now not relevant), take the first one aviable
-            else if (module.GetComponent<SimulationObject>().GetSTATE() == STATE.AGENT)
+            else if(module.GetComponent<SimulationObject>().GetSTATE() == STATE.AGENT)
             {
-                Module target = module.GetComponent<Agent>().DetermineAction(gameObject, true);
+                Module target = module.GetComponent<Agent>().DetermineAction(gameObject, false);
                 
-                if (target)
+                if (target && target.IsOutputReady(r))
                 {
+                    object_in = target.GetComponent<SimulationObject>();
                     // check if target is a valid target
-                    if (target.GetComponent<SimulationObject>().GetSTATE() == STATE.BLOCKED && 
-                        resources.Contains(target.GetComponent<Module>().resourceArray.Peek().Resource))
+                    if (Random.value < 1 / (successors.Count))
                     {
-                        object_in = target.GetComponent<SimulationObject>();
                         break;
                     }
-                    else
-                    {
-                        reportInacceptibleAgent();
-                    }
+                }
+                else
+                {
+                    reportInacceptibleAgent();
                 }
             }
 

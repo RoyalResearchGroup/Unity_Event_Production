@@ -81,7 +81,7 @@ public class Source : Module
         module.DetermineState();
     }
 
-    public override void UpdateCTRL()
+    public override void UpdateCTRL(Module m)
     {
         //As long as we can find output objects and there are resources present, distribute them
         while(resourceBuffer.Count > 0)

@@ -83,7 +83,7 @@ public class Station : Module
     }
 
 
-    public override void UpdateCTRL()
+    public override void UpdateCTRL(Module m)
     {
         bool action = true;
         while (resourceBuffer.Count < resourceBuffer.Limit && action)
@@ -102,6 +102,11 @@ public class Station : Module
 
             //Get a candidate for output
             mod_out = (Module)OutputCTRL(res);
+
+            if (m)
+            {
+                mod_out = m;
+            }
 
             //If there no candidate, the out action failed
             if (mod_out == null)

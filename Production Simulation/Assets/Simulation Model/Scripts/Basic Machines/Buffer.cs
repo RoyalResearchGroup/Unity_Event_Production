@@ -64,7 +64,7 @@ public class Buffer : Module
     }
 
 
-    public override void UpdateCTRL()
+    public override void UpdateCTRL(Module m)
     {
         bool action = true;
         while (resourceBuffer.Count > 0 && action)
