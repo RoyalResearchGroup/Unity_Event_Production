@@ -66,7 +66,7 @@ public class Source : Module
             //Dispatch the Event to spawn a resource
             DispatchEvent();
             DetermineState();
-        }    
+        }   
     }
 
 
@@ -106,7 +106,12 @@ public class Source : Module
             MoveToModule(mod_out);
             mod_out.UpdateCTRL();
         }
-
+        //Dispatch a new Event creation
+        if(resourceBuffer.Count < resourceBuffer.Limit)
+        {
+            DispatchEvent();
+            DetermineState();
+        }
     }
 
     //Override the Gizmo color:

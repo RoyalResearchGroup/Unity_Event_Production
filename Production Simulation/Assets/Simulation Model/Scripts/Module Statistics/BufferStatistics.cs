@@ -9,7 +9,7 @@ public class BufferStatistics : Statistics
 
     private void Update()
     {
-        absoluteFill += GetComponent<Buffer>().GetRBufferFillDEBUG();
+        absoluteFill += GetComponent<Buffer>().GetRBufferFillDEBUG() * t_manager.deltaTime;
         averageFill = absoluteFill / t_manager.time;
     }
 
