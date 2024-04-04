@@ -69,21 +69,30 @@ public class Agent : SimulationObject
         return chosen;
     }
 
-
     // These aren't used at all, maybe we should move these methods from the SimulationObject class
     // to the Module class.
-    public override SimulationObject InputCTRL()
+    public override SimulationObject InputCTRL(List<Resource> r)
     {
-        throw new System.NotImplementedException();
+        return null;
     }
 
     public override SimulationObject OutputCTRL(Resource r)
     {
-        throw new System.NotImplementedException();
+        return null;
     }
 
-    public override void UpdateCTRL()
+    public override void UpdateCTRL(Module m = null)
     {
-        throw new System.NotImplementedException();
+       
+    }
+
+    public override bool IsInputReady(Resource r)
+    {
+        return false;
+    }
+
+    public override bool IsOutputReady(List<Resource> r)
+    {
+        return false;
     }
 }

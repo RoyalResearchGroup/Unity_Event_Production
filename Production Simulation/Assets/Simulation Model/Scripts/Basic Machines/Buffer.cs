@@ -80,6 +80,11 @@ public class Buffer : Module
             //Get a candidate for output
             mod_out = (Module)OutputCTRL(res_peek);
 
+            if (m != null)
+            {
+                mod_out = m;
+            }
+
             //If there no candidate, the out action failed
             if (mod_out == null)
             {
@@ -106,11 +111,12 @@ public class Buffer : Module
             }
             else
             {
-                mod_in.UpdateCTRL();
+                mod_in.UpdateCTRL(gameObject.GetComponent<Module>());
             }
 
             //If neither one of the actions was successful, break the loop
             action = action_in && action_out;
+            m = null;
         }
     }
 

@@ -47,7 +47,7 @@ public abstract class Module : SimulationObject
 
         if (e_callback)
         {
-            UpdateCTRL();
+            UpdateCTRL(null);
         }
         //Rest the check
         e_callback = false;
