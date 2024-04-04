@@ -134,6 +134,7 @@ GameObject:
   - component: {fileID: 33279040}
   - component: {fileID: 33279039}
   - component: {fileID: 33279038}
+  - component: {fileID: 33279041}
   m_Layer: 0
   m_Name: BufferY
   m_TagString: Untagged
@@ -229,6 +230,19 @@ Transform:
   - {fileID: 1982869050}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &33279041
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 33279037}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6cbaba289f2dadb4d8aaebeed70ce6ae, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  averageFill: 0
 --- !u!1001 &33706734
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -303,6 +317,7 @@ GameObject:
   - component: {fileID: 97882785}
   - component: {fileID: 97882784}
   - component: {fileID: 97882783}
+  - component: {fileID: 97882787}
   m_Layer: 0
   m_Name: MachineYB 2
   m_TagString: Untagged
@@ -407,6 +422,19 @@ Transform:
   - {fileID: 276288747}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &97882787
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 97882782}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3cb961ed72f33774bb04269efd68a756, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  machineUsage: {x: 0, y: 0, z: 0, w: 0}
 --- !u!1 &188252126
 GameObject:
   m_ObjectHideFlags: 0
@@ -613,7 +641,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   connectedObjects:
   - {fileID: 33279038}
-  creationRate: 0.9
+  creationRate: 100
   creationType: {fileID: 11400000, guid: b1729ac1cd965ad42aefb8d768c3faeb, type: 2}
 --- !u!212 &359211416
 SpriteRenderer:
@@ -695,6 +723,7 @@ GameObject:
   - component: {fileID: 365966827}
   - component: {fileID: 365966826}
   - component: {fileID: 365966825}
+  - component: {fileID: 365966829}
   m_Layer: 0
   m_Name: MachineYB 1
   m_TagString: Untagged
@@ -799,6 +828,19 @@ Transform:
   - {fileID: 33706735}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &365966829
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 365966824}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3cb961ed72f33774bb04269efd68a756, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  machineUsage: {x: 0, y: 0, z: 0, w: 0}
 --- !u!1 &519420028
 GameObject:
   m_ObjectHideFlags: 0
@@ -835,7 +877,7 @@ Camera:
   m_Enabled: 1
   serializedVersion: 2
   m_ClearFlags: 2
-  m_BackGroundColor: {r: 0.19215687, g: 0.3019608, b: 0.4745098, a: 0}
+  m_BackGroundColor: {r: 0.13207549, g: 0.13207549, b: 0.13207549, a: 0}
   m_projectionMatrixMode: 1
   m_GateFitMode: 2
   m_FOVAxisMode: 0
@@ -903,6 +945,7 @@ GameObject:
   - component: {fileID: 584370159}
   - component: {fileID: 584370161}
   - component: {fileID: 584370162}
+  - component: {fileID: 584370163}
   m_Layer: 0
   m_Name: Assembler
   m_TagString: Untagged
@@ -1005,7 +1048,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   blueprints:
-  - {fileID: 11400000, guid: f0794c4eaf754f24fbcd88085b02a3a9, type: 2}
+  - {fileID: 11400000, guid: 1be0aeffc779a784f98e7ce82953a243, type: 2}
+--- !u!114 &584370163
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 584370158}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3cb961ed72f33774bb04269efd68a756, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  machineUsage: {x: 0, y: 0, z: 0, w: 0}
 --- !u!1001 &608046001
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1100,7 +1156,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   connectedObjects:
   - {fileID: 1462354050}
-  creationRate: 2
+  creationRate: 100
   creationType: {fileID: 11400000, guid: 0726eea8b00e33749b6a2a8a5599bd83, type: 2}
 --- !u!212 &611330099
 SpriteRenderer:
@@ -1182,6 +1238,7 @@ GameObject:
   - component: {fileID: 732677000}
   - component: {fileID: 732676999}
   - component: {fileID: 732676998}
+  - component: {fileID: 732677002}
   m_Layer: 0
   m_Name: MachineY
   m_TagString: Untagged
@@ -1202,7 +1259,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   blueprints:
-  - {fileID: 11400000, guid: 424d923850c6bdd4f8aaef8b1736ffb2, type: 2}
+  - {fileID: 11400000, guid: 1593350b08b773c4a9eb815077ba2704, type: 2}
 --- !u!114 &732676999
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1285,6 +1342,19 @@ Transform:
   - {fileID: 1214754454}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &732677002
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 732676997}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3cb961ed72f33774bb04269efd68a756, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  machineUsage: {x: 0, y: 0, z: 0, w: 0}
 --- !u!1001 &770149958
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1544,6 +1614,7 @@ GameObject:
   - component: {fileID: 1462354049}
   - component: {fileID: 1462354048}
   - component: {fileID: 1462354050}
+  - component: {fileID: 1462354051}
   m_Layer: 0
   m_Name: BufferB
   m_TagString: Untagged
@@ -1639,6 +1710,19 @@ MonoBehaviour:
   capacity: 5
   allowedResources:
   - {fileID: 11400000, guid: 0726eea8b00e33749b6a2a8a5599bd83, type: 2}
+--- !u!114 &1462354051
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1462354047}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6cbaba289f2dadb4d8aaebeed70ce6ae, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  averageFill: 0
 --- !u!1001 &1523080494
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1713,6 +1797,7 @@ GameObject:
   - component: {fileID: 1590549970}
   - component: {fileID: 1590549969}
   - component: {fileID: 1590549968}
+  - component: {fileID: 1590549972}
   m_Layer: 0
   m_Name: MachineB
   m_TagString: Untagged
@@ -1816,6 +1901,19 @@ Transform:
   - {fileID: 2067064046}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1590549972
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1590549967}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3cb961ed72f33774bb04269efd68a756, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  machineUsage: {x: 0, y: 0, z: 0, w: 0}
 --- !u!1 &1668069852
 GameObject:
   m_ObjectHideFlags: 0
@@ -1827,6 +1925,7 @@ GameObject:
   - component: {fileID: 1668069855}
   - component: {fileID: 1668069854}
   - component: {fileID: 1668069853}
+  - component: {fileID: 1668069856}
   m_Layer: 0
   m_Name: Drain
   m_TagString: Untagged
@@ -1916,6 +2015,19 @@ Transform:
   - {fileID: 770149959}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1668069856
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1668069852}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ee524cf00df748d4fbcf4904e750802d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  drainRate: 0
 --- !u!1 &1736161252
 GameObject:
   m_ObjectHideFlags: 0
@@ -1946,6 +2058,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7f90e9bfbf4d8e84ebaad4ed7e5f1688, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  deltaTime: 0
 --- !u!212 &1736161254
 SpriteRenderer:
   m_ObjectHideFlags: 0

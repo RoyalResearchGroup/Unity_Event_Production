@@ -11,6 +11,11 @@ public class Buffer : Module
     //Current accepting states
     public List<Resource> allowedResources = new List<Resource>();
 
+
+    //Debug/Stats:
+    private int absoluteFill = 0;
+
+
     public override void DetermineState()
     {
         if (resourceBuffer.Count > 0)
@@ -108,4 +113,16 @@ public class Buffer : Module
             action = action_in && action_out;
         }
     }
+
+
+    /// <summary>
+    /// Debug Section:
+    /// </summary>
+    /// <returns>
+
+    public int GetRBufferFillDEBUG()
+    {
+        return resourceBuffer.Count;
+    }
+
 }

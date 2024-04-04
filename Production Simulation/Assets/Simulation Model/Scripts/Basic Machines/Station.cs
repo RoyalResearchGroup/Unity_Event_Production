@@ -10,9 +10,15 @@ public class Station : Module
     //Current accepting states(Mirror the blueprint managers version)
     private List<Resource> allowedResources = new List<Resource>();
     private Blueprint currentBlueprint;
-
+    private Blueprint setupBlueprint = null; //No setup at start
     //Product buffer
     protected ResourceObject product;
+
+
+    //DEBUG/STATS: Save the ratio of SETUP time to occupation time if setup is needed
+    //[HideInInspector]
+    public float setupRatio { get; set; } = 0f;
+
 
     public override void Start()
     {
@@ -44,6 +50,7 @@ public class Station : Module
         resourceBuffer.Clear();
         b_manager.UpdateAllowedResourcesAndBlueprints(resourceBuffer);
         allowedResources = b_manager.GetAllowedResources();
+        resourceBuffer.Limit = b_manager.GetCurrentCapacity();
         DetermineState();
 
         //DEBUG:
@@ -59,8 +66,18 @@ public class Station : Module
     public override void DispatchEvent()
     {
         base.DispatchEvent();
-        //We need to current blueprints production time
-        e_manager.EnqueueEvent(new Event(currentBlueprint.processingTime, this, EVENTTYPE.PROCESS));
+
+        //Production time calculation: if the blueprint is not ready (different setup), add the setup time
+        float time = currentBlueprint.processingTime;
+        setupRatio = 0f;
+        if (currentBlueprint != setupBlueprint)
+        {
+            time += currentBlueprint.setupTime;
+            setupBlueprint = currentBlueprint;
+            setupRatio = currentBlueprint.setupTime / time;
+        }
+        //Enqueue the event
+        e_manager.EnqueueEvent(new Event(time, this, EVENTTYPE.PROCESS));
         //DEBUG:
         GetComponent<SpriteRenderer>().color = Color.yellow;
     }
@@ -74,6 +91,7 @@ public class Station : Module
             //Update the blueprint manager in case a blueprint is finished
             b_manager.UpdateAllowedResourcesAndBlueprints(resourceBuffer);
             allowedResources = b_manager.GetAllowedResources();
+            resourceBuffer.Limit = b_manager.GetCurrentCapacity();
             bool action_in = true;
             bool action_out = true;
             //The source can only output resources, so no input model needed
@@ -153,7 +171,10 @@ public class Station : Module
             {
                 SetSTATE(STATE.BLOCKED);
             }
-            else { SetSTATE(STATE.EMPTY);}
+            else { SetSTATE(STATE.AVAILABLE);}
+
+            //DEBUG:
+            setupRatio = 0f;
         }
     }
 

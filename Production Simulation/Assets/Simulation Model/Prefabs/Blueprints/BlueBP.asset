@@ -16,5 +16,5 @@ MonoBehaviour:
   - resource: {fileID: 11400000, guid: 0726eea8b00e33749b6a2a8a5599bd83, type: 2}
     number: 1
   product: {fileID: 11400000, guid: 0726eea8b00e33749b6a2a8a5599bd83, type: 2}
-  processingTime: 1
-  setupTime: 2
+  processingTime: 3
+  setupTime: 4

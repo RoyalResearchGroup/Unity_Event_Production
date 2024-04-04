@@ -118,6 +118,9 @@ public abstract class Module : SimulationObject
     }
 
 
+    /// <summary>
+    ///DEBUG SECTION
+    /// </summary>
 
     // Visualize connections in editor mode
     void OnDrawGizmos()
