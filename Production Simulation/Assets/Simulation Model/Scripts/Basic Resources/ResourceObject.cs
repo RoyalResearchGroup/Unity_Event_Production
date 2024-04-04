@@ -5,7 +5,7 @@ using UnityEngine;
 [System.Serializable]
 public class ResourceObject
 {
-    public Resource Resource { get; private set; }
+    public Resource Resource;
 
     public ResourceObject(Resource resource)
     {

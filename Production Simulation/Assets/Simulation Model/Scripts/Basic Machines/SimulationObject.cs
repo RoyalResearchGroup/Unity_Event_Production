@@ -7,6 +7,7 @@ public enum STATE
     AVAILABLE,
     OCCUPIED,
     BLOCKED,
+    EMPTY,
     SETUP,
     AGENT
 }
@@ -57,10 +58,14 @@ public abstract class SimulationObject : MonoBehaviour
     }
 
     //These methods should be overwritten by the respectable derivate
-    public abstract SimulationObject InputCTRL();
+    public abstract SimulationObject InputCTRL(List<Resource> r);
     public abstract SimulationObject OutputCTRL(Resource r);
     //Can be called by previous or succeding models to trigger I/O controls
     public abstract void UpdateCTRL();
+
+    public abstract bool IsInputReady(Resource r);
+
+    public abstract bool IsOutputReady(List<Resource> r);
     
     
 

@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 5ce4696d3d486ee4e85bc657992fc375, type: 3}
-  m_Name: BlueMU
+  m_Name: YellowMU
   m_EditorClassIdentifier: 
-  r_name: blueMU
+  r_name: yellowMU
   r_color: {r: 0, g: 0, b: 0, a: 0}
