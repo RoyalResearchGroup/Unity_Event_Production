@@ -8,4 +8,6 @@ public class Blueprint : ScriptableObject
 {
     public List<ResourceEntry> resources = new List<ResourceEntry>();
     public Resource product;
+    public float processingTime;
+    public float setupTime;
 }

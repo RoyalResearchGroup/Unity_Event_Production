@@ -10,9 +10,13 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 611306c4c38c3da4c81091b56fb64eba, type: 3}
-  m_Name: Blue2
+  m_Name: YandB
   m_EditorClassIdentifier: 
   resources:
   - resource: {fileID: 11400000, guid: 0726eea8b00e33749b6a2a8a5599bd83, type: 2}
-    number: 2
-  product: {fileID: 11400000, guid: 0726eea8b00e33749b6a2a8a5599bd83, type: 2}
+    number: 1
+  - resource: {fileID: 11400000, guid: b1729ac1cd965ad42aefb8d768c3faeb, type: 2}
+    number: 1
+  product: {fileID: 0}
+  processingTime: 6
+  setupTime: 0
