@@ -2,17 +2,27 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+public enum EVENTTYPE
+{
+    PROCESS,
+    CREATE
+}
+
+[System.Serializable]
 public class Event
 {
-    //How long does it take to execute the Event?
+    // The duration it takes to execute the Event.
     public float m_executionTime { get; set; }
-    //Time at which the event was queued
-    public float m_startingTime { get; set; }
+    // Time at which the event was queued.
+    public Module m_module { get; set; }
+    // The type of this event.
+    public EVENTTYPE m_eventType { get; private set; }
 
-    public Event(float executionTime, float startingTime)
+    // Constructor for the event.
+    public Event(float executionTime, Module module, EVENTTYPE eventType)
     {
         m_executionTime = executionTime;
-        m_startingTime = startingTime;
-
+        m_module = module;
+        m_eventType = eventType;
     }
 }
