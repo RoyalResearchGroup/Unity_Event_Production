@@ -34,3 +34,5 @@ Tasks: `Task-X`
 *Story*: Notwendigkeit von mehreren Arbeitsschritten bei der Lösung einer Problemstellung
 
 *Task*: Notwendigkeit von maximal einem Arbeitsschritt bei der Lösung einer Problemstellung
+
+*Folgetasks*: Außerhalb von Stories anlegen
