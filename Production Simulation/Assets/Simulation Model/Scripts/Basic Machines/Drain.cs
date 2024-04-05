@@ -46,7 +46,7 @@ public class Drain : Module
         //There will be no follow ip modules, so nothing to do here
     }
 
-    public override void UpdateCTRL()
+    public override void UpdateCTRL(Module m)
     {
         //No need to update anything
     }

@@ -81,7 +81,7 @@ public class Source : Module
         module.DetermineState();
     }
 
-    public override void UpdateCTRL()
+    public override void UpdateCTRL(Module m)
     {
         //As long as we can find output objects and there are resources present, distribute them
         while(resourceBuffer.Count > 0)
@@ -94,6 +94,12 @@ public class Source : Module
 
             //Get a candidate for output
             mod_out = (Module) OutputCTRL(res_peek);
+
+            if (m != null)
+            {
+                mod_out = m;
+            }
+
             //There are no candidates, so break the loop and return.
             if (mod_out == null) 
             {
@@ -105,6 +111,8 @@ public class Source : Module
             //Otherwise, we can move the resource
             MoveToModule(mod_out);
             mod_out.UpdateCTRL();
+
+            m = null;
         }
         //Dispatch a new Event creation
         if(resourceBuffer.Count < resourceBuffer.Limit)

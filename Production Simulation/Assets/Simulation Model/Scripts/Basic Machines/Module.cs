@@ -1,10 +1,15 @@
+using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Linq.Expressions;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using Unity.VisualScripting;
 using UnityEditor;
 using UnityEditor.Tilemaps;
 using UnityEngine;
+using UnityEngine.Assertions;
+using Random = UnityEngine.Random;
 
 
 public abstract class Module : SimulationObject
@@ -42,7 +47,7 @@ public abstract class Module : SimulationObject
 
         if (e_callback)
         {
-            UpdateCTRL();
+            UpdateCTRL(null);
         }
         //Rest the check
         e_callback = false;
@@ -57,6 +62,25 @@ public abstract class Module : SimulationObject
         SimulationObject object_out = null;
         foreach(GameObject module in successors)
         {
+            //We might prioritize Agents over simple connections (for now not relevant), take the first one aviable
+            if(module.GetComponent<SimulationObject>().GetSTATE() == STATE.AGENT)
+            {
+                Module target = module.GetComponent<Agent>().DetermineAction(gameObject, false);
+                
+                if (target && target.IsInputReady(r))
+                {
+                    object_out = target.GetComponent<SimulationObject>();
+                    // check if target is a valid target
+                    if (Random.value < 1 / (successors.Count))
+                    {
+                        break;
+                    }
+                }
+                else
+                {
+                    reportInacceptibleAgent();
+                }
+            }
             //Did we find a fitting module? It needs to be available and support the given resource
             if (module.GetComponent<SimulationObject>().IsInputReady(r))
             {
@@ -87,11 +111,35 @@ public abstract class Module : SimulationObject
                     break;
                 }
             }
+            //We might prioritize Agents over simple connections (for now not relevant), take the first one aviable
+            else if(module.GetComponent<SimulationObject>().GetSTATE() == STATE.AGENT)
+            {
+                Module target = module.GetComponent<Agent>().DetermineAction(gameObject, false);
+                
+                if (target && target.IsOutputReady(r))
+                {
+                    object_in = target.GetComponent<SimulationObject>();
+                    // check if target is a valid target
+                    if (Random.value < 1 / (successors.Count))
+                    {
+                        break;
+                    }
+                }
+                else
+                {
+                    reportInacceptibleAgent();
+                }
+            }
+
         }
         return object_in;
     }
 
-
+    private void reportInacceptibleAgent()
+    {
+        throw new InvalidDataException("Agent chose a module which is unable to accept the resource!");
+        // Application.Quit();
+    }
 
     //A scheduled event was performed, do the action (callback by the event system).
     public virtual void EventCallback(Event r_event)

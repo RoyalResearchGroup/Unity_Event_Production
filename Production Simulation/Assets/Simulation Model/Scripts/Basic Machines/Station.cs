@@ -83,7 +83,7 @@ public class Station : Module
     }
 
 
-    public override void UpdateCTRL()
+    public override void UpdateCTRL(Module m)
     {
         bool action = true;
         while (resourceBuffer.Count < resourceBuffer.Limit && action)
@@ -103,6 +103,11 @@ public class Station : Module
             //Get a candidate for output
             mod_out = (Module)OutputCTRL(res);
 
+            if (m != null)
+            {
+                mod_out = m;
+            }
+
             //If there no candidate, the out action failed
             if (mod_out == null)
             {
@@ -113,7 +118,7 @@ public class Station : Module
             {
                 //Otherwise, we can move the resource
                 MoveToModule(mod_out);
-                mod_out.UpdateCTRL();
+                mod_out.UpdateCTRL(null);
             }
 
 
@@ -131,11 +136,12 @@ public class Station : Module
             else
             {
                 //Otherwise, initiate the transaction
-                mod_in.UpdateCTRL();
+                mod_in.UpdateCTRL(GetComponent<Module>());
             }
 
             //If neither one of the actions was successful, break the loop
             action = action_in && action_out;
+            m = null;
         }
 
         //UpdateCTRL is a bit different here then in other modules. Every time this is called, we need to check if the machine is ready to produce something.
