@@ -4,10 +4,10 @@ using UnityEngine;
 
 public class RLAgent : Agent
 {
-    protected override GameObject Decide(GameObject caller, List<GameObject> options)
+    protected override GameObject Decide(GameObject caller, List<ModuleInformation> m_info)
     {
         // Here, the neural network needs to make a choice
 
-        return base.Decide(caller, options);
+        return base.Decide(caller, m_info);
     }
 }
