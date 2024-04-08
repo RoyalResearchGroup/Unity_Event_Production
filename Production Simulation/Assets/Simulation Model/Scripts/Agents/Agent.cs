@@ -1,11 +1,17 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Unity.VisualScripting;
 using UnityEngine;
 
 // Base class for all agents. It is pretty stupid, so subagents should not call base.Decide().
 public class Agent : SimulationObject
 {
+
+    protected List<ModuleInformation> m_info = new List<ModuleInformation>();
+    private GameObject d_caller;
+
+
     // Start is called before the first frame update
     public override void Start()
     {
@@ -27,12 +33,15 @@ public class Agent : SimulationObject
     // In case the chosen object is another agent, it is also asked for an action. This recursively repeats until an agent selects a module.
     public Module DetermineAction(GameObject caller, bool callerInFront)
     {
-        var options = callerInFront ? predecessors : successors;
-        if(options == null || options.Count == 0)
+        d_caller = caller;
+        GetObservationInformation(callerInFront, caller);
+
+        //var options = callerInFront ? predecessors : successors;
+        if(m_info == null || m_info.Count == 0)
         {
             return null;
         }
-        GameObject decision = Decide(caller, options);
+        GameObject decision = Decide(caller, m_info);
         if (!decision)
             return null;
 
@@ -56,18 +65,57 @@ public class Agent : SimulationObject
     // prioritize calling the agent rather than other connected modules, while successors act contrarily.
     // This Method should return the module that the agent has chosen. The calling module can then validate that the
     // chosen module is in a valid state and can perform MoveToModule / MoveFromModule from then on.
-    protected virtual GameObject Decide(GameObject caller, List<GameObject> options)
+    protected virtual GameObject Decide(GameObject caller, List<ModuleInformation> m_info)
     {
         GameObject chosen = null;
         
         // This base agent is stupid, so it will always choose the last machine
-        chosen = options.Last();
+        chosen = m_info.Last().module;
         
         // Here the NN agent would ask the network for an output. Integrating the training process into the simulation could be expensive.
         // The heuristic agent could work with strategies, the strategies are scriptable objects that one can assign to the heuristic agent.
 
         return chosen;
     }
+
+    //Iterate through the environment to get information required by the agents. These can access this information through the Agent top level class.
+    private void GetObservationInformation(bool callerInFront, GameObject caller)
+    {
+        m_info.Clear();
+
+        foreach(GameObject pred in predecessors)
+        {
+            ModuleInformation temp_info = pred.GetComponent<Module>().GetModuleInformation();
+            temp_info.module = pred;
+            if (callerInFront)
+            {
+                temp_info.valid = true;
+            }
+            else
+            {
+                temp_info.valid = false;
+            }
+
+            temp_info.ready = pred.GetComponent<Module>().IsOutputReady(caller.GetComponent<Module>().GetAcceptedResources());
+            m_info.Add(temp_info);
+        }
+        foreach (GameObject suc in successors)
+        {
+            ModuleInformation temp_info = suc.GetComponent<Module>().GetModuleInformation();
+            temp_info.module = suc;
+            if (callerInFront)
+            {
+                temp_info.valid = false;
+            }
+            else 
+            {
+                temp_info.valid = true; 
+            }
+            temp_info.ready = suc.GetComponent<Module>().IsInputReady(caller.GetComponent<Module>().GetOutputResource());
+            m_info.Add(temp_info);
+        }
+    }
+
 
     // These aren't used at all, maybe we should move these methods from the SimulationObject class
     // to the Module class.

@@ -30,6 +30,11 @@ public class BlueprintManager : MonoBehaviour
         return currentCapacity;
     }
 
+    public List<float> GetProcessingTimes()
+    {
+        return resourceProcessingTimes;
+    }
+
 
     public void InitializeBlueprintSettings()
     {
