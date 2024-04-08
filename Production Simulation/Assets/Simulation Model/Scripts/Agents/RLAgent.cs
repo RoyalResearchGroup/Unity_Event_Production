@@ -4,10 +4,19 @@ using UnityEngine;
 
 public class RLAgent : Agent
 {
+    /*
+    // The strategy that the agent uses
+    [SerializeField] protected Strategy _strategy;
     protected override GameObject Decide(GameObject caller, List<ModuleInformation> m_info)
     {
-        // Here, the neural network needs to make a choice
+        if (_strategy == null)
+        {
+            // we call this civil disobedience
+            Debug.LogWarning("No strategy selected. Will do nothing...");
+            return null;
+        }
 
-        return base.Decide(caller, m_info);
+        return _strategy.act(caller, m_info);
     }
+    */
 }
