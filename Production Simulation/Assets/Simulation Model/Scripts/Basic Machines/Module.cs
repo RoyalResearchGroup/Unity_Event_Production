@@ -66,9 +66,11 @@ public abstract class Module : SimulationObject
             if(module.GetComponent<SimulationObject>().GetSTATE() == STATE.AGENT)
             {
                 Module target = module.GetComponent<Agent>().DetermineAction(gameObject, false);
+                //Debug.Log(target);
                 
                 if (target && target.IsInputReady(r))
                 {
+                    //Debug.Log("Legal: " + target + " Caller: " + gameObject.name);
                     object_out = target.GetComponent<SimulationObject>();
                     // check if target is a valid target
                     if (Random.value < 1 / (successors.Count))
@@ -78,7 +80,16 @@ public abstract class Module : SimulationObject
                 }
                 else
                 {
-                    reportInacceptibleAgent();
+                    if(!target)
+                    {
+                        //No action taken, valid
+                        //Debug.Log("No action");
+                    }
+                    else
+                    {
+                        Debug.Log("Illegal output: " + target + " Caller: " + gameObject.name);
+                        reportInacceptibleAgent();
+                    }
                 }
             }
             //Did we find a fitting module? It needs to be available and support the given resource
@@ -114,11 +125,13 @@ public abstract class Module : SimulationObject
             //We might prioritize Agents over simple connections (for now not relevant), take the first one aviable
             else if(module.GetComponent<SimulationObject>().GetSTATE() == STATE.AGENT)
             {
-                Module target = module.GetComponent<Agent>().DetermineAction(gameObject, false);
-                
+                Module target = module.GetComponent<Agent>().DetermineAction(gameObject, true);
+                //Debug.Log(target);
+
                 if (target && target.IsOutputReady(r))
                 {
                     object_in = target.GetComponent<SimulationObject>();
+                    //Debug.Log("Legal: " + target + " Caller: " + gameObject.name);
                     // check if target is a valid target
                     if (Random.value < 1 / (successors.Count))
                     {
@@ -127,7 +140,16 @@ public abstract class Module : SimulationObject
                 }
                 else
                 {
-                    reportInacceptibleAgent();
+                    if (!target)
+                    {
+                        //No action taken, valid
+                        //Debug.Log("No action");
+                    }
+                    else
+                    {
+                        Debug.Log("Illegal input: " + target + " Caller: " + gameObject.name);
+                        reportInacceptibleAgent();
+                    }
                 }
             }
 
@@ -164,6 +186,12 @@ public abstract class Module : SimulationObject
     {
         resourceBuffer.Enqueue(o);
     }
+
+    public abstract List<Resource> GetAcceptedResources();
+    public abstract Resource GetOutputResource();
+
+    //Get current state information:
+    public abstract ModuleInformation GetModuleInformation();
 
 
     /// <summary>

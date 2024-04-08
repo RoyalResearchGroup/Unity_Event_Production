@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class Buffer : Module
@@ -131,4 +132,23 @@ public class Buffer : Module
         return resourceBuffer.Count;
     }
 
+    public override ModuleInformation GetModuleInformation()
+    {
+        Resource peek = null;
+        if(resourceBuffer.Count > 0)
+        {
+            peek = resourceBuffer.Peek().Resource;
+        }
+        return new ModuleInformation(TYPE.BUFFER,GetSTATE(), peek, allowedResources, null, null);
+    }
+
+    public override List<Resource> GetAcceptedResources()
+    {
+        return allowedResources;
+    }
+
+    public override Resource GetOutputResource()
+    {
+        return resourceBuffer.Peek().Resource;
+    }
 }

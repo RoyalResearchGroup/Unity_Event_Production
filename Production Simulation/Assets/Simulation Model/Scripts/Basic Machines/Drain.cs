@@ -50,4 +50,19 @@ public class Drain : Module
     {
         //No need to update anything
     }
+
+    public override ModuleInformation GetModuleInformation()
+    {
+        return new ModuleInformation(TYPE.DRAIN,GetSTATE(), null, null, null, null);
+    }
+
+    public override List<Resource> GetAcceptedResources()
+    {
+        return null;
+    }
+
+    public override Resource GetOutputResource()
+    {
+        return null;
+    }
 }
