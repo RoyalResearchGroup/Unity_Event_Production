@@ -23,8 +23,11 @@ public class BufferPanel : PanelController
         usageChart.ClearData();
         foreach (var entry in ((Buffer)simObject).gameObject.GetComponent<BufferStatistics>().bufferFill)
         {
-            usageChart.AddXAxisData(""+entry.Key);
-            usageChart.AddData(0, Mathf.Round(((float)entry.Value)*100.0f / t_manager.time));
+            if (t_manager)
+            {
+                usageChart.AddXAxisData("" + entry.Key);
+                usageChart.AddData(0, Mathf.Round(((float)entry.Value) * 100.0f / t_manager.time));
+            }
         }
 
         resourceChart.ClearData();

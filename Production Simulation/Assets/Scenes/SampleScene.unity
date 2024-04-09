@@ -1767,7 +1767,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_events: {fileID: 1311707035}
   batchSize: 20
-  createStatistic: 0
+  createStatistic: 1
 --- !u!114 &1311707037
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2791,6 +2791,14 @@ PrefabInstance:
     - target: {fileID: 75393186888180712, guid: 3281a09b4e9056642a4db69721821af4, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2119955553098996611, guid: 3281a09b4e9056642a4db69721821af4, type: 3}
+      propertyPath: expectedDate
+      value: 1000
+      objectReference: {fileID: 0}
+    - target: {fileID: 2119955553098996611, guid: 3281a09b4e9056642a4db69721821af4, type: 3}
+      propertyPath: expectedAmount
+      value: 300
       objectReference: {fileID: 0}
     - target: {fileID: 4794061558402858253, guid: 3281a09b4e9056642a4db69721821af4, type: 3}
       propertyPath: lineRenderer
