@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class RLAgent : Agent
+public class RLAgent : BaseAgent
 {
     
     // The strategy that the agent uses
