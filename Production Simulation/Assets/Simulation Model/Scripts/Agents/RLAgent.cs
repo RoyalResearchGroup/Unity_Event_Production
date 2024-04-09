@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class RLAgent : Agent
 {
-    /*
+    
     // The strategy that the agent uses
     [SerializeField] protected Strategy _strategy;
     protected override GameObject Decide(GameObject caller, List<ModuleInformation> m_info)
@@ -18,5 +18,5 @@ public class RLAgent : Agent
 
         return _strategy.act(caller, m_info);
     }
-    */
+    
 }
