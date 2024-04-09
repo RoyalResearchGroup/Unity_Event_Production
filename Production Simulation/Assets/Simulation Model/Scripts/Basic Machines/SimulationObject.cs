@@ -24,6 +24,18 @@ public abstract class SimulationObject : MonoBehaviour
     //State management
     private STATE currentState = STATE.AVAILABLE;
 
+    public GameObject lineRenderer;
+    private GameObject lineRendererInstance;
+
+
+    public virtual void Start()
+    {
+        SetupLists();
+
+        //Create the lines
+        lineRenderer = Instantiate(lineRenderer,transform);
+        lineRenderer.GetComponent<LineDrawer>().DrawLinesToSuccessors(successors);
+    }
 
     //Setup the environment list (all adjacent Simulation objects)
     public void SetupLists()
