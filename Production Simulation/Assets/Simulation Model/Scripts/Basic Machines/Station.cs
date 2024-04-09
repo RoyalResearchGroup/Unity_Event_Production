@@ -213,4 +213,25 @@ public class Station : Module
         }
         return false;
     }
+
+    public override ModuleInformation GetModuleInformation()
+    {
+        Resource peek = null;
+        if(product.Resource != null)
+        {
+            peek = product.Resource;
+        }
+
+        return new ModuleInformation(TYPE.STATION,GetSTATE(), peek, allowedResources, setupBlueprint, b_manager.GetProcessingTimes());
+    }
+
+    public override List<Resource> GetAcceptedResources()
+    {
+        return allowedResources;
+    }
+
+    public override Resource GetOutputResource()
+    {
+        return product.Resource;
+    }
 }

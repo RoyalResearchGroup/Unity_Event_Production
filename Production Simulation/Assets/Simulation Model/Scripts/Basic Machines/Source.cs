@@ -154,6 +154,22 @@ public class Source : Module
         }
         return false;
     }
+
+    public override ModuleInformation GetModuleInformation()
+    {
+        List<float> tList = new List<float>{1 / creationRate};
+        return new ModuleInformation(TYPE.SOURCE,GetSTATE(), creationType, null, null, tList);
+    }
+
+    public override List<Resource> GetAcceptedResources()
+    {
+        return null;
+    }
+
+    public override Resource GetOutputResource()
+    {
+        return creationType;
+    }
 }
 
 

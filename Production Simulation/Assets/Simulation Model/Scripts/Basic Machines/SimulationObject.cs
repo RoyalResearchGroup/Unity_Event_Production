@@ -12,6 +12,15 @@ public enum STATE
     AGENT
 }
 
+
+public enum TYPE
+{
+    BUFFER,
+    STATION,
+    SOURCE,
+    DRAIN
+}
+
 public abstract class SimulationObject : MonoBehaviour
 {
     // A list of modules this one is connected to
