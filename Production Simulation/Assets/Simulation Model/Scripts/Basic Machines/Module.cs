@@ -24,11 +24,10 @@ public abstract class Module : SimulationObject
     //Has an event been dispatched and is pending?
     protected bool d_event = false;
 
-    public virtual void Start()
+    public override void Start()
     {
+        base.Start();
         e_manager = GameObject.FindWithTag("EventManager").GetComponent<EventManager>();
-        //Fill the tamporal variable resource list
-        SetupLists();
     }
 
 

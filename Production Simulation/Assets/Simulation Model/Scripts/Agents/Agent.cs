@@ -7,11 +7,11 @@ using UnityEngine;
 public class Agent : SimulationObject
 {
     // Start is called before the first frame update
-    void Start()
+    public override void Start()
     {
+        base.Start();
         // IMPORTANT: Otherwise modules will not be able to see that this is an agent
         SetSTATE(STATE.AGENT);
-        SetupLists();
     }
 
     // Update is called once per frame
