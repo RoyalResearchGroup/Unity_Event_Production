@@ -66,7 +66,7 @@ public abstract class Module : SimulationObject
             //We might prioritize Agents over simple connections (for now not relevant), take the first one aviable
             if(module.GetComponent<SimulationObject>().GetSTATE() == STATE.AGENT)
             {
-                Module target = module.GetComponent<Agent>().DetermineAction(gameObject, false);
+                Module target = module.GetComponent<BaseAgent>().DetermineAction(gameObject, false);
                 //Debug.Log(target);
                 
                 if (target && target.IsInputReady(r))
@@ -129,7 +129,7 @@ public abstract class Module : SimulationObject
             //We might prioritize Agents over simple connections (for now not relevant), take the first one aviable
             else if(module.GetComponent<SimulationObject>().GetSTATE() == STATE.AGENT)
             {
-                Module target = module.GetComponent<Agent>().DetermineAction(gameObject, true);
+                Module target = module.GetComponent<BaseAgent>().DetermineAction(gameObject, true);
                 //Debug.Log(target);
 
                 if (target && target.IsOutputReady(r))
