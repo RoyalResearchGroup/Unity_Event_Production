@@ -8,6 +8,7 @@ public class Drain : Module
     public int absoluteDrain;
     public List<Resource> allowedResources;
 
+
     public override void DetermineState()
     {
         SetSTATE(STATE.AVAILABLE);
