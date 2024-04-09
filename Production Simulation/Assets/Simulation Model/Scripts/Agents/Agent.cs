@@ -116,6 +116,11 @@ public class Agent : SimulationObject
         }
     }
 
+    public virtual void CallbackIllegalAction()
+    {
+        //DUBIDU
+    }
+
 
     // These aren't used at all, maybe we should move these methods from the SimulationObject class
     // to the Module class.

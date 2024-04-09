@@ -36,6 +36,9 @@ public abstract class SimulationObject : MonoBehaviour
     public GameObject lineRenderer;
     private GameObject lineRendererInstance;
 
+    //UI
+    [SerializeField]
+    public GameObject UIPanel;
 
     public virtual void Start()
     {
