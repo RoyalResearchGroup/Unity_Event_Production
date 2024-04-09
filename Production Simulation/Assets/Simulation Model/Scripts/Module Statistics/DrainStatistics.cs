@@ -7,8 +7,9 @@ public class DrainStatistics : Statistics
 {
     public float drainRate;
 
-    private void Update()
+    public void NotifyEventBatch()
     {
+        if (!useStatistics) return;
         drainRate = GetComponent<Drain>().absoluteDrain / (t_manager.time+1);
     }
 }

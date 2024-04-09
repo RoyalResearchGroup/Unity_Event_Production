@@ -10,10 +10,12 @@ public abstract class Statistics : MonoBehaviour
     //Time manager
     protected TimeManager t_manager;
 
+    protected bool useStatistics;
 
     public virtual void Start()
     {
-        t_manager = GameObject.FindWithTag("TimeManager").GetComponent<TimeManager>();
+        t_manager = GetComponentInParent<TimeManager>();
+        useStatistics = GetComponentInParent<EventManager>().createStatistic;
     }
 
 }
