@@ -5,7 +5,7 @@ using Unity.VisualScripting;
 using UnityEngine;
 
 // Base class for all agents. It is pretty stupid, so subagents should not call base.Decide().
-public class Agent : SimulationObject
+public class BaseAgent : SimulationObject
 {
 
     protected List<ModuleInformation> m_info = new List<ModuleInformation>();
@@ -51,8 +51,8 @@ public class Agent : SimulationObject
             return chosen;
         }
 
-        Agent followUp;
-        if (decision.TryGetComponent<Agent>(out followUp))
+        BaseAgent followUp;
+        if (decision.TryGetComponent<BaseAgent>(out followUp))
         {
             return followUp.DetermineAction(gameObject, callerInFront);
         }
