@@ -193,6 +193,8 @@ public abstract class Module : SimulationObject
     //Get current state information:
     public abstract ModuleInformation GetModuleInformation();
 
+    //public abstract void ResetModule();
+
 
     /// <summary>
     ///DEBUG SECTION

@@ -21,6 +21,15 @@ public class MLAgent : Agent
 
     public override void CollectObservations(VectorSensor sensor)
     {
-        sensor 
+        rlAgent.CollectObservations(sensor);
     }
+
+    public override void OnActionReceived(ActionBuffers actions)
+    {
+        // TODO Here the agent needs to act on the environment
+        rlAgent.SetActions(actions.DiscreteActions);
+    }
+
+
+
 }

@@ -6,10 +6,16 @@ using Unity.MLAgents;
 using Unity.MLAgents.Sensors;
 using Unity.MLAgents.Actuators;
 
-[CreateAssetMenu(fileName = "NewStrategy", menuName = "Strategies/SimpleStrategy")]
+[CreateAssetMenu(fileName = "NewStrategy", menuName = "Strategies/RLAgentStrategy")]
 public class RLStrategy : Strategy
 {
 
+    private RLAgent rlAgent;
+
+    private void Start()
+    {
+        //rlAgent = GetComponent<RLAgent>();
+    }
     public override GameObject act(GameObject caller, List<ModuleInformation> m_info)
     {
         //The Strategy should return a viable machine. 
@@ -27,6 +33,12 @@ public class RLStrategy : Strategy
                 break;
             }
         }
+
+
+        //caller.GetComponent<MLAgent>().CollectObservations(sensor);
+
+
+
         return target;
     }
 }
