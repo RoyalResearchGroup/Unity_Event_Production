@@ -1,12 +1,26 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.ComponentModel;
+using Unity.VisualScripting;
 using UnityEditor.Search;
 using UnityEngine;
+using UnityEngine.Serialization;
+using UnityEditor;
+
+enum Distribution
+{
+    Linear,
+    Normal,
+    Exponential
+}
 
 public class Source : Module
 {
-    public float creationRate;
+    [HideInInspector] public float[] parameters = new float[3] {0.0f, 0.0f, 0.0f};
+    private float creationTime;
     public Resource creationType;
+    [FormerlySerializedAs("dist")] [SerializeField] private Distribution distribution = Distribution.Linear;
 
     public override void DetermineState()
     {
@@ -35,7 +49,8 @@ public class Source : Module
     public override void DispatchEvent()
     {
         base.DispatchEvent();
-        e_manager.EnqueueEvent(new Event(1 / creationRate, this, EVENTTYPE.CREATE));
+        
+        e_manager.EnqueueEvent(new Event(DistributedCreationTime(), this, EVENTTYPE.CREATE));
     }
 
     public override void EventCallback(Event r_event)
@@ -47,6 +62,29 @@ public class Source : Module
         AddResource(obj);
     }
 
+    private float DistributedCreationTime()
+    {
+        switch (distribution)
+        {
+            case Distribution.Linear:
+                float range = parameters[2] - parameters[1];
+                creationTime = RandomFromDistribution.RandomLinear(parameters[0]) * range + parameters[1];
+                break;
+            case Distribution.Normal:
+                creationTime = RandomFromDistribution.RandomNormalDistribution(parameters[0], parameters[1]);
+                break;
+            case Distribution.Exponential:
+                creationTime = RandomFromDistribution.RandomFromExponentialDistribution(parameters[0],
+                    RandomFromDistribution.Direction_e.Right);
+                break;
+            default:
+                creationTime = float.PositiveInfinity;
+                break;
+        }
+
+        return creationTime;
+    }
+
 
 
     public override void Start()
@@ -54,23 +92,19 @@ public class Source : Module
         base.Start();
         //init resource buffer with one slot
         resourceBuffer = new LimitedQueue<ResourceObject>(1);
-        //DispatchEvent();
     }
 
-    public void LateUpdate()
+
+    public override void LateUpdate()
     {
+        base.LateUpdate();
+
         //If the buffer is not full
-        if (resourceBuffer.Count < resourceBuffer.Limit && GetSTATE() != STATE.OCCUPIED)
-        {
+        if(resourceBuffer.Count < resourceBuffer.Limit && GetSTATE()!=STATE.OCCUPIED) {
             //Dispatch the Event to spawn a resource
             DispatchEvent();
             DetermineState();
-        }
-    }
-
-    public override void NotifyEventBatch()
-    {
-        base.NotifyEventBatch();  
+        }   
     }
 
 
@@ -158,28 +192,59 @@ public class Source : Module
         }
         return false;
     }
-
-    public override ModuleInformation GetModuleInformation()
+    
+    
+    
+    [CustomEditor(typeof(Source))]
+    [Serializable]
+    public class MyScriptEditor: Editor
     {
-        List<float> tList = new List<float>{1 / creationRate};
-        return new ModuleInformation(TYPE.SOURCE,GetSTATE(), creationType, null, null, tList);
-    }
+        private SerializedProperty parametersProp;
 
-    public override List<Resource> GetAcceptedResources()
-    {
-        return null;
-    }
+        private void OnEnable()
+        {
+            parametersProp = serializedObject.FindProperty("parameters");
+        }
 
-    public override Resource GetOutputResource()
-    {
-        return creationType;
-    }
+        public override void OnInspectorGUI() 
+        {
+            serializedObject.Update();
+            base.OnInspectorGUI();
+            
+            // Reference the variables in the script
+            Source script = (Source)target;
 
-    public override void ResetModule()
-    {
-        base.ResetModule();
-        resourceBuffer.Clear();  
-        DetermineState();
+            // Ensure the label and the value are on the same line
+            EditorGUILayout.BeginHorizontal();
+            
+            EditorGUI.BeginChangeCheck();
+            
+            switch (script.distribution)
+            {
+                case Distribution.Linear:
+                    EditorGUILayout.PropertyField(parametersProp.GetArrayElementAtIndex(0), new GUIContent("Slope"));
+                    EditorGUILayout.EndHorizontal(); EditorGUILayout.BeginHorizontal();
+                    EditorGUILayout.PropertyField(parametersProp.GetArrayElementAtIndex(1), new GUIContent("Min"));
+                    EditorGUILayout.EndHorizontal(); EditorGUILayout.BeginHorizontal();
+                    EditorGUILayout.PropertyField(parametersProp.GetArrayElementAtIndex(2), new GUIContent("Max"));
+                    break;
+                case Distribution.Normal:
+                    EditorGUILayout.PropertyField(parametersProp.GetArrayElementAtIndex(0), new GUIContent("Mean"));
+                    EditorGUILayout.EndHorizontal(); EditorGUILayout.BeginHorizontal();
+                    EditorGUILayout.PropertyField(parametersProp.GetArrayElementAtIndex(1), new GUIContent("Standard Deviation"));
+                    break;
+                case Distribution.Exponential:
+                    EditorGUILayout.PropertyField(parametersProp.GetArrayElementAtIndex(0), new GUIContent("Exponent"));
+                    break;
+            }
+            
+            if (EditorGUI.EndChangeCheck())
+            {
+                serializedObject.ApplyModifiedProperties();
+            }
+            
+            EditorGUILayout.EndHorizontal();
+        }
     }
 }
 
