@@ -6,6 +6,7 @@ using UnityEngine;
 /// <summary>
 /// The event manager handles the execution of events. Each frame update, ONE event is processed from the list and the time advanced.
 /// </summary>
+[RequireComponent(typeof(TimeManager))]
 public class EventManager : MonoBehaviour
 {
     //Event list. Here, we can insert events
@@ -15,31 +16,50 @@ public class EventManager : MonoBehaviour
     //Time manager
     private TimeManager m_timeManager;
 
+    //Performance optimization: If theres performance overhead, process events in batches
+    [SerializeField]
+    private int batchSize = 1;
+
+    [SerializeField]
+    public bool createStatistic = true;
+
 
     private void Start()
     {
-        m_timeManager = GameObject.FindWithTag("TimeManager").GetComponent<TimeManager>();
+        m_timeManager = GetComponent<TimeManager>();
         m_events = GetComponent<SortedList>();
     }
 
     private void Update()
     {
-        //Here, we process the first event in the list
-        if(m_events.PeekEvent() != null)
+        int counter = 0;
+        while(counter < batchSize)
         {
-            //DEBUG
-            //Debug.Log(m_events.PrintEvents());
-            //Pop the first event
-            Event m_event = m_events.PopEvent();
-            //Notify the module it was dispatched from (generally just a state change)
-            m_event.m_module.EventCallback(m_event);
+            //Here, we process the first event in the list
+            if (m_events.PeekEvent() != null)
+            {
+                //DEBUG
+                //Debug.Log(m_events.PrintEvents());
+                //Pop the first event
+                Event m_event = m_events.PopEvent();
+                //Notify the module it was dispatched from (generally just a state change)
+                m_event.m_module.EventCallback(m_event);
 
-            //Update the time
-            //First: Update the time of all events contained in the list
-            m_events.SubtractTimeFromEvents(m_event.m_executionTime);
-            //Second: Update the global time by adding the time
-            m_timeManager.ProgressTime(m_event.m_executionTime);
-            //Else, nothing to do here! The modules will update the simulation state automatically
+                //Update the time
+                //First: Update the time of all events contained in the list
+                m_events.SubtractTimeFromEvents(m_event.m_executionTime);
+                //Second: Update the global time by adding the time
+                m_timeManager.ProgressTime(m_event.m_executionTime);
+
+
+                //Some modules have to be notified that the event was processed (eg source, drain)
+                BroadcastMessage("NotifyEventBatch");
+                counter++;
+            }
+            else
+            {
+                break;
+            }
         }
 
     }

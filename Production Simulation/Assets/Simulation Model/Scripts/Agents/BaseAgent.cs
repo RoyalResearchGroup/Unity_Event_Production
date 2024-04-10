@@ -13,11 +13,11 @@ public class BaseAgent : SimulationObject
 
 
     // Start is called before the first frame update
-    void Start()
+    public override void Start()
     {
+        base.Start();
         // IMPORTANT: Otherwise modules will not be able to see that this is an agent
         SetSTATE(STATE.AGENT);
-        SetupLists();
     }
 
     // Update is called once per frame
@@ -114,6 +114,11 @@ public class BaseAgent : SimulationObject
             temp_info.ready = suc.GetComponent<Module>().IsInputReady(caller.GetComponent<Module>().GetOutputResource());
             m_info.Add(temp_info);
         }
+    }
+
+    public virtual void CallbackIllegalAction()
+    {
+        //DUBIDU
     }
 
 

@@ -151,4 +151,10 @@ public class Buffer : Module
     {
         return resourceBuffer.Peek().Resource;
     }
+
+    public override void ResetModule()
+    {
+        resourceBuffer.Clear();
+        absoluteFill = 0;
+    }
 }
