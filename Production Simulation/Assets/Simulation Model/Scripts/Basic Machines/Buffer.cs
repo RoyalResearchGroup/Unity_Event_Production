@@ -154,7 +154,9 @@ public class Buffer : Module
 
     public override void ResetModule()
     {
+        base.ResetModule();
         resourceBuffer.Clear();
         absoluteFill = 0;
+        DetermineState ();
     }
 }
