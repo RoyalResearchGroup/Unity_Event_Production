@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.ComponentModel;
 using Unity.VisualScripting;
 using UnityEditor.Search;
 using UnityEngine;
@@ -16,10 +17,10 @@ enum Distribution
 
 public class Source : Module
 {
-    [SerializeField] public float[] parameters = new float[2];
+    [HideInInspector] public float[] parameters = new float[3] {0.0f, 0.0f, 0.0f};
     private float creationTime;
     public Resource creationType;
-    [SerializeField] private Distribution dist = Distribution.Linear;
+    [FormerlySerializedAs("dist")] [SerializeField] private Distribution distribution = Distribution.Linear;
 
     public override void DetermineState()
     {
@@ -63,10 +64,11 @@ public class Source : Module
 
     private float DistributedCreationTime()
     {
-        switch (dist)
+        switch (distribution)
         {
             case Distribution.Linear:
-                creationTime = RandomFromDistribution.RandomLinear(parameters[0]);
+                float range = parameters[2] - parameters[1];
+                creationTime = RandomFromDistribution.RandomLinear(parameters[0]) * range + parameters[1];
                 break;
             case Distribution.Normal:
                 creationTime = RandomFromDistribution.RandomNormalDistribution(parameters[0], parameters[1]);
@@ -217,14 +219,18 @@ public class Source : Module
             
             EditorGUI.BeginChangeCheck();
             
-            switch (script.dist)
+            switch (script.distribution)
             {
                 case Distribution.Linear:
                     EditorGUILayout.PropertyField(parametersProp.GetArrayElementAtIndex(0), new GUIContent("Slope"));
+                    EditorGUILayout.EndHorizontal(); EditorGUILayout.BeginHorizontal();
+                    EditorGUILayout.PropertyField(parametersProp.GetArrayElementAtIndex(1), new GUIContent("Min"));
+                    EditorGUILayout.EndHorizontal(); EditorGUILayout.BeginHorizontal();
+                    EditorGUILayout.PropertyField(parametersProp.GetArrayElementAtIndex(2), new GUIContent("Max"));
                     break;
                 case Distribution.Normal:
                     EditorGUILayout.PropertyField(parametersProp.GetArrayElementAtIndex(0), new GUIContent("Mean"));
-                    //EditorGUILayout.EndHorizontal();
+                    EditorGUILayout.EndHorizontal(); EditorGUILayout.BeginHorizontal();
                     EditorGUILayout.PropertyField(parametersProp.GetArrayElementAtIndex(1), new GUIContent("Standard Deviation"));
                     break;
                 case Distribution.Exponential:
