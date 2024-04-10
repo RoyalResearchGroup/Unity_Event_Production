@@ -1,26 +1,12 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.ComponentModel;
-using Unity.VisualScripting;
 using UnityEditor.Search;
 using UnityEngine;
-using UnityEngine.Serialization;
-using UnityEditor;
-
-enum Distribution
-{
-    Linear,
-    Normal,
-    Exponential
-}
 
 public class Source : Module
 {
-    [HideInInspector] public float[] parameters = new float[3] {0.0f, 0.0f, 0.0f};
-    private float creationTime;
+    public float creationRate;
     public Resource creationType;
-    [FormerlySerializedAs("dist")] [SerializeField] private Distribution distribution = Distribution.Linear;
 
     public override void DetermineState()
     {
@@ -49,8 +35,7 @@ public class Source : Module
     public override void DispatchEvent()
     {
         base.DispatchEvent();
-        
-        e_manager.EnqueueEvent(new Event(DistributedCreationTime(), this, EVENTTYPE.CREATE));
+        e_manager.EnqueueEvent(new Event(1 / creationRate, this, EVENTTYPE.CREATE));
     }
 
     public override void EventCallback(Event r_event)
@@ -60,29 +45,6 @@ public class Source : Module
         //Create the resource object
         ResourceObject obj = new ResourceObject(creationType);
         AddResource(obj);
-    }
-
-    private float DistributedCreationTime()
-    {
-        switch (distribution)
-        {
-            case Distribution.Linear:
-                float range = parameters[2] - parameters[1];
-                creationTime = RandomFromDistribution.RandomLinear(parameters[0]) * range + parameters[1];
-                break;
-            case Distribution.Normal:
-                creationTime = RandomFromDistribution.RandomNormalDistribution(parameters[0], parameters[1]);
-                break;
-            case Distribution.Exponential:
-                creationTime = RandomFromDistribution.RandomFromExponentialDistribution(parameters[0],
-                    RandomFromDistribution.Direction_e.Right);
-                break;
-            default:
-                creationTime = float.PositiveInfinity;
-                break;
-        }
-
-        return creationTime;
     }
 
 
@@ -196,59 +158,28 @@ public class Source : Module
         }
         return false;
     }
-    
-    
-    
-    [CustomEditor(typeof(Source))]
-    [Serializable]
-    public class MyScriptEditor: Editor
+
+    public override ModuleInformation GetModuleInformation()
     {
-        private SerializedProperty parametersProp;
+        List<float> tList = new List<float>{1 / creationRate};
+        return new ModuleInformation(TYPE.SOURCE,GetSTATE(), creationType, null, null, tList);
+    }
 
-        private void OnEnable()
-        {
-            parametersProp = serializedObject.FindProperty("parameters");
-        }
+    public override List<Resource> GetAcceptedResources()
+    {
+        return null;
+    }
 
-        public override void OnInspectorGUI() 
-        {
-            serializedObject.Update();
-            base.OnInspectorGUI();
-            
-            // Reference the variables in the script
-            Source script = (Source)target;
+    public override Resource GetOutputResource()
+    {
+        return creationType;
+    }
 
-            // Ensure the label and the value are on the same line
-            EditorGUILayout.BeginHorizontal();
-            
-            EditorGUI.BeginChangeCheck();
-            
-            switch (script.distribution)
-            {
-                case Distribution.Linear:
-                    EditorGUILayout.PropertyField(parametersProp.GetArrayElementAtIndex(0), new GUIContent("Slope"));
-                    EditorGUILayout.EndHorizontal(); EditorGUILayout.BeginHorizontal();
-                    EditorGUILayout.PropertyField(parametersProp.GetArrayElementAtIndex(1), new GUIContent("Min"));
-                    EditorGUILayout.EndHorizontal(); EditorGUILayout.BeginHorizontal();
-                    EditorGUILayout.PropertyField(parametersProp.GetArrayElementAtIndex(2), new GUIContent("Max"));
-                    break;
-                case Distribution.Normal:
-                    EditorGUILayout.PropertyField(parametersProp.GetArrayElementAtIndex(0), new GUIContent("Mean"));
-                    EditorGUILayout.EndHorizontal(); EditorGUILayout.BeginHorizontal();
-                    EditorGUILayout.PropertyField(parametersProp.GetArrayElementAtIndex(1), new GUIContent("Standard Deviation"));
-                    break;
-                case Distribution.Exponential:
-                    EditorGUILayout.PropertyField(parametersProp.GetArrayElementAtIndex(0), new GUIContent("Exponent"));
-                    break;
-            }
-            
-            if (EditorGUI.EndChangeCheck())
-            {
-                serializedObject.ApplyModifiedProperties();
-            }
-            
-            EditorGUILayout.EndHorizontal();
-        }
+    public override void ResetModule()
+    {
+        base.ResetModule();
+        resourceBuffer.Clear();  
+        DetermineState();
     }
 
     public override void ResetModule()
