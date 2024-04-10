@@ -47,4 +47,13 @@ public class BufferStatistics : Statistics
         absoluteFill += GetComponent<Buffer>().GetRBufferFillDEBUG() * t_manager.deltaTime;
         averageFill = absoluteFill / t_manager.time;
     }
+
+    public override void ResetModule()
+    {
+        averageFill = 0;
+        absoluteFill = 0;
+        resourceSum = 0;
+        aggregatedResources.Clear();
+        bufferFill.Clear();
+    }
 }

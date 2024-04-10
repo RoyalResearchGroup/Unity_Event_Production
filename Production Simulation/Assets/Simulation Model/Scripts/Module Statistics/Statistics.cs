@@ -18,4 +18,5 @@ public abstract class Statistics : MonoBehaviour
         useStatistics = GetComponentInParent<EventManager>().createStatistic;
     }
 
+    public abstract void ResetModule();
 }
