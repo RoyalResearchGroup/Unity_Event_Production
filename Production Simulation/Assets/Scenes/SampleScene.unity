@@ -13,7 +13,7 @@ OcclusionCullingSettings:
 --- !u!104 &2
 RenderSettings:
   m_ObjectHideFlags: 0
-  serializedVersion: 9
+  serializedVersion: 10
   m_Fog: 0
   m_FogColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}
   m_FogMode: 3
@@ -44,7 +44,6 @@ RenderSettings:
 LightmapSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 12
-  m_GIWorkflowMode: 1
   m_GISettings:
     serializedVersion: 2
     m_BounceScale: 1
@@ -67,9 +66,6 @@ LightmapSettings:
     m_LightmapParameters: {fileID: 0}
     m_LightmapsBakeMode: 1
     m_TextureCompression: 1
-    m_FinalGather: 0
-    m_FinalGatherFiltering: 1
-    m_FinalGatherRayCount: 256
     m_ReflectionCompression: 2
     m_MixedBakeMode: 2
     m_BakeBackend: 0
@@ -176,6 +172,8 @@ SpriteRenderer:
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 0
   m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -288,7 +286,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   connectedObjects:
-  - {fileID: 1648459137}
+  - {fileID: 0}
 --- !u!212 &97882785
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -306,6 +304,8 @@ SpriteRenderer:
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 0
   m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -481,6 +481,8 @@ SpriteRenderer:
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 0
   m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -719,6 +721,8 @@ SpriteRenderer:
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 0
   m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -915,6 +919,8 @@ SpriteRenderer:
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 0
   m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -1152,6 +1158,8 @@ SpriteRenderer:
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 0
   m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -1250,7 +1258,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   connectedObjects:
-  - {fileID: 1648459137}
+  - {fileID: 0}
 --- !u!212 &732677000
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -1268,6 +1276,8 @@ SpriteRenderer:
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 0
   m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -1659,6 +1669,8 @@ SpriteRenderer:
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 0
   m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -1757,7 +1769,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   connectedObjects:
-  - {fileID: 1648459137}
+  - {fileID: 0}
 --- !u!212 &1590549970
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -1775,6 +1787,8 @@ SpriteRenderer:
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 0
   m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -1849,7 +1863,8 @@ GameObject:
   m_Component:
   - component: {fileID: 1648459136}
   - component: {fileID: 1648459138}
-  - component: {fileID: 1648459137}
+  - component: {fileID: 1648459140}
+  - component: {fileID: 1648459139}
   m_Layer: 0
   m_Name: Agent (1)
   m_TagString: Untagged
@@ -1873,23 +1888,6 @@ Transform:
   - {fileID: 1705642598}
   m_Father: {fileID: 1311707034}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1648459137
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1648459135}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 77a0fc9fbe32a147482dcb1a04ac0960, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  connectedObjects:
-  - {fileID: 584370161}
-  - {fileID: 624324969}
-  - {fileID: 1468906097}
-  _strategy: {fileID: 11400000, guid: 465e76c10d9018744a0c3722f93a437c, type: 2}
 --- !u!212 &1648459138
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -1907,6 +1905,8 @@ SpriteRenderer:
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 0
   m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -1942,6 +1942,32 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &1648459139
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1648459135}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d849f6e832f97f49f97081c7d38ce2e1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  connectedObjects: []
+  _strategy: {fileID: 0}
+--- !u!114 &1648459140
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1648459135}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0035f1d2c479d694f9c9c249b9da9ac5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &1668069853 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 4794061558402858253, guid: 3281a09b4e9056642a4db69721821af4, type: 3}
@@ -2068,6 +2094,8 @@ SpriteRenderer:
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 0
   m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -2312,6 +2340,8 @@ SpriteRenderer:
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 0
   m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -2545,23 +2575,23 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3698676927356203186, guid: d561281c0ae9ab846bec2125b25c75fa, type: 3}
-      propertyPath: allowedResources.Array.data[0]
+      propertyPath: 'allowedResources.Array.data[0]'
       value: 
       objectReference: {fileID: 11400000, guid: 0726eea8b00e33749b6a2a8a5599bd83, type: 2}
     - target: {fileID: 3698676927356203186, guid: d561281c0ae9ab846bec2125b25c75fa, type: 3}
-      propertyPath: connectedObjects.Array.data[0]
+      propertyPath: 'connectedObjects.Array.data[0]'
       value: 
       objectReference: {fileID: 2028906109}
     - target: {fileID: 3698676927356203186, guid: d561281c0ae9ab846bec2125b25c75fa, type: 3}
-      propertyPath: connectedObjects.Array.data[1]
+      propertyPath: 'connectedObjects.Array.data[1]'
       value: 
       objectReference: {fileID: 97882784}
     - target: {fileID: 3698676927356203186, guid: d561281c0ae9ab846bec2125b25c75fa, type: 3}
-      propertyPath: connectedObjects.Array.data[2]
+      propertyPath: 'connectedObjects.Array.data[2]'
       value: 
       objectReference: {fileID: 732676999}
     - target: {fileID: 3698676927356203186, guid: d561281c0ae9ab846bec2125b25c75fa, type: 3}
-      propertyPath: connectedObjects.Array.data[3]
+      propertyPath: 'connectedObjects.Array.data[3]'
       value: 
       objectReference: {fileID: 1590549969}
     - target: {fileID: 5252317540498491593, guid: d561281c0ae9ab846bec2125b25c75fa, type: 3}
@@ -2626,7 +2656,7 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 11400000, guid: 0726eea8b00e33749b6a2a8a5599bd83, type: 2}
     - target: {fileID: 3072050068962860056, guid: ae7a0aa567654ea4c87fad5fbfd43994, type: 3}
-      propertyPath: connectedObjects.Array.data[0]
+      propertyPath: 'connectedObjects.Array.data[0]'
       value: 
       objectReference: {fileID: 1462354050}
     - target: {fileID: 3246497237683324552, guid: ae7a0aa567654ea4c87fad5fbfd43994, type: 3}
@@ -2743,19 +2773,19 @@ PrefabInstance:
       value: MachineYB 1
       objectReference: {fileID: 0}
     - target: {fileID: 4174982596692924601, guid: d3c38f4475499064083b28af2330bfef, type: 3}
-      propertyPath: connectedObjects.Array.data[0]
+      propertyPath: 'connectedObjects.Array.data[0]'
       value: 
-      objectReference: {fileID: 1648459137}
+      objectReference: {fileID: 0}
     - target: {fileID: 5865962122886976372, guid: d3c38f4475499064083b28af2330bfef, type: 3}
       propertyPath: blueprints.Array.size
       value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 5865962122886976372, guid: d3c38f4475499064083b28af2330bfef, type: 3}
-      propertyPath: blueprints.Array.data[0]
+      propertyPath: 'blueprints.Array.data[0]'
       value: 
       objectReference: {fileID: 11400000, guid: 553c9bc36a5b7fa4090f2540d34e0122, type: 2}
     - target: {fileID: 5865962122886976372, guid: d3c38f4475499064083b28af2330bfef, type: 3}
-      propertyPath: blueprints.Array.data[1]
+      propertyPath: 'blueprints.Array.data[1]'
       value: 
       objectReference: {fileID: 11400000, guid: b1c94dd9f5f59794aa556acb00a72d80, type: 2}
     m_RemovedComponents: []

@@ -7,15 +7,8 @@ using Unity.MLAgents.Sensors;
 using Unity.MLAgents.Actuators;
 
 [CreateAssetMenu(fileName = "NewStrategy", menuName = "Strategies/SimpleStrategy")]
-public class RLStrategy : Strategy, Agent 
+public class RLStrategy : Strategy
 {
-
-
-    public override void OnEpisodeBegin()
-    {
-
-
-    }
 
     public override GameObject act(GameObject caller, List<ModuleInformation> m_info)
     {
