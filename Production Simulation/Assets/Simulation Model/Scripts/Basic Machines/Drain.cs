@@ -6,6 +6,8 @@ public class Drain : Module
 {
     //Number of drained (exiting the system) items
     public int absoluteDrain;
+    public List<Resource> allowedResources;
+
 
     public override void DetermineState()
     {
@@ -14,8 +16,8 @@ public class Drain : Module
 
     public override bool IsInputReady(Resource r)
     {
-        //Input is always possible
-        return true;
+        if(allowedResources.Contains(r)) return true;
+        return false;   
     }
 
     public override bool IsOutputReady(List<Resource> r)
@@ -31,7 +33,7 @@ public class Drain : Module
         DetermineState();
     }
 
-    public override void LateUpdate()
+    public override void NotifyEventBatch()
     {
         //Simply clear the resource buffer
         if(resourceBuffer.Count > 0 )
@@ -39,6 +41,7 @@ public class Drain : Module
             absoluteDrain += resourceBuffer.Count;
             resourceBuffer.Clear();
         }
+        base.NotifyEventBatch();
     }
 
     public override void MoveToModule(Module module)
@@ -48,6 +51,44 @@ public class Drain : Module
 
     public override void UpdateCTRL(Module m)
     {
-        //No need to update anything
+        //Check if there is an aviable input machine that could provide a new resource
+        while(true)
+        {
+            Module mod_in;
+
+            mod_in = (Module)InputCTRL(allowedResources);
+
+            //Same case for the input
+            if (mod_in == null)
+            {
+                DetermineState();
+                return;
+            }
+            else
+            {
+                //Otherwise, initiate the transaction
+                mod_in.UpdateCTRL(GetComponent<Module>());
+            }
+        }
+    }
+
+    public override ModuleInformation GetModuleInformation()
+    {
+        return new ModuleInformation(TYPE.DRAIN,GetSTATE(), null, allowedResources, null, null);
+    }
+
+    public override List<Resource> GetAcceptedResources()
+    {
+        return allowedResources;
+    }
+
+    public override Resource GetOutputResource()
+    {
+        return null;
+    }
+
+    public override void ResetModule()
+    {
+        absoluteDrain = 0;  
     }
 }
