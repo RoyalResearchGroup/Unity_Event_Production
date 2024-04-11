@@ -35,6 +35,7 @@ public class ExperimentManager : MonoBehaviour
     private void Start()
     {
         e_manager = GetComponent<EventManager>();
+        StartExperiment();
     }
 
     public void NotifyEventBatch()

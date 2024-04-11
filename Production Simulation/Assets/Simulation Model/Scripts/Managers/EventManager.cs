@@ -98,4 +98,10 @@ public class EventManager : MonoBehaviour
     {
         m_events.AddEvent(r_event);
     }
+
+    public void Pause(bool yes)
+    {
+        Debug.Log("Pause");
+        experimentRunning = !yes;
+    }
 }

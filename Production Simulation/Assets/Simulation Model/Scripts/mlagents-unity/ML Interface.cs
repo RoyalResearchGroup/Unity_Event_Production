@@ -17,7 +17,10 @@ public class MLInterface : Agent
 
     public override void OnEpisodeBegin()
     {
-        
+
+        GetComponentInParent<ExperimentManager>().StopExperiment();
+        // start the experiment in the experiment manager
+        GetComponentInParent<ExperimentManager>().StartExperiment();
     }
 
 
@@ -29,6 +32,7 @@ public class MLInterface : Agent
 
     public override void OnActionReceived(ActionBuffers actions)
     {
+        Debug.Log("Actions received");
         // TODO Here the agent needs to act on the environment
         rlAgent.SetActions(actions.DiscreteActions);
     }

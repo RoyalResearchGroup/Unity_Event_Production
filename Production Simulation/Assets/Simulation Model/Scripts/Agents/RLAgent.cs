@@ -2,30 +2,47 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Unity.MLAgents;
+using System;
 using Unity.MLAgents.Sensors;
 using Unity.MLAgents.Actuators;
+using System.Runtime.CompilerServices;
 
 [RequireComponent(typeof(MLInterface))]
-[RequireComponent(typeof(BufferSensorComponent))]
 public class RLAgent : BaseAgent
 {
     
     // The strategy that the agent uses
     [SerializeField] protected Strategy _strategy;
-    BufferSensorComponent bf;
     MLInterface mlAgent;
+    EventManager e_manager;
+    GameObject caller;
+    bool callerInFront;
+
     ActionSegment<int> discreteActions;
     bool actionsReceived = false;
 
-    private void Start()
+    public override void Start()
     {
-        SetSTATE(STATE.AGENT);
-        bf = GetComponent<BufferSensorComponent>();
+        base.Start();
         mlAgent = GetComponent<MLInterface>();
+        e_manager = GetComponentInParent<EventManager>();
+    }
+
+    private void LateUpdate()
+    {
+        
+    }
+
+    public new Module DetermineAction(GameObject caller, bool callerInFront)
+    {
+        this.caller = caller;
+        this.callerInFront = callerInFront;
+        return base.DetermineAction(caller, callerInFront);
     }
 
     protected override GameObject Decide(GameObject caller, List<ModuleInformation> m_info)
     {
+
         /*if (_strategy == null)
         {
             // we call this civil disobedience
@@ -35,6 +52,85 @@ public class RLAgent : BaseAgent
 
         return _strategy.act(caller, m_info);*/
 
+        //Debug.Log("Observations: " + inputs.Count);
+        //bf.AppendObservation(inputs.ToArray());
+        e_manager.Pause(true);
+
+        // Wait for the actions to be received using a coroutine
+        StartCoroutine(WaitForActions());
+        //WaitForActions();
+
+        return null;
+    }
+
+    
+    // Implement WaitForActions coroutine
+    IEnumerator WaitForActions()
+    {
+        mlAgent.RequestDecision();
+
+        while (!actionsReceived)
+        {
+            yield return new WaitForEndOfFrame();
+        }
+
+        if (discreteActions.Length > 0)
+        {
+            var output = discreteActions[0];
+
+
+            if (output < 0 || output >= m_info.Count)
+            {
+                // give penalty for invalid action
+                Debug.LogWarning("Action out of range");
+                mlAgent.EndEpisode();
+                // end the experiment in the experiment manager
+                mlAgent.AddReward(-1f);
+                mlAgent.EndEpisode();
+                GetComponentInParent<ExperimentManager>().StopExperiment();
+            }
+            else if (m_info[output].valid && m_info[output].ready)
+            {
+                // valid action received, return the corresponding module
+                //return m_info[output].module;
+                Module callerM = caller.GetComponent<Module>();
+                Module decisionM = m_info[output].module.GetComponent<Module>();
+                Debug.Log("Valid action selected: " + decisionM.name);
+                if (callerInFront)
+                {
+                    // maybe the caller could not be ready to get input (if it is dogshit)
+                    decisionM.UpdateCTRL(callerM);
+                }
+                else
+                {
+                    callerM.UpdateCTRL(decisionM);
+                }
+                mlAgent.AddReward(0.5f);
+            }
+            else
+            {
+                // give penalty for invalid action
+                Debug.LogWarning("Invalid action selected: " + output);
+                // add penalty
+                mlAgent.AddReward(-0.1f);
+                mlAgent.EndEpisode();
+                GetComponentInParent<ExperimentManager>().StopExperiment();
+
+            }
+        }
+        else
+        {
+            Debug.LogWarning("No actions received");
+        }
+
+        // Reset the flag for the next decision
+        actionsReceived = false;
+        e_manager.Pause(false);
+    }
+    
+
+    public void CollectObservations(VectorSensor sensor)
+    {
         List<float> inputs = new List<float>();
         foreach (ModuleInformation info in m_info)
         {
@@ -53,65 +149,11 @@ public class RLAgent : BaseAgent
                     
                     break;*/
                 default:
-                    float inp = System.Convert.ToSingle(info.valid && info.ready);
-                    inputs.Add(inp);
+                    //float inp = System.Convert.ToSingle(info.valid && info.ready);
+                    sensor.AddObservation(info.valid && info.ready);
                     break;
             }
         }
-        bf.AppendObservation(inputs.ToArray());
-
-        mlAgent.RequestAction();
-
-        // Wait for the actions to be received using a coroutine
-        StartCoroutine(WaitForActions());
-
-        return null;
-    }
-
-    
-    // Implement WaitForActions coroutine
-    IEnumerator WaitForActions()
-    {
-        while (!actionsReceived)
-        {
-            yield return new WaitForSeconds(0.1f);
-        }
-        if (discreteActions.Length > 0)
-        {
-            var output = discreteActions[0];
-
-
-            if (output < 0 || output >= m_info.Count)
-            {
-                // give penalty for invalid action
-                Debug.LogWarning("Action out of range");
-                mlAgent.EndEpisode();
-            }
-            else if (m_info[output].valid && m_info[output].ready)
-            {
-                // valid action received, return the corresponding module
-                yield return m_info[output].module;
-            }
-            else
-            {
-                // give penalty for invalid action
-                Debug.LogWarning("Invalid action selected");
-                mlAgent.EndEpisode();
-            }
-        }
-        else
-        {
-            Debug.LogWarning("No actions received");
-        }
-
-        // Reset the flag for the next decision
-        actionsReceived = false;
-    }
-    
-
-    public void CollectObservations(VectorSensor sensor)
-    {
-
     }
 
 
@@ -120,5 +162,45 @@ public class RLAgent : BaseAgent
         discreteActions = acts;
         actionsReceived = true;
     }
-    
+
+    public class CoroutineAwaiter : INotifyCompletion
+    {
+        private readonly MonoBehaviour _host;
+        private readonly IEnumerator _coroutine;
+        private Action _continuation;
+
+        public CoroutineAwaiter(MonoBehaviour host, IEnumerator coroutine)
+        {
+            _host = host;
+            _coroutine = coroutine;
+        }
+
+        public CoroutineAwaiter GetAwaiter()
+        {
+            return this;
+        }
+
+        public bool IsCompleted
+        {
+            get { return false; }
+        }
+
+        public void OnCompleted(Action continuation)
+        {
+            _continuation = continuation;
+            _host.StartCoroutine(InvokeCoroutine());
+        }
+
+        private IEnumerator InvokeCoroutine()
+        {
+            yield return _host.StartCoroutine(_coroutine);
+            _continuation?.Invoke();
+        }
+
+        public void GetResult()
+        {
+            // No result to return for coroutine
+        }
+    }
+
 }
