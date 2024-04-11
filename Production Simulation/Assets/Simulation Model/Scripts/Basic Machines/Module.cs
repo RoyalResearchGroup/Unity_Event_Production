@@ -21,7 +21,7 @@ public abstract class Module : SimulationObject
     protected EventManager e_manager;
     [HideInInspector]
     protected ExperimentManager x_manager;
-    private bool e_callback = false;
+    protected bool e_callback = false;
 
     //Has an event been dispatched and is pending?
     protected bool d_event = false;
@@ -204,7 +204,11 @@ public abstract class Module : SimulationObject
     //Get current state information:
     public abstract ModuleInformation GetModuleInformation();
 
-    public abstract void ResetModule();
+    public virtual void ResetModule()
+    {
+        d_event= false;
+        e_callback= false;
+    }
 
     /// <summary>
     ///DEBUG SECTION

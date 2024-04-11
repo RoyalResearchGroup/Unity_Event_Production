@@ -64,6 +64,11 @@ public class SortedList : MonoBehaviour
         }
     }
 
+    public void Clear()
+    {
+        events.Clear();
+    }
+
     //DEB
     public string PrintEvents()
     {
