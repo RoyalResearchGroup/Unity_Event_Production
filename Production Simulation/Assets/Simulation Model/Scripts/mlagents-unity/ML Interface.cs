@@ -5,7 +5,7 @@ using Unity.MLAgents;
 using Unity.MLAgents.Sensors;
 using Unity.MLAgents.Actuators;
 
-public class MLAgent : Agent
+public class MLInterface : Agent
 {
     RLAgent rlAgent;
     // Start is called before the first frame update

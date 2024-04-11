@@ -5,7 +5,7 @@ using Unity.MLAgents;
 using Unity.MLAgents.Sensors;
 using Unity.MLAgents.Actuators;
 
-[RequireComponent(typeof(MLAgent))]
+[RequireComponent(typeof(MLInterface))]
 [RequireComponent(typeof(BufferSensorComponent))]
 public class RLAgent : BaseAgent
 {
@@ -13,7 +13,7 @@ public class RLAgent : BaseAgent
     // The strategy that the agent uses
     [SerializeField] protected Strategy _strategy;
     BufferSensorComponent bf;
-    MLAgent mlAgent;
+    MLInterface mlAgent;
     ActionSegment<int> discreteActions;
     bool actionsReceived = false;
 
@@ -21,7 +21,7 @@ public class RLAgent : BaseAgent
     {
         SetSTATE(STATE.AGENT);
         bf = GetComponent<BufferSensorComponent>();
-        mlAgent = GetComponent<MLAgent>();
+        mlAgent = GetComponent<MLInterface>();
     }
 
     protected override GameObject Decide(GameObject caller, List<ModuleInformation> m_info)
@@ -65,43 +65,55 @@ public class RLAgent : BaseAgent
         // Wait for the actions to be received using a coroutine
         StartCoroutine(WaitForActions());
 
-        var output = discreteActions[0];
-
-        if (output < 0 || output >= m_info.Count)
-        {
-            // give penalty for invalid action
-            Debug.LogWarning("Invalid action selected");
-            return null;
-        }
-
-        if (m_info[output].valid && m_info[output].ready)
-        {
-            return m_info[output].module;
-        } 
-        else
-        {
-            // give penalty for invalid action
-            Debug.LogWarning("Invalid action selected");
-        }
-
-
         return null;
     }
 
+    
     // Implement WaitForActions coroutine
     IEnumerator WaitForActions()
     {
         while (!actionsReceived)
         {
-            yield return null;
+            yield return new WaitForSeconds(0.1f);
         }
+        if (discreteActions.Length > 0)
+        {
+            var output = discreteActions[0];
+
+
+            if (output < 0 || output >= m_info.Count)
+            {
+                // give penalty for invalid action
+                Debug.LogWarning("Action out of range");
+                mlAgent.EndEpisode();
+            }
+            else if (m_info[output].valid && m_info[output].ready)
+            {
+                // valid action received, return the corresponding module
+                yield return m_info[output].module;
+            }
+            else
+            {
+                // give penalty for invalid action
+                Debug.LogWarning("Invalid action selected");
+                mlAgent.EndEpisode();
+            }
+        }
+        else
+        {
+            Debug.LogWarning("No actions received");
+        }
+
+        // Reset the flag for the next decision
         actionsReceived = false;
     }
+    
 
     public void CollectObservations(VectorSensor sensor)
     {
 
     }
+
 
     public void SetActions(ActionSegment<int> acts)
     {
