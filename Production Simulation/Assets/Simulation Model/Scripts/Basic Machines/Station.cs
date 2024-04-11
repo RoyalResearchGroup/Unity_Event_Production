@@ -57,9 +57,9 @@ public class Station : Module
         GetComponent<SpriteRenderer>().color = Color.white;
     }
 
-    public override void LateUpdate()
+    public override void NotifyEventBatch()
     {
-        base.LateUpdate();
+        base.NotifyEventBatch();
     }
 
 
@@ -233,5 +233,15 @@ public class Station : Module
     public override Resource GetOutputResource()
     {
         return product.Resource;
+    }
+
+    public override void ResetModule()
+    {
+        resourceBuffer.Clear();
+        product.Resource = null;
+        b_manager.UpdateAllowedResourcesAndBlueprints(resourceBuffer);
+        allowedResources = b_manager.GetAllowedResources();
+        currentBlueprint = null;
+        setupBlueprint = null;
     }
 }

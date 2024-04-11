@@ -1,0 +1,142 @@
+@startuml
+!theme reddress-darkblue
+skinparam groupInheritance 3
+
+enum STATE {
+AVAILABLE
+BLOCKED
+OCCUPIED
+EMPTY
+SETUP
+AGENT
+}
+
+enum TYPE {
+SOURCE
+BUFFER
+STATION
+DRAIN
+}
+
+abstract class SimulationObject {
+#predecessors: SimulationObject[]
+#successors: SimulationObject[]
+
+{abstract} +InputCtrl(): SimulationObject
+{abstract} +OutputCtrl(Resource): SimulationObject
+{abstract} +UpdateCtrl(): void
+{abstract} +IsInputReady(Resource): bool
+{abstract} +IsOutputReady(List<Resource>): bool
++GetSTATE(): STATE
+}
+
+class Module extends SimulationObject {
+-e_callback: bool
+#d_event: bool
+
+{abstract} +DetermineState(): void
+{abstract} +MoveToModule(Module): void
+{abstract} +GetModuleInformation(): ModuleInformation
++EventCallback(Event): void <<virtual>>
++DispatchEvent(): void <<virtual>>
+}
+
+class ModuleInformation {
++type: TYPE
++state: STATE
++ product: Resource
++ input: List<Resource>
++ setup: Blueprint
++ processingTimes: List<float>
+
++ valid: bool
++ module: GameObject
++ ready: bool
+}
+
+class Station extends Module {
+-allowedResources: List<Resource>
+#product: ResourceObject
+}
+
+class Source extends Module
+class Buffer extends Module
+class Drain extends Module
+
+class BlueprintManager {
++blueprints: List<Blueprint>
+
++InitializeBlueprintSettings(): void
++UpdateAllowedResourcesAndBlueprints(Queue<ResourceObject>): void
++RecalculateCapacities(List<Blueprint>): void
++FindFirstBlueprintMeetingRequirements(Queue<ResourceObject>): Blueprint
+}
+
+class Blueprint {
++resources: Dictionary<Resource, int>
++product: Resource
++processingTime: float
++setupTime: float
+}
+
+class Agent extends SimulationObject {
+-d_caller: GameObject
+#m_info: List<ModuleInformation>
+
+-GetObservationInformation(bool, GameObject): void
+#Decide(GameObject, List<ModuleInformation>): GameObject <<virtual>>
++DetermineAction(GameObject, bool): Module
+}
+
+class HeuristicAgent extends Agent {
+#Decide(GameObject, bool): GameObject <<override>>
+}
+
+class RLAgent extends Agent
+
+abstract Strategy {
+{abstract} +act(GameObject, List<ModuleInformation>): GameObject
+}
+
+class Resource {
++name: string
++color: Color
+}
+
+class ResourceObject
+
+class EventManager {
+-Update(): void
+}
+
+enum EVENT_TYPE {
+PROCESS
+CREATE
+}
+
+class Event {
++executionTime: float
+}
+
+class TimeManager {
++time: float
++ProgressTime(float): void
+}
+
+
+SimulationObject *-right- STATE
+SimulationObject *-left- TYPE
+Module "*" -- "*" Resource : possible resources
+Module "1" -- "n" ResourceObject: resourceBuffer
+ResourceObject "n" o-- "1" Resource
+EventManager "1" *-- "1" TimeManager
+EventManager "1" -- "n" Event
+Event *-- EVENT_TYPE
+
+Module o-left- ModuleInformation
+Station o-- BlueprintManager
+Station --> Blueprint: -currentBlueprint
+Station --> Blueprint: -setupBlueprint
+HeuristicAgent *-- Strategy
+
+@enduml

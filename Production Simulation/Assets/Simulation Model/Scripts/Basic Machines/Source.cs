@@ -54,12 +54,13 @@ public class Source : Module
         base.Start();
         //init resource buffer with one slot
         resourceBuffer = new LimitedQueue<ResourceObject>(1);
+        DispatchEvent();
     }
 
 
-    public override void LateUpdate()
+    public override void NotifyEventBatch()
     {
-        base.LateUpdate();
+        base.NotifyEventBatch();
 
         //If the buffer is not full
         if(resourceBuffer.Count < resourceBuffer.Limit && GetSTATE()!=STATE.OCCUPIED) {
@@ -169,6 +170,11 @@ public class Source : Module
     public override Resource GetOutputResource()
     {
         return creationType;
+    }
+
+    public override void ResetModule()
+    {
+        resourceBuffer.Clear();  
     }
 }
 
