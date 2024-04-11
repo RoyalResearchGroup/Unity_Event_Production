@@ -643,8 +643,8 @@ MonoBehaviour:
   UIPanel: {fileID: 0}
   parameters:
   - 0
-  - 0.6
-  - 0.9
+  - 0.007
+  - 0.015
   creationType: {fileID: 11400000, guid: b1729ac1cd965ad42aefb8d768c3faeb, type: 2}
   distribution: 0
 --- !u!212 &359211416
@@ -3523,11 +3523,11 @@ PrefabInstance:
       objectReference: {fileID: 7171977854619541312, guid: c5f5a07b8c399fd4783b291e500bcf9a, type: 3}
     - target: {fileID: 3072050068962860056, guid: ae7a0aa567654ea4c87fad5fbfd43994, type: 3}
       propertyPath: 'parameters.Array.data[1]'
-      value: 0.5
+      value: 0.01
       objectReference: {fileID: 0}
     - target: {fileID: 3072050068962860056, guid: ae7a0aa567654ea4c87fad5fbfd43994, type: 3}
       propertyPath: 'parameters.Array.data[2]'
-      value: 1
+      value: 0.02
       objectReference: {fileID: 0}
     - target: {fileID: 3072050068962860056, guid: ae7a0aa567654ea4c87fad5fbfd43994, type: 3}
       propertyPath: 'connectedObjects.Array.data[0]'
