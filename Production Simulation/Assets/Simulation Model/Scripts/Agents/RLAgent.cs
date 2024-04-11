@@ -77,7 +77,8 @@ public class RLAgent : BaseAgent
         if (discreteActions.Length > 0)
         {
             var output = discreteActions[0];
-
+            string outputString = "";
+            Debug.Log("Action Length: " + discreteActions.Array[0] + discreteActions.Array[1] + discreteActions.Array[2] + discreteActions.Array[3] + discreteActions.Array[4] + discreteActions.Array[5]);
 
             if (output < 0 || output >= m_info.Count)
             {
@@ -96,6 +97,7 @@ public class RLAgent : BaseAgent
                 Module callerM = caller.GetComponent<Module>();
                 Module decisionM = m_info[output].module.GetComponent<Module>();
                 Debug.Log("Valid action selected: " + decisionM.name);
+                mlAgent.AddReward(0.5f);
                 if (callerInFront)
                 {
                     // maybe the caller could not be ready to get input (if it is dogshit)
@@ -105,14 +107,13 @@ public class RLAgent : BaseAgent
                 {
                     callerM.UpdateCTRL(decisionM);
                 }
-                mlAgent.AddReward(0.5f);
             }
             else
             {
                 // give penalty for invalid action
                 Debug.LogWarning("Invalid action selected: " + output);
                 // add penalty
-                mlAgent.AddReward(-0.1f);
+                mlAgent.AddReward(-1f);
                 mlAgent.EndEpisode();
                 GetComponentInParent<ExperimentManager>().StopExperiment();
 
@@ -161,46 +162,6 @@ public class RLAgent : BaseAgent
     {
         discreteActions = acts;
         actionsReceived = true;
-    }
-
-    public class CoroutineAwaiter : INotifyCompletion
-    {
-        private readonly MonoBehaviour _host;
-        private readonly IEnumerator _coroutine;
-        private Action _continuation;
-
-        public CoroutineAwaiter(MonoBehaviour host, IEnumerator coroutine)
-        {
-            _host = host;
-            _coroutine = coroutine;
-        }
-
-        public CoroutineAwaiter GetAwaiter()
-        {
-            return this;
-        }
-
-        public bool IsCompleted
-        {
-            get { return false; }
-        }
-
-        public void OnCompleted(Action continuation)
-        {
-            _continuation = continuation;
-            _host.StartCoroutine(InvokeCoroutine());
-        }
-
-        private IEnumerator InvokeCoroutine()
-        {
-            yield return _host.StartCoroutine(_coroutine);
-            _continuation?.Invoke();
-        }
-
-        public void GetResult()
-        {
-            // No result to return for coroutine
-        }
     }
 
 }
