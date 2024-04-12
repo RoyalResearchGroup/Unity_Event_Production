@@ -28,12 +28,12 @@ public class RLAgent : BaseAgent
         e_manager = GetComponentInParent<EventManager>();
     }
 
-    private void LateUpdate()
+    public void NotifyEventBatch()
     {
-        
+        Academy.Instance.EnvironmentStep();
     }
 
-    public new Module DetermineAction(GameObject caller, bool callerInFront)
+    public override Module DetermineAction(GameObject caller, bool callerInFront)
     {
         this.caller = caller;
         this.callerInFront = callerInFront;
@@ -42,7 +42,6 @@ public class RLAgent : BaseAgent
 
     protected override GameObject Decide(GameObject caller, List<ModuleInformation> m_info)
     {
-
         /*if (_strategy == null)
         {
             // we call this civil disobedience
@@ -76,9 +75,15 @@ public class RLAgent : BaseAgent
 
         if (discreteActions.Length > 0)
         {
+            /*string outputString = "Continuous Actions: ";
+            foreach (var action in discreteActions)
+            {
+                outputString += action + " ";
+            }
+            Debug.Log("Action: " + outputString);*/
+            
             var output = discreteActions[0];
-            string outputString = "";
-            Debug.Log("Action Length: " + discreteActions.Array[0] + discreteActions.Array[1] + discreteActions.Array[2] + discreteActions.Array[3] + discreteActions.Array[4] + discreteActions.Array[5]);
+            Debug.Log("Action: " + output);
 
             if (output < 0 || output >= m_info.Count)
             {
@@ -94,6 +99,7 @@ public class RLAgent : BaseAgent
             {
                 // valid action received, return the corresponding module
                 //return m_info[output].module;
+                Debug.Log("Caller: " + caller);
                 Module callerM = caller.GetComponent<Module>();
                 Module decisionM = m_info[output].module.GetComponent<Module>();
                 Debug.Log("Valid action selected: " + decisionM.name);
@@ -101,7 +107,7 @@ public class RLAgent : BaseAgent
                 if (callerInFront)
                 {
                     // maybe the caller could not be ready to get input (if it is dogshit)
-                    decisionM.UpdateCTRL(callerM);
+                    //decisionM.UpdateCTRL(callerM);
                 }
                 else
                 {

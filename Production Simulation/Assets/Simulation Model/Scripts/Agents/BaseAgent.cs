@@ -31,7 +31,7 @@ public class BaseAgent : SimulationObject
     // it then calls Decide() to choose a GameObject from the action space.
     // if the chosen object is a module, that is returned.
     // In case the chosen object is another agent, it is also asked for an action. This recursively repeats until an agent selects a module.
-    public Module DetermineAction(GameObject caller, bool callerInFront)
+    public virtual Module DetermineAction(GameObject caller, bool callerInFront)
     {
         d_caller = caller;
         GetObservationInformation(callerInFront, caller);

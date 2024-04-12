@@ -1,5 +1,7 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Numerics;
 using UnityEngine;
 using Unity.MLAgents;
 using Unity.MLAgents.Sensors;
@@ -9,6 +11,11 @@ public class MLInterface : Agent
 {
     RLAgent rlAgent;
 
+    private void Awake()
+    {
+        Academy.Instance.AutomaticSteppingEnabled = false;
+    }
+
     // Start is called before the first frame update
     void Start()
     {
@@ -17,7 +24,7 @@ public class MLInterface : Agent
 
     public override void OnEpisodeBegin()
     {
-
+        
         GetComponentInParent<ExperimentManager>().StopExperiment();
         // start the experiment in the experiment manager
         GetComponentInParent<ExperimentManager>().StartExperiment();

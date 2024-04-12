@@ -238,7 +238,7 @@ public class Station : Module
     public override void ResetModule()
     {
         base.ResetModule();
-        Debug.Log("RESET");
+        //sDebug.Log("RESET");
         resourceBuffer.Clear();
         product.Resource = null;
         b_manager.UpdateAllowedResourcesAndBlueprints(resourceBuffer);
