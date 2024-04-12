@@ -6,7 +6,7 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "NewStrategy", menuName = "Strategies/SimpleStrategy")]
 public class SimpleStrategy : Strategy
 {
-    public override GameObject act(GameObject caller, List<ModuleInformation> m_info)
+    public override GameObject act(GameObject caller, List<ModuleInformation> m_info, bool callerInFront)
     {
         //The Strategy should return a viable machine. 
         //This simple example strategy will show how the m_info list can be used to find a fitting target.

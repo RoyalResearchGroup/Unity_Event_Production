@@ -121,6 +121,10 @@ public class Station : Module
                 mod_out.UpdateCTRL(null);
             }
 
+            if(product.Resource != null)
+            {
+                return;
+            }
 
             //Check if there is an aviable input machine that could provide a new resource
             Module mod_in;
@@ -222,7 +226,7 @@ public class Station : Module
             peek = product.Resource;
         }
 
-        return new ModuleInformation(TYPE.STATION,GetSTATE(), peek, allowedResources, setupBlueprint, b_manager.GetProcessingTimes());
+        return new ModuleInformation(TYPE.STATION,GetSTATE(), peek, allowedResources, setupBlueprint, b_manager.GetProcessingTimes(), b_manager.blueprints);
     }
 
     public override List<Resource> GetAcceptedResources()

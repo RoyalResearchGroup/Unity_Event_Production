@@ -12,7 +12,7 @@ public class DrainStatistics : Statistics
     public void NotifyEventBatch()
     {
         if (!useStatistics) return;
-        drainRate = GetComponent<Drain>().absoluteDrain / (t_manager.time+1);
+        drainRate = GetComponent<Drain>().absoluteDrain / (t_manager.time+0.000000001f);
         timePerProduct = 1 / drainRate;
     }
 

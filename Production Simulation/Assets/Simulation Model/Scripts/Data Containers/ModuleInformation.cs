@@ -16,6 +16,7 @@ public class ModuleInformation
     public Blueprint setup;
 
     public List<float> processingTimes;
+    public List<Blueprint> blueprints;
 
     //SET BY AGENT
     public bool valid = false;
@@ -31,7 +32,7 @@ public class ModuleInformation
     /// <param name="i"></param>
     /// <param name="u"></param>
     /// <param name="t"></param>
-    public ModuleInformation(TYPE y, STATE s, Resource p, List<Resource> i, Blueprint u, List<float> t)
+    public ModuleInformation(TYPE y, STATE s, Resource p, List<Resource> i, Blueprint u, List<float> t, List<Blueprint> b)
     {
         type = y;
         state = s;
@@ -39,5 +40,6 @@ public class ModuleInformation
         input = i;
         setup = u;
         processingTimes = t;
+        blueprints = b;
     }
 }

@@ -9,7 +9,6 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f290e5efce2dcca42ae9abda0a6b210d, type: 3}
-  m_Name: rate_1
+  m_Script: {fileID: 11500000, guid: c53229ab9ae8db2468dc9466d50994b9, type: 3}
+  m_Name: pt
   m_EditorClassIdentifier: 
-  targetRate: 1000000

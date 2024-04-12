@@ -74,7 +74,7 @@ public class Drain : Module
 
     public override ModuleInformation GetModuleInformation()
     {
-        return new ModuleInformation(TYPE.DRAIN,GetSTATE(), null, allowedResources, null, null);
+        return new ModuleInformation(TYPE.DRAIN,GetSTATE(), null, allowedResources, null, null, null);
     }
 
     public override List<Resource> GetAcceptedResources()

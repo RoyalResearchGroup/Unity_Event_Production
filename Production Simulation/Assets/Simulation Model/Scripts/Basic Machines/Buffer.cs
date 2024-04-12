@@ -139,7 +139,7 @@ public class Buffer : Module
         {
             peek = resourceBuffer.Peek().Resource;
         }
-        return new ModuleInformation(TYPE.BUFFER,GetSTATE(), peek, allowedResources, null, null);
+        return new ModuleInformation(TYPE.BUFFER,GetSTATE(), peek, allowedResources, null, null, null);
     }
 
     public override List<Resource> GetAcceptedResources()

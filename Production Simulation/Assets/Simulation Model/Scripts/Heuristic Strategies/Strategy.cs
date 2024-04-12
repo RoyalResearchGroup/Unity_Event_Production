@@ -9,5 +9,5 @@ using UnityEngine;
 public abstract class Strategy : ScriptableObject
 {
     // The list passed here is the action space. Maybe we should also provide the observation space to the strategies.
-    public abstract GameObject act(GameObject caller, List<ModuleInformation> m_info);
+    public abstract GameObject act(GameObject caller, List<ModuleInformation> m_info , bool callerInFront);
 }

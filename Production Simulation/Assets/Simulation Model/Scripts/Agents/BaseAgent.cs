@@ -41,7 +41,7 @@ public class BaseAgent : SimulationObject
         {
             return null;
         }
-        GameObject decision = Decide(caller, m_info);
+        GameObject decision = Decide(caller, m_info, callerInFront);
         if (!decision)
             return null;
 
@@ -65,7 +65,7 @@ public class BaseAgent : SimulationObject
     // prioritize calling the agent rather than other connected modules, while successors act contrarily.
     // This Method should return the module that the agent has chosen. The calling module can then validate that the
     // chosen module is in a valid state and can perform MoveToModule / MoveFromModule from then on.
-    protected virtual GameObject Decide(GameObject caller, List<ModuleInformation> m_info)
+    protected virtual GameObject Decide(GameObject caller, List<ModuleInformation> m_info, bool callerInFront)
     {
         GameObject chosen = null;
         

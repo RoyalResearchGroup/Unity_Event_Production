@@ -5,7 +5,7 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "NewStrategy", menuName = "Strategies/LFUStrategy")]
 public class LFUStrategy : Strategy
 {
-    public override GameObject act(GameObject caller, List<ModuleInformation> m_info)
+    public override GameObject act(GameObject caller, List<ModuleInformation> m_info, bool callerInFront)
     {
         //Implement here
         return null;
