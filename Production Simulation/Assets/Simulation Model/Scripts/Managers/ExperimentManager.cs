@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -38,11 +39,20 @@ public class ExperimentManager : MonoBehaviour
         StartExperiment();
     }
 
+    private void Update()
+    {
+        if (!running)
+        {
+            StartExperiment();
+        }
+    }
+
     public void NotifyEventBatch()
     {
         if (!e_manager.createStatistic) return;
         if(experiment.EvaluateState(this, observationSpace))
         {
+            Debug.LogWarning("Experiment succeeded!");
             StopExperiment();
         }
     }

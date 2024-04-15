@@ -101,7 +101,6 @@ public class EventManager : MonoBehaviour
 
     public void Pause(bool yes)
     {
-        Debug.Log("Pause");
         experimentRunning = !yes;
     }
 }

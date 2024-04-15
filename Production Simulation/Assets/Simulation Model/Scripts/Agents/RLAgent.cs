@@ -99,7 +99,6 @@ public class RLAgent : BaseAgent
             {
                 // valid action received, return the corresponding module
                 //return m_info[output].module;
-                Debug.Log("Caller: " + caller);
                 Module callerM = caller.GetComponent<Module>();
                 Module decisionM = m_info[output].module.GetComponent<Module>();
                 Debug.Log("Valid action selected: " + decisionM.name);
@@ -107,12 +106,15 @@ public class RLAgent : BaseAgent
                 if (callerInFront)
                 {
                     // maybe the caller could not be ready to get input (if it is dogshit)
-                    //decisionM.UpdateCTRL(callerM);
+                    decisionM.UpdateCTRL(callerM);
+                    //decisionM.MoveToModule(callerM);
                 }
                 else
                 {
                     callerM.UpdateCTRL(decisionM);
+                    //callerM.MoveToModule(decisionM);
                 }
+                e_manager.Pause(false);
             }
             else
             {
@@ -122,17 +124,17 @@ public class RLAgent : BaseAgent
                 mlAgent.AddReward(-1f);
                 mlAgent.EndEpisode();
                 GetComponentInParent<ExperimentManager>().StopExperiment();
-
             }
         }
         else
         {
             Debug.LogWarning("No actions received");
+            e_manager.Pause(false);
         }
 
         // Reset the flag for the next decision
         actionsReceived = false;
-        e_manager.Pause(false);
+        //e_manager.Pause(false);
     }
     
 
