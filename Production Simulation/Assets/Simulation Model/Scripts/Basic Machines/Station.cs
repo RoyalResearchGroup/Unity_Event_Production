@@ -68,7 +68,7 @@ public class Station : Module
         base.DispatchEvent();
 
         //Production time calculation: if the blueprint is not ready (different setup), add the setup time
-        float time = currentBlueprint.processingTime;
+        float time = currentBlueprint.DistributedProcessingTime(); 
         setupRatio = 0f;
         if (currentBlueprint != setupBlueprint)
         {
