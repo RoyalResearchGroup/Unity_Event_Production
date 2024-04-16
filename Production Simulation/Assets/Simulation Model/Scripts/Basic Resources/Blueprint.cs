@@ -9,12 +9,13 @@ using UnityEngine.Serialization;
 public class Blueprint : ScriptableObject
 {
     
-    [FormerlySerializedAs("dist")][SerializeField] private Distribution distribution = Distribution.Linear;
     [HideInInspector] public float[] parameters = new float[3] { 0.0f, 0.0f, 0.0f };
     public List<ResourceEntry> resources = new List<ResourceEntry>();
     public Resource product;
     public float processingTime;
     public float setupTime;
+    [SerializeField] private Distribution distribution = Distribution.Linear;
+
     
     public float DistributedProcessingTime()
     {
