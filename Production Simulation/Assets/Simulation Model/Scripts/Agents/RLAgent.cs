@@ -83,16 +83,21 @@ public class RLAgent : BaseAgent
             Debug.Log("Action: " + outputString);*/
             
             var output = discreteActions[0];
-            Debug.Log("Action: " + output);
+            //Debug.Log("Action: " + output);
 
-            if (output < 0 || output >= m_info.Count)
+            if (output == m_info.Count)
+            {
+                // no module selected (do nothing)
+                Debug.Log("Do nothing...");
+                e_manager.Pause(false);
+            }
+            else if (output < 0 || output >= m_info.Count)
             {
                 // give penalty for invalid action
                 Debug.LogWarning("Action out of range");
-                mlAgent.EndEpisode();
                 // end the experiment in the experiment manager
                 mlAgent.AddReward(-1f);
-                mlAgent.EndEpisode();
+                mlAgent.EndEpisode(); 
                 GetComponentInParent<ExperimentManager>().StopExperiment();
             }
             else if (m_info[output].valid && m_info[output].ready)
@@ -101,7 +106,7 @@ public class RLAgent : BaseAgent
                 //return m_info[output].module;
                 Module callerM = caller.GetComponent<Module>();
                 Module decisionM = m_info[output].module.GetComponent<Module>();
-                Debug.Log("Valid action selected: " + decisionM.name);
+                Debug.Log("Valid action selected");
                 mlAgent.AddReward(0.5f);
                 if (callerInFront)
                 {
@@ -119,7 +124,7 @@ public class RLAgent : BaseAgent
             else
             {
                 // give penalty for invalid action
-                Debug.LogWarning("Invalid action selected: " + output);
+                Debug.LogWarning("Invalid action selected");
                 // add penalty
                 mlAgent.AddReward(-1f);
                 mlAgent.EndEpisode();
@@ -163,6 +168,12 @@ public class RLAgent : BaseAgent
                     break;
             }
         }
+    }
+
+    public void ApplyDeadlockPenalty()
+    {
+        mlAgent.AddReward(-5f);
+        mlAgent.EndEpisode();
     }
 
 
