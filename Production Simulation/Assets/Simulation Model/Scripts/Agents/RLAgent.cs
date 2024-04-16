@@ -28,11 +28,6 @@ public class RLAgent : BaseAgent
         e_manager = GetComponentInParent<EventManager>();
     }
 
-    public void NotifyEventBatch()
-    {
-        Academy.Instance.EnvironmentStep();
-    }
-
     public override Module DetermineAction(GameObject caller, bool callerInFront)
     {
         this.caller = caller;
@@ -54,7 +49,7 @@ public class RLAgent : BaseAgent
         //Debug.Log("Observations: " + inputs.Count);
         //bf.AppendObservation(inputs.ToArray());
         e_manager.Pause(true);
-
+        Academy.Instance.EnvironmentStep();
         // Wait for the actions to be received using a coroutine
         StartCoroutine(WaitForActions());
         //WaitForActions();
