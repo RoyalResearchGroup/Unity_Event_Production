@@ -20,7 +20,7 @@ public class Source : Module
     [HideInInspector] public float[] parameters = new float[3] { 0.0f, 0.0f, 0.0f };
     private float creationTime;
     public Resource creationType;
-    [FormerlySerializedAs("dist")][SerializeField] private Distribution distribution = Distribution.Linear;
+    [SerializeField] private Distribution distribution = Distribution.Linear;
 
     public override void DetermineState()
     {
