@@ -65,4 +65,12 @@ public class StationStatistics : Statistics
 
         machineUsage = new Vector4(absoluteUsage.x/abs_time, absoluteUsage.y / abs_time, absoluteUsage.z / abs_time, absoluteUsage.w / abs_time);
     }
+
+    public override void ResetModule()
+    {
+        absoluteUsage = Vector4.zero;
+        machineUsage = Vector4.zero;
+        aggregatedResources.Clear();
+        resourceSum = 0;
+    }
 }

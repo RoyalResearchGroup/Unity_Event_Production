@@ -54,20 +54,23 @@ public class Source : Module
         base.Start();
         //init resource buffer with one slot
         resourceBuffer = new LimitedQueue<ResourceObject>(1);
-        DispatchEvent();
+        //DispatchEvent();
     }
 
-
-    public override void NotifyEventBatch()
+    public void LateUpdate()
     {
-        base.NotifyEventBatch();
-
         //If the buffer is not full
-        if(resourceBuffer.Count < resourceBuffer.Limit && GetSTATE()!=STATE.OCCUPIED) {
+        if (resourceBuffer.Count < resourceBuffer.Limit && GetSTATE() != STATE.OCCUPIED)
+        {
             //Dispatch the Event to spawn a resource
             DispatchEvent();
             DetermineState();
-        }   
+        }
+    }
+
+    public override void NotifyEventBatch()
+    {
+        base.NotifyEventBatch();  
     }
 
 
@@ -94,12 +97,7 @@ public class Source : Module
             Resource res_peek = resourceBuffer.Peek().Resource;
 
             //Get a candidate for output
-            mod_out = (Module) OutputCTRL(res_peek);
-
-            if (m != null)
-            {
-                mod_out = m;
-            }
+            mod_out = m != null ? m : (Module)OutputCTRL(res_peek);
 
             //There are no candidates, so break the loop and return.
             if (mod_out == null) 
@@ -174,7 +172,9 @@ public class Source : Module
 
     public override void ResetModule()
     {
+        base.ResetModule();
         resourceBuffer.Clear();  
+        DetermineState();
     }
 }
 

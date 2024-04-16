@@ -14,4 +14,9 @@ public class TimeManager : MonoBehaviour
         deltaTime = dt;
     }
 
+    public void ResetModule()
+    {
+        time = 0;
+        deltaTime = 0;
+    }
 }

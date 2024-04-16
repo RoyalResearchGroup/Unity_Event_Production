@@ -101,12 +101,7 @@ public class Station : Module
             Resource res = product.Resource;
 
             //Get a candidate for output
-            mod_out = (Module)OutputCTRL(res);
-
-            if (m != null)
-            {
-                mod_out = m;
-            }
+            mod_out = m != null ? m : (Module)OutputCTRL(res);
 
             //If there no candidate, the out action failed
             if (mod_out == null)
@@ -237,11 +232,15 @@ public class Station : Module
 
     public override void ResetModule()
     {
+        base.ResetModule();
+        //sDebug.Log("RESET");
         resourceBuffer.Clear();
         product.Resource = null;
         b_manager.UpdateAllowedResourcesAndBlueprints(resourceBuffer);
         allowedResources = b_manager.GetAllowedResources();
         currentBlueprint = null;
         setupBlueprint = null;
+        GetComponent<SpriteRenderer>().color = Color.white;
+        DetermineState();
     }
 }

@@ -79,12 +79,7 @@ public class Buffer : Module
             Resource res_peek = resourceBuffer.Peek().Resource;
 
             //Get a candidate for output
-            mod_out = (Module)OutputCTRL(res_peek);
-
-            if (m != null)
-            {
-                mod_out = m;
-            }
+            mod_out = m != null ? m : (Module)OutputCTRL(res_peek);
 
             //If there no candidate, the out action failed
             if (mod_out == null)
@@ -154,7 +149,9 @@ public class Buffer : Module
 
     public override void ResetModule()
     {
+        base.ResetModule();
         resourceBuffer.Clear();
         absoluteFill = 0;
+        DetermineState ();
     }
 }

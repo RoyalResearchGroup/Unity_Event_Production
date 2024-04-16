@@ -19,9 +19,15 @@ public class EventManager : MonoBehaviour
     //Performance optimization: If theres performance overhead, process events in batches
     [SerializeField]
     private int batchSize = 1;
+    [SerializeField]
+    public float simSpeed = 1;
+
+    private int stepCounter = 0;
 
     [SerializeField]
     public bool createStatistic = true;
+
+    private bool experimentRunning = false;
 
 
     private void Start()
@@ -32,6 +38,18 @@ public class EventManager : MonoBehaviour
 
     private void Update()
     {
+        if (!experimentRunning) return;
+
+
+        stepCounter++;
+        if (stepCounter > 1/simSpeed)
+        {
+            stepCounter = 0;
+        }
+        else
+        {
+            return;
+        }
         int counter = 0;
         while(counter < batchSize)
         {
@@ -64,10 +82,25 @@ public class EventManager : MonoBehaviour
 
     }
 
+    public void StartExperiment()
+    {
+        experimentRunning = true;
+    }
 
+    public void StopExperiment()
+    {
+        m_events.Clear();
+        stepCounter = 0;
+        experimentRunning = false;
+    }
     //Function to add an event to the manager from the modules
     public void EnqueueEvent(Event r_event)
     {
         m_events.AddEvent(r_event);
+    }
+
+    public void Pause(bool yes)
+    {
+        experimentRunning = !yes;
     }
 }
