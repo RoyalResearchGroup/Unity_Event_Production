@@ -151,23 +151,63 @@ public class RLAgent : BaseAgent
             //Take the first valid option
             switch (info.type)
             {
-                /*case TYPE.SOURCE:
-                    break;
-                case TYPE.BUFFER:
-                    
-                    break;
-                case TYPE.STATION:
-                    
-                    break;
-                case TYPE.DRAIN:
-                    
-                    break;*/
-                default:
-                    //float inp = System.Convert.ToSingle(info.valid && info.ready);
+                case TYPE.SOURCE:
+                    sensor.AddObservation(info.product);
                     sensor.AddObservation(info.valid && info.ready);
                     break;
+                case TYPE.BUFFER:
+                    sensor.AddObservation(info.product);
+                    sensor.AddObservation((int) info.state);
+                    sensor.AddObservation(codeAllowedResources(info.input));
+                    break;
+                case TYPE.STATION:
+                    sensor.AddObservation(info.product);
+                    sensor.AddObservation((int) info.state);
+                    sensor.AddObservation(info.processingTimes);
+                    sensor.AddObservation(codeAllowedResources(info.input));
+                    break;
+                case TYPE.DRAIN:
+                    sensor.AddObservation((int) info.state);
+                    sensor.AddObservation(codeAllowedResources(info.input));
+                    break;
+            }
+            sensor.AddObservation(info.valid && info.ready);
+        }
+    }
+
+
+    public float codeAllowedResources(List<Resource> list)
+    {
+        if (list.Capacity == 0)
+        {
+            return 0;
+        }
+        else if (list.Capacity == 2)
+        {
+            return 1;
+        }
+        else
+        {
+            foreach (var allowedRes in list)
+            {
+                switch (allowedRes.name)
+                {
+                    case "yellowMU":
+                        return 0.33f;
+                    case "blueMU":
+                        return 0.67f;
+                }
             }
         }
+        return 0;
+    }
+    
+    //function accept for converting a string into a float hash
+    public float GetFloatHash(string input)
+    {
+        int hashCode = input.GetHashCode();
+        float hashFloat = Convert.ToSingle(hashCode);
+        return hashFloat;
     }
 
     public void ApplyDeadlockPenalty()
