@@ -42,7 +42,7 @@ public class RLAgent : BaseAgent
         return base.DetermineAction(caller, callerInFront);
     }
 
-    protected override GameObject Decide(GameObject caller, List<ModuleInformation> m_info)
+    protected override GameObject Decide(GameObject caller, List<ModuleInformation> m_info, bool callerInFront)
     {
         /*if (_strategy == null)
         {

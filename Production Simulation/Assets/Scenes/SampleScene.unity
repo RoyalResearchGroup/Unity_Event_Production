@@ -579,9 +579,12 @@ MonoBehaviour:
   - {fileID: 33279038}
   lineRenderer: {fileID: 7171977854619541312, guid: c5f5a07b8c399fd4783b291e500bcf9a, type: 3}
   UIPanel: {fileID: 0}
-  creationRate: 100
+  parameters:
+  - 0.4
+  - 0.1
+  - 0
   creationType: {fileID: 11400000, guid: b1729ac1cd965ad42aefb8d768c3faeb, type: 2}
-  distribution: 0
+  distribution: 1
 --- !u!212 &359211416
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -1802,6 +1805,7 @@ Transform:
   - {fileID: 2028906108}
   - {fileID: 1648459136}
   - {fileID: 1668069855}
+  - {fileID: 1468906101}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1311707035
@@ -3342,9 +3346,21 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 11400000, guid: 0726eea8b00e33749b6a2a8a5599bd83, type: 2}
     - target: {fileID: 3072050068962860056, guid: ae7a0aa567654ea4c87fad5fbfd43994, type: 3}
+      propertyPath: distribution
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3072050068962860056, guid: ae7a0aa567654ea4c87fad5fbfd43994, type: 3}
       propertyPath: lineRenderer
       value: 
       objectReference: {fileID: 7171977854619541312, guid: c5f5a07b8c399fd4783b291e500bcf9a, type: 3}
+    - target: {fileID: 3072050068962860056, guid: ae7a0aa567654ea4c87fad5fbfd43994, type: 3}
+      propertyPath: 'parameters.Array.data[0]'
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 3072050068962860056, guid: ae7a0aa567654ea4c87fad5fbfd43994, type: 3}
+      propertyPath: 'parameters.Array.data[1]'
+      value: 0.1
+      objectReference: {fileID: 0}
     - target: {fileID: 3072050068962860056, guid: ae7a0aa567654ea4c87fad5fbfd43994, type: 3}
       propertyPath: 'connectedObjects.Array.data[0]'
       value: 
