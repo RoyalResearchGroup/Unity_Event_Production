@@ -56,7 +56,7 @@ public class RLAgent : BaseAgent
         //Debug.Log("Observations: " + inputs.Count);
         //bf.AppendObservation(inputs.ToArray());
         e_manager.Pause(true);
-        Academy.Instance.EnvironmentStep();
+        //Academy.Instance.EnvironmentStep();
         // Wait for the actions to be received using a coroutine
         StartCoroutine(WaitForActions());
         Academy.Instance.EnvironmentStep();
