@@ -25,9 +25,9 @@ public class MLInterface : Agent
     public override void OnEpisodeBegin()
     {
         
-        GetComponentInParent<ExperimentManager>().StopExperiment();
+        //GetComponentInParent<ExperimentManager>().StopExperiment();
         // start the experiment in the experiment manager
-        GetComponentInParent<ExperimentManager>().StartExperiment();
+        //GetComponentInParent<ExperimentManager>().StartExperiment();
     }
 
 

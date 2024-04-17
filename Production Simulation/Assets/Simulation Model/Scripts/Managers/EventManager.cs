@@ -76,6 +76,16 @@ public class EventManager : MonoBehaviour
             }
             else
             {
+                // check if the experiment has succeeded
+                // no, if the experiment would have succeeded the experiment would have stopped.
+                // but we cannot assume that the agent is responsible for the deadlock.
+                // BUUT the agent should be able to avoid a deadlock. If the agent is not responsible,
+                // then the simulation model is faulty.
+                
+                // We assume that the agent is responsible for this deadlock.
+                Debug.Log("Deadlock occurred!");
+                BroadcastMessage("ApplyDeadlockPenalty");
+                GetComponent<ExperimentManager>().StopExperiment();
                 break;
             }
         }
