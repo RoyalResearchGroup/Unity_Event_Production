@@ -3294,12 +3294,12 @@ MonoBehaviour:
     NumStackedVectorObservations: 1
     m_ActionSpec:
       m_NumContinuousActions: 0
-      BranchSizes: 06000000
-    VectorActionSize: 06000000
+      BranchSizes: 07000000
+    VectorActionSize: 07000000
     VectorActionDescriptions: []
     VectorActionSpaceType: 0
     hasUpgradedBrainParametersWithActionSpec: 1
-  m_Model: {fileID: 0}
+  m_Model: {fileID: 5022602860645237092, guid: 8ea5a361b9fe6314791bad48f3696c7e, type: 3}
   m_InferenceDevice: 2
   m_BehaviorType: 0
   m_BehaviorName: MLAgent
