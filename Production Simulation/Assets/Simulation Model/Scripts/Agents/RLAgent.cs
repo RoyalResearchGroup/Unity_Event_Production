@@ -145,7 +145,7 @@ public class RLAgent : BaseAgent
 
     public void CollectObservations(VectorSensor sensor)
     {
-        List<float> inputs = new List<float>();
+        sensor.AddObservation(callerInFront);
         foreach (ModuleInformation info in m_info)
         {
             //Take the first valid option
