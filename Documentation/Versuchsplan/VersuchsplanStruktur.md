@@ -12,11 +12,14 @@
     1. Resourcen:
     2. Produkt:
 ## 3. Aufbau des Experiments 
+**Wichtige Angabe**: Wie viele Experimente sollen für jeden Ansatz durchgeführt werden?
 ### 3.1 Leistungskriterien
-### 3.X Konfiguration X
+### 3.X Grundansatz X
+#### Simulationskonfiguration
 2. Maschine X und Y
     1. Blueprints: *Bsp.: BlueprintX*
     2. **Wichtig!** Besonderheit: *Bsp.: Bearbeitet BlueprintX schneller*
+#### Lernkonfiguration
 ## 4. Durchführung des Experiments 
 ### 4.1 Durchführung mit RL
 ### 4.2 Durchführung mit Heuristik
