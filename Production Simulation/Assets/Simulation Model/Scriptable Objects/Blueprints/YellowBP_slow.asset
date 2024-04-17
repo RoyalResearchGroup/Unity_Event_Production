@@ -12,9 +12,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 611306c4c38c3da4c81091b56fb64eba, type: 3}
   m_Name: YellowBP_slow
   m_EditorClassIdentifier: 
+  parameters:
+  - 4.5
+  - 0.3
+  - 0
   resources:
   - resource: {fileID: 11400000, guid: b1729ac1cd965ad42aefb8d768c3faeb, type: 2}
     number: 1
   product: {fileID: 11400000, guid: b1729ac1cd965ad42aefb8d768c3faeb, type: 2}
-  processingTime: 6
+  processingTime: 0
   setupTime: 3
+  distribution: 1

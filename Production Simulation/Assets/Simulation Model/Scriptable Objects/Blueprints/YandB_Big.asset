@@ -12,6 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 611306c4c38c3da4c81091b56fb64eba, type: 3}
   m_Name: YandB_Big
   m_EditorClassIdentifier: 
+  parameters:
+  - 5
+  - 0.2
+  - 0
   resources:
   - resource: {fileID: 11400000, guid: 0726eea8b00e33749b6a2a8a5599bd83, type: 2}
     number: 2
@@ -20,3 +24,4 @@ MonoBehaviour:
   product: {fileID: 0}
   processingTime: 4
   setupTime: 1
+  distribution: 1
