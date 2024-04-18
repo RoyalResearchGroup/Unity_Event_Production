@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -16,7 +17,8 @@ public class ModuleInformation
     public Blueprint setup;
 
     public List<float> processingTimes;
-
+    public Dictionary<string, bool> attributeBooleans;
+    
     //SET BY AGENT
     public bool valid = false;
     public GameObject module;
@@ -39,5 +41,27 @@ public class ModuleInformation
         input = i;
         setup = u;
         processingTimes = t;
+        
+        // Initialize the dictionary
+        attributeBooleans = new Dictionary<string, bool>();
+
+        // Populate the dictionary with boolean values for each attribute
+        PopulateAttributeBooleans();
+    }
+    
+    private void PopulateAttributeBooleans()
+    {
+        var fields = this.GetType().GetFields(); // Get all public fields of the class
+        
+        foreach (var field in fields)
+        {   // Get the value of the field
+            var value = field.GetValue(this);
+            // Check if the field is not a dictionary
+            if (field.FieldType != typeof(Dictionary<string, bool>) && value != null)
+            {
+                // Add the field name and set its corresponding boolean value to false
+                attributeBooleans[field.Name] = false;
+            }
+        }
     }
 }
