@@ -86,6 +86,8 @@ public class BaseAgent : SimulationObject
         foreach(GameObject pred in predecessors)
         {
             ModuleInformation temp_info = pred.GetComponent<Module>().GetModuleInformation();
+            // Set observation flags
+            this.setObservationFlags(temp_info);
             temp_info.module = pred;
             if (callerInFront)
             {
@@ -102,6 +104,8 @@ public class BaseAgent : SimulationObject
         foreach (GameObject suc in successors)
         {
             ModuleInformation temp_info = suc.GetComponent<Module>().GetModuleInformation();
+            // Set observation flags
+            this.setObservationFlags(temp_info);
             temp_info.module = suc;
             if (callerInFront)
             {
@@ -147,5 +151,117 @@ public class BaseAgent : SimulationObject
     public override bool IsOutputReady(List<Resource> r)
     {
         return false;
+    }
+    
+    // Method for adding observation flags to the ModuleInformation attribute Dictionary
+    private void setObservationFlags(ModuleInformation temp_info)
+    {
+        switch (temp_info.type)
+            {
+                case TYPE.SOURCE:
+                    foreach (var attribute in temp_info.attributeBooleans)
+                    {
+                        switch (attribute.Key)
+                        {
+                            case "type":
+                                // 
+                                break;
+                            case "state":
+                                temp_info.setAttrBoolean(attribute.Key);
+                                break;
+                            case "product":
+                                temp_info.setAttrBoolean(attribute.Key);
+                                break;
+                            case "input":
+                                //
+                                break;
+                            case "setup":
+                                //
+                                break;
+                            case "processingTimes":
+                                //
+                                break;
+                        }
+                    }
+                    break;
+                case TYPE.BUFFER:
+                    foreach (var attribute in temp_info.attributeBooleans)
+                    {
+                        switch (attribute.Key)
+                        {
+                            case "type":
+                                // 
+                                break;
+                            case "state":
+                                temp_info.setAttrBoolean(attribute.Key);
+                                break;
+                            case "product":
+                                temp_info.setAttrBoolean(attribute.Key);
+                                break;
+                            case "input":
+                                temp_info.setAttrBoolean(attribute.Key);
+                                break;
+                            case "setup":
+                                //
+                                break;
+                            case "processingTimes":
+                                //
+                                break;
+                        }
+                    }
+                    break;
+                case TYPE.STATION:
+                    foreach (var attribute in temp_info.attributeBooleans)
+                    {
+                        switch (attribute.Key)
+                        {
+                            case "type":
+                                // 
+                                break;
+                            case "state":
+                                temp_info.setAttrBoolean(attribute.Key);
+                                break;
+                            case "product":
+                                temp_info.setAttrBoolean(attribute.Key);
+                                break;
+                            case "input":
+                                temp_info.setAttrBoolean(attribute.Key);
+                                break;
+                            case "setup":
+                                //
+                                break;
+                            case "processingTimes":
+                                temp_info.setAttrBoolean(attribute.Key);
+                                break;
+                        }
+                    }
+                    break;
+                case TYPE.DRAIN:
+                    foreach (var attribute in temp_info.attributeBooleans)
+                    {
+                        switch (attribute.Key)
+                        {
+                            case "type":
+                                // 
+                                break;
+                            case "state":
+                                temp_info.setAttrBoolean(attribute.Key);
+                                break;
+                            case "product":
+                                //
+                                break;
+                            case "input":
+                                temp_info.setAttrBoolean(attribute.Key);
+                                break;
+                            case "setup":
+                                //
+                                break;
+                            case "processingTimes":
+                                //
+                                break;
+                        }
+                    }
+                    break;
+            }
     }
 }

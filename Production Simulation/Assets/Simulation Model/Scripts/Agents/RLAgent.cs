@@ -26,6 +26,12 @@ public class RLAgent : BaseAgent
         base.Start();
         mlAgent = GetComponent<MLInterface>();
         e_manager = GetComponentInParent<EventManager>();
+        
+        // Set the flags for observed attributes
+        // attribute flags set to true will automatically get added to the VectorSensor
+        
+        
+        
     }
 
     public void NotifyEventBatch()
