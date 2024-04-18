@@ -12,6 +12,7 @@ public class RLAgent : BaseAgent
 {
     public Drain obs;
 
+    private int decStep = 0;
     
     // The strategy that the agent uses
     [SerializeField] protected Strategy _strategy;
@@ -59,6 +60,7 @@ public class RLAgent : BaseAgent
         //Academy.Instance.EnvironmentStep();
         // Wait for the actions to be received using a coroutine
         StartCoroutine(WaitForActions());
+        decStep++;
         Academy.Instance.EnvironmentStep();
         //WaitForActions();
 
@@ -88,6 +90,8 @@ public class RLAgent : BaseAgent
             var output = discreteActions[0];
             //Debug.Log("Action: " + output);
 
+            //mlAgent.AddReward(0.1f);
+
             if (output == m_info.Count)
             {
                 // no module selected (do nothing)
@@ -95,24 +99,38 @@ public class RLAgent : BaseAgent
 
                 //Get the number of currently working machines
                 int c = 0;
+                int d = 0;
                 foreach(ModuleInformation m in m_info)
                 {
                     if(m.valid && m.ready)
                     {
                         c++;
                     }
+                    if(m.valid && !m.ready)
+                    {
+                        d++;
+                    }
+
                 }
                 if(c == 0)
                 {
-                    mlAgent.AddReward(0.6f);
+                    mlAgent.AddReward(2.0f + decStep*0.2f);
+                    mlAgent.EndEpisode();
+                }
+                else if(c>0 && d > 0)
+                {
+                    mlAgent.AddReward(-0.1f);
+                    mlAgent.EndEpisode();
                 }
                 else
                 {
-                    mlAgent.AddReward(-1f);
-                    mlAgent.AddReward(obs.absoluteDrain * 0.5f);
+                    mlAgent.AddReward(-2.0f);
+                    //mlAgent.AddReward(obs.absoluteDrain * 0.5f);
                     mlAgent.EndEpisode();
+                    decStep = 0;
                     GetComponentInParent<ExperimentManager>().StopExperiment();
                 }
+                //mlAgent.AddReward(0.0f);
                 e_manager.Pause(false);
             }
             /*else if (output < 0 || output >= m_info.Count)
@@ -132,7 +150,12 @@ public class RLAgent : BaseAgent
                 Module callerM = caller.GetComponent<Module>();
                 Module decisionM = m_info[output].module.GetComponent<Module>();
                 Debug.Log("Valid action selected");
-                mlAgent.AddReward(0.6f);
+                mlAgent.AddReward(2.0f + decStep * 0.2f);
+                mlAgent.EndEpisode();
+
+                //Academy step here - Update might call the agent again!
+                Academy.Instance.EnvironmentStep();
+
                 if (callerInFront)
                 {
                     // maybe the caller could not be ready to get input (if it is dogshit)
@@ -149,11 +172,12 @@ public class RLAgent : BaseAgent
             else
             {
                 // give penalty for invalid action
-                Debug.LogWarning("Invalid action selected");
+                Debug.LogWarning("Invalid action selected: " + caller.name + " " + m_info[output].module.gameObject.name + m_info.ToArray().ToString());
                 // add penalty
-                mlAgent.AddReward(-1.0f);
-                mlAgent.AddReward(obs.absoluteDrain * 0.5f);
+                mlAgent.AddReward(-4.0f);
+                //mlAgent.AddReward(obs.absoluteDrain * 0.5f);
                 mlAgent.EndEpisode();
+                decStep = 0;
                 GetComponentInParent<ExperimentManager>().StopExperiment();
             }
         }
@@ -194,13 +218,15 @@ public class RLAgent : BaseAgent
                     break;
             }
         }
+        sensor.AddObservation(callerInFront);
     }
 
     public void ApplyDeadlockPenalty()
     {
-        mlAgent.AddReward(-5f);
-        mlAgent.AddReward(obs.absoluteDrain * 0.5f);
+        mlAgent.AddReward(-3f);
+        //mlAgent.AddReward(obs.absoluteDrain * 0.5f);
         mlAgent.EndEpisode();
+        decStep = 0;
     }
 
 
