@@ -19,6 +19,9 @@ public class ModuleInformation
     public Blueprint setup;
     public List<float> processingTimes;
     
+    
+    // OBSERVED ATTRIBUTES COUNT
+    public int observedAttributes; 
     // BOOLEAN DICTIONARY
     public Dictionary<string, bool> attributeBooleans;
     

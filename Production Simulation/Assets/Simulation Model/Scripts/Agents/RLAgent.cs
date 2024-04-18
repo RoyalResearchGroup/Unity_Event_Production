@@ -26,12 +26,6 @@ public class RLAgent : BaseAgent
         base.Start();
         mlAgent = GetComponent<MLInterface>();
         e_manager = GetComponentInParent<EventManager>();
-        
-        // Set the flags for observed attributes
-        // attribute flags set to true will automatically get added to the VectorSensor
-        
-        
-        
     }
 
     public void NotifyEventBatch()
@@ -152,32 +146,34 @@ public class RLAgent : BaseAgent
     public void CollectObservations(VectorSensor sensor)
     {
         sensor.AddObservation(callerInFront);
+        // iterate over the 
         foreach (ModuleInformation info in m_info)
         {
-            //Take the first valid option
-            switch (info.type)
-            {
-                case TYPE.SOURCE:
-                    sensor.AddObservation(info.product);
-                    sensor.AddObservation(info.valid && info.ready);
-                    break;
-                case TYPE.BUFFER:
-                    sensor.AddObservation(info.product);
-                    sensor.AddObservation((int) info.state);
-                    sensor.AddObservation(codeAllowedResources(info.input));
-                    break;
-                case TYPE.STATION:
-                    sensor.AddObservation(info.product);
-                    sensor.AddObservation((int) info.state);
-                    sensor.AddObservation(info.processingTimes);
-                    sensor.AddObservation(codeAllowedResources(info.input));
-                    break;
-                case TYPE.DRAIN:
-                    sensor.AddObservation((int) info.state);
-                    sensor.AddObservation(codeAllowedResources(info.input));
-                    break;
-            }
             sensor.AddObservation(info.valid && info.ready);
+            var booleanList = info.attributeBooleans;
+            foreach (var attribute in booleanList)
+            {
+                if (attribute.Value == true)
+                {
+                    switch (attribute.Key)
+                    {
+                            break;
+                        case "state":
+                            sensor.AddObservation((int) info.state);
+                            break;
+                        case "product":
+                            sensor.AddObservation(info.product);
+                            break;
+                        case "input":
+                            codeAllowedResources(info.input);
+                            break;
+                        case "processingTimes":
+                            sensor.AddObservation(info.processingTimes);
+                            break;
+                    }
+                }
+            }
+            
         }
     }
 

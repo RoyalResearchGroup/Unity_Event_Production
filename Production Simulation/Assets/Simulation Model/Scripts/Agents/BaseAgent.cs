@@ -154,6 +154,9 @@ public class BaseAgent : SimulationObject
     }
     
     // Method for adding observation flags to the ModuleInformation attribute Dictionary
+    // For adding observing attributes 
+    // Call temp_info.setAttrBoolean(attribute.Key); within the specific case
+
     private void setObservationFlags(ModuleInformation temp_info)
     {
         switch (temp_info.type)
@@ -163,9 +166,6 @@ public class BaseAgent : SimulationObject
                     {
                         switch (attribute.Key)
                         {
-                            case "type":
-                                // 
-                                break;
                             case "state":
                                 temp_info.setAttrBoolean(attribute.Key);
                                 break;
