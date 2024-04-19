@@ -2,7 +2,7 @@
 
 ## Scrum-Regeln
 ### Dailies
-**Jeden** Tag um 18 Uhr. Unangekündigtes Fehlen wird mit einem Strich bestraft.
+**Jeden** Tag um 14 Uhr. Unangekündigtes Fehlen wird mit einem Strich bestraft.
 
 *Sonderregel*: Keine Abmeldepflicht an Wochenenden und Feiertagen.
 
