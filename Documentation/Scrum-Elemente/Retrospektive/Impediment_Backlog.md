@@ -36,3 +36,13 @@
 * Schlechte Arbeitszuteilung bei grundlegenden Aufgaben => Im Laufe des Sprints den Umfang überprüfen und bei Problemen anmerken im Daily
 * Folgeaufgaben nicht der selben Person zugewiesen => Währrend des Plannings Abhängigkeiten überprüfen (here we go again)
 
+
+
+## Retrospektive 19.04.2024
+* Branch situation => Am Ende von Sprint ale branches zusammen mergen
+* git add . => Überprüfung mit "git status" welche Dateien man wirklich pushen will
+* PR merge trotz Änderungswünschen => Änderungswünsche in der PR: Kommentar in der PR, Klar Kommunizieren! 
+* Ungleiche Auslastung durch Mehrarbeit wegen Hilfe für andere Teammitglieder statt eigene Taskbearbeitung => Melden bei Fragen
+* Keine Zielführende Tasks im Sprint Backlog => Unter Absprache Folgetasks erstellen
+* Daily nicht effektiv genutzt => Verschieben auf 14 Uhr
+
