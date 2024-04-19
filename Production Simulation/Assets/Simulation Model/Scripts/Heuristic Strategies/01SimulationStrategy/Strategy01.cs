@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Unity.VisualScripting;
 using UnityEngine;
 
@@ -10,18 +11,22 @@ public class Strategy01 : Strategy
     public override GameObject act(GameObject caller, List<ModuleInformation> m_info, bool callerInFront)
     {
         Dictionary<string, GameObject> ready_options = new Dictionary<string, GameObject>();
+        Dictionary<string, GameObject> all_options = new Dictionary<string, GameObject>();
         List<string> successorNames = new List<string> { "MachineYB 1", "MachineYB 2", "MachineY", "MachineB" };
-        List<string> predecessorNames = new List<string> { "BufferB", "BufferY" };
+        List<string> predecessorNames = new List<string> { "BufferY", "BufferB" };
+        List<string> resourceNames = new List<string> { "YellowMU", "BlueMU" };
 
         foreach (ModuleInformation info in m_info)
         {
-            if (info.valid && info.ready)
+            if (info.valid)
             {
-                ready_options.Add(info.module.GetComponent<Module>().name, info.module);
+                all_options.Add(info.module.GetComponent<Module>().name, info.module);
+                if (info.ready)
+                {
+                    ready_options.Add(info.module.GetComponent<Module>().name, info.module);
+                }
             }
         }
-
-        Debug.Log(callerInFront);
 
         if (ready_options.Count == 0)
         {
@@ -55,10 +60,23 @@ public class Strategy01 : Strategy
                             ready_options.TryGetValue(successorNames[1], out target);
                         }
                     }
-                    else if (ready_options.ContainsKey(successorNames[2]) && ready_options.ContainsKey(successorNames[3]))
+                    /*else if (ready_options.ContainsKey(successorNames[2]) && ready_options.ContainsKey(successorNames[3]))
                     {
-                        ready_options.TryGetValue(successorNames[rand.Next(2) + 2], out target);
-                    }
+                        all_options.TryGetValue(successorNames[2], out GameObject gameObject0);
+                        all_options.TryGetValue(successorNames[3], out GameObject gameObject1);
+                        if (!(gameObject0.GetComponent<Module>().GetModuleInformation().product.name == resourceNames[0]
+                            || gameObject1.GetComponent<Module>().GetModuleInformation().product.name == resourceNames[0]
+                            || gameObject0.GetComponent<Module>().GetModuleInformation().resourceBuffer.Any(resourceObject => resourceObject.Resource.name == resourceNames[0])
+                            || gameObject1.GetComponent<Module>().GetModuleInformation().resourceBuffer.Any(resourceObject => resourceObject.Resource.name == resourceNames[0])))
+                        {
+                            ready_options.TryGetValue(successorNames[rand.Next(2) + 2], out target);
+                            Debug.Log("Blue"
+                                + " : " + (gameObject0.GetComponent<Module>().GetModuleInformation().product.name == resourceNames[0])
+                                + " : " + (gameObject1.GetComponent<Module>().GetModuleInformation().product.name == resourceNames[0])
+                                + " : " + (gameObject0.GetComponent<Module>().GetModuleInformation().resourceBuffer.Any(resourceObject => resourceObject.Resource.name == resourceNames[0]))
+                                + " : " + (gameObject0.GetComponent<Module>().GetModuleInformation().resourceBuffer.Any(resourceObject => resourceObject.Resource.name == resourceNames[0])));
+                        }
+                    }*/
                     break;
                 case "BlueMU":
                     if (ready_options.ContainsKey(successorNames[2]) || ready_options.ContainsKey(successorNames[3]))
@@ -76,11 +94,24 @@ public class Strategy01 : Strategy
                         {
                             ready_options.TryGetValue(successorNames[3], out target);
                         }
-                    }
+                    }/*
                     else if (ready_options.ContainsKey(successorNames[0]) && ready_options.ContainsKey(successorNames[1]))
                     {
-                        ready_options.TryGetValue(successorNames[rand.Next(2)], out target);
-                    }
+                        all_options.TryGetValue(successorNames[0], out GameObject gameObject0);
+                        all_options.TryGetValue(successorNames[1], out GameObject gameObject1);
+                        if (!(gameObject0.GetComponent<Module>().GetModuleInformation().product.name == resourceNames[1] 
+                            || gameObject1.GetComponent<Module>().GetModuleInformation().product.name == resourceNames[1]
+                            || gameObject0.GetComponent<Module>().GetModuleInformation().resourceBuffer.Any(resourceObject => resourceObject.Resource.name == resourceNames[1])
+                            || gameObject1.GetComponent<Module>().GetModuleInformation().resourceBuffer.Any(resourceObject => resourceObject.Resource.name == resourceNames[1])))
+                        {
+                            ready_options.TryGetValue(successorNames[rand.Next(2)], out target);
+                            Debug.Log("Blue" 
+                                + " : " + (gameObject0.GetComponent<Module>().GetModuleInformation().product.name == resourceNames[1])
+                                + " : " + (gameObject1.GetComponent<Module>().GetModuleInformation().product.name == resourceNames[1])
+                                + " : " + (gameObject0.GetComponent<Module>().GetModuleInformation().resourceBuffer.Any(resourceObject => resourceObject.Resource.name == resourceNames[1]))
+                                + " : " + (gameObject0.GetComponent<Module>().GetModuleInformation().resourceBuffer.Any(resourceObject => resourceObject.Resource.name == resourceNames[1])));
+                        }
+                    }*/
                     break;
             }
         }

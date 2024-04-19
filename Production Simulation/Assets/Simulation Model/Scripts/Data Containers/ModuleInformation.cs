@@ -17,6 +17,7 @@ public class ModuleInformation
 
     public List<float> processingTimes;
     public List<Blueprint> blueprints;
+    public LimitedQueue<ResourceObject> resourceBuffer;
 
     //SET BY AGENT
     public bool valid = false;
@@ -32,7 +33,7 @@ public class ModuleInformation
     /// <param name="i"></param>
     /// <param name="u"></param>
     /// <param name="t"></param>
-    public ModuleInformation(TYPE y, STATE s, Resource p, List<Resource> i, Blueprint u, List<float> t, List<Blueprint> b)
+    public ModuleInformation(TYPE y, STATE s, Resource p, List<Resource> i, Blueprint u, List<float> t, List<Blueprint> b, LimitedQueue<ResourceObject> rB)
     {
         type = y;
         state = s;
@@ -41,5 +42,6 @@ public class ModuleInformation
         setup = u;
         processingTimes = t;
         blueprints = b;
+        resourceBuffer = rB;
     }
 }

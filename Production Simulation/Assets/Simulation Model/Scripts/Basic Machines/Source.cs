@@ -200,7 +200,7 @@ public class Source : Module
     public override ModuleInformation GetModuleInformation()
     {
         List<float> tList = new List<float>{ creationTime };
-        return new ModuleInformation(TYPE.SOURCE, GetSTATE(), creationType, null, null, tList, null);
+        return new ModuleInformation(TYPE.SOURCE, GetSTATE(), creationType, null, null, tList, null, resourceBuffer);
     }
 
     public override List<Resource> GetAcceptedResources()

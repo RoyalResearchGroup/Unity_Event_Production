@@ -226,7 +226,7 @@ public class Station : Module
             peek = product.Resource;
         }
 
-        return new ModuleInformation(TYPE.STATION,GetSTATE(), peek, allowedResources, setupBlueprint, b_manager.GetProcessingTimes(), b_manager.blueprints);
+        return new ModuleInformation(TYPE.STATION,GetSTATE(), peek, allowedResources, setupBlueprint, b_manager.GetProcessingTimes(), b_manager.blueprints, resourceBuffer);
     }
 
     public override List<Resource> GetAcceptedResources()
