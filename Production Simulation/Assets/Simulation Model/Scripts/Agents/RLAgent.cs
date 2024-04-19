@@ -12,7 +12,7 @@ public class RLAgent : BaseAgent
 {
     public Drain obs;
 
-    private int decStep = 0;
+    private int maxDrain = 0;
     
     // The strategy that the agent uses
     [SerializeField] protected Strategy _strategy;
@@ -60,8 +60,6 @@ public class RLAgent : BaseAgent
         //Academy.Instance.EnvironmentStep();
         // Wait for the actions to be received using a coroutine
         StartCoroutine(WaitForActions());
-        decStep++;
-        Academy.Instance.EnvironmentStep();
         //WaitForActions();
 
         return null;
@@ -72,6 +70,7 @@ public class RLAgent : BaseAgent
     IEnumerator WaitForActions()
     {
         mlAgent.RequestDecision();
+        Academy.Instance.EnvironmentStep();
 
         while (!actionsReceived)
         {
@@ -106,43 +105,31 @@ public class RLAgent : BaseAgent
                     {
                         c++;
                     }
-                    if(m.valid && !m.ready)
-                    {
-                        d++;
-                    }
-
+                    if (m.valid) d++;
                 }
                 if(c == 0)
                 {
-                    mlAgent.AddReward(2.0f + decStep*0.2f);
-                    mlAgent.EndEpisode();
-                }
-                else if(c>0 && d > 0)
-                {
-                    mlAgent.AddReward(-0.1f);
-                    mlAgent.EndEpisode();
+                    mlAgent.AddReward(4.0f); //+ decStep*0.2f);
+                    Debug.Log("None perfected!");
+                    //mlAgent.EndEpisode();
                 }
                 else
                 {
-                    mlAgent.AddReward(-2.0f);
+                    mlAgent.AddReward(1.1f * d - 1f * c);
                     //mlAgent.AddReward(obs.absoluteDrain * 0.5f);
-                    mlAgent.EndEpisode();
-                    decStep = 0;
-                    GetComponentInParent<ExperimentManager>().StopExperiment();
+
+                    if (c == d)
+                    {
+                        mlAgent.AddReward(-15.0f - 0.2f * obs.absoluteDrain);
+                        //mlAgent.AddReward(obs.absoluteDrain * 0.3f);
+                        GetComponentInParent<ExperimentManager>().StopExperiment();
+                        mlAgent.EndEpisode();
+                    }
+                    //mlAgent.EndEpisode();
                 }
                 //mlAgent.AddReward(0.0f);
                 e_manager.Pause(false);
             }
-            /*else if (output < 0 || output >= m_info.Count)
-            {
-                // give penalty for invalid action
-                Debug.LogWarning("Action out of range");
-                // end the experiment in the experiment manager
-                mlAgent.AddReward(-1f);
-                mlAgent.EndEpisode(); 
-                
-                GetComponentInParent<ExperimentManager>().StopExperiment();
-            }*/
             else if (m_info[output].valid && m_info[output].ready)
             {
                 // valid action received, return the corresponding module
@@ -150,11 +137,11 @@ public class RLAgent : BaseAgent
                 Module callerM = caller.GetComponent<Module>();
                 Module decisionM = m_info[output].module.GetComponent<Module>();
                 Debug.Log("Valid action selected");
-                mlAgent.AddReward(2.0f + decStep * 0.2f);
-                mlAgent.EndEpisode();
+                mlAgent.AddReward(0.5f); // + decStep * 0.2f);
+                //mlAgent.EndEpisode();
 
                 //Academy step here - Update might call the agent again!
-                Academy.Instance.EnvironmentStep();
+                //Academy.Instance.EnvironmentStep();
 
                 if (callerInFront)
                 {
@@ -167,17 +154,30 @@ public class RLAgent : BaseAgent
                     callerM.UpdateCTRL(decisionM);
                     //callerM.MoveToModule(decisionM);
                 }
+
+                //e_manager.CheckDeadlock();
+
                 e_manager.Pause(false);
             }
             else
             {
                 // give penalty for invalid action
-                Debug.LogWarning("Invalid action selected: " + caller.name + " " + m_info[output].module.gameObject.name + m_info.ToArray().ToString());
+                Debug.LogWarning("Invalid action selected.");
+
+                /*string str = "Observations: ";
+                foreach (var module in m_info)
+                {
+                    str += (module.valid && module.ready) + " ";                    
+                }
+                // give penalty for invalid action
+                Debug.LogWarning(str);*/
+
+
                 // add penalty
-                mlAgent.AddReward(-4.0f);
+                mlAgent.AddReward(-10.0f - 0.2f * obs.absoluteDrain);
+                //mlAgent.AddReward(obs.absoluteDrain * 0.2f);
                 //mlAgent.AddReward(obs.absoluteDrain * 0.5f);
                 mlAgent.EndEpisode();
-                decStep = 0;
                 GetComponentInParent<ExperimentManager>().StopExperiment();
             }
         }
@@ -190,12 +190,19 @@ public class RLAgent : BaseAgent
         // Reset the flag for the next decision
         actionsReceived = false;
         //e_manager.Pause(false);
+        //Academy.Instance.EnvironmentStep();
     }
     
 
     public void CollectObservations(VectorSensor sensor)
     {
         List<float> inputs = new List<float>();
+
+
+        //Blueprint priming
+        Dictionary<Blueprint, int> b_dict = new Dictionary<Blueprint, int>();
+
+        //string str = "OBS: ";
         foreach (ModuleInformation info in m_info)
         {
             //Take the first valid option
@@ -215,18 +222,28 @@ public class RLAgent : BaseAgent
                 default:
                     //float inp = System.Convert.ToSingle(info.valid && info.ready);
                     sensor.AddObservation(info.valid && info.ready);
+                    //str += info.valid && info.ready;
                     break;
             }
         }
         sensor.AddObservation(callerInFront);
+        //Debug.Log(str);
     }
 
     public void ApplyDeadlockPenalty()
     {
-        mlAgent.AddReward(-3f);
+        //Not too high, we dont want a random decision to be penalized
+        mlAgent.AddReward(-10.0f);
         //mlAgent.AddReward(obs.absoluteDrain * 0.5f);
+        Debug.LogWarning("Deadlock detected!");
+        if(maxDrain < obs.absoluteDrain )
+        {
+            //mlAgent.AddReward(obs.absoluteDrain * 0.5f);
+            maxDrain = obs.absoluteDrain;
+        }
         mlAgent.EndEpisode();
-        decStep = 0;
+
+
     }
 
 
