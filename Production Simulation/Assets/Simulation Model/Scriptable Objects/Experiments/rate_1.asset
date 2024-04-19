@@ -12,4 +12,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f290e5efce2dcca42ae9abda0a6b210d, type: 3}
   m_Name: rate_1
   m_EditorClassIdentifier: 
-  targetRate: 1000000
+  targetRate: -1
