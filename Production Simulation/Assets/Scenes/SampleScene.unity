@@ -297,7 +297,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   blueprints:
-  - {fileID: 11400000, guid: b1c94dd9f5f59794aa556acb00a72d80, type: 2}
+  - {fileID: 11400000, guid: 1593350b08b773c4a9eb815077ba2704, type: 2}
   - {fileID: 11400000, guid: 553c9bc36a5b7fa4090f2540d34e0122, type: 2}
 --- !u!114 &97882784
 MonoBehaviour:
@@ -1246,8 +1246,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   blueprints:
-  - {fileID: 11400000, guid: 1593350b08b773c4a9eb815077ba2704, type: 2}
   - {fileID: 11400000, guid: 424d923850c6bdd4f8aaef8b1736ffb2, type: 2}
+  - {fileID: 11400000, guid: b1c94dd9f5f59794aa556acb00a72d80, type: 2}
 --- !u!114 &732676999
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2074,7 +2074,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   blueprints:
   - {fileID: 11400000, guid: 424d923850c6bdd4f8aaef8b1736ffb2, type: 2}
-  - {fileID: 11400000, guid: 1593350b08b773c4a9eb815077ba2704, type: 2}
+  - {fileID: 11400000, guid: b1c94dd9f5f59794aa556acb00a72d80, type: 2}
 --- !u!114 &1590549969
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2925,8 +2925,6 @@ GameObject:
   - component: {fileID: 2028906108}
   - component: {fileID: 2028906110}
   - component: {fileID: 2028906111}
-  - component: {fileID: 2028906115}
-  - component: {fileID: 2028906114}
   - component: {fileID: 2028906112}
   m_Layer: 0
   m_Name: Agent
@@ -3035,64 +3033,17 @@ MonoBehaviour:
   m_GameObject: {fileID: 2028906107}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d849f6e832f97f49f97081c7d38ce2e1, type: 3}
+  m_Script: {fileID: 11500000, guid: 77a0fc9fbe32a147482dcb1a04ac0960, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   connectedObjects:
   - {fileID: 365966826}
   - {fileID: 97882784}
-  - {fileID: 732676999}
   - {fileID: 1590549969}
+  - {fileID: 732676999}
   lineRenderer: {fileID: 7171977854619541312, guid: c5f5a07b8c399fd4783b291e500bcf9a, type: 3}
   UIPanel: {fileID: 0}
-  obs: {fileID: 1668069853}
-  _strategy: {fileID: 0}
---- !u!114 &2028906114
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2028906107}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0035f1d2c479d694f9c9c249b9da9ac5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  agentParameters:
-    maxStep: 0
-  hasUpgradedFromAgentParameters: 1
-  MaxStep: 0
---- !u!114 &2028906115
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2028906107}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5d1c4e0b1822b495aa52bc52839ecb30, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_BrainParameters:
-    VectorObservationSize: 7
-    NumStackedVectorObservations: 1
-    m_ActionSpec:
-      m_NumContinuousActions: 0
-      BranchSizes: 07000000
-    VectorActionSize: 07000000
-    VectorActionDescriptions: []
-    VectorActionSpaceType: 0
-    hasUpgradedBrainParametersWithActionSpec: 1
-  m_Model: {fileID: 0}
-  m_InferenceDevice: 2
-  m_BehaviorType: 0
-  m_BehaviorName: MLAgent
-  TeamId: 0
-  m_UseChildSensors: 1
-  m_UseChildActuators: 1
-  m_ObservableAttributeHandling: 0
+  _strategy: {fileID: 11400000, guid: b5fe82659236c3b4a96971983aa20538, type: 2}
 --- !u!1001 &2067064045
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3506,7 +3457,7 @@ PrefabInstance:
     - target: {fileID: 5865962122886976372, guid: d3c38f4475499064083b28af2330bfef, type: 3}
       propertyPath: 'blueprints.Array.data[1]'
       value: 
-      objectReference: {fileID: 11400000, guid: b1c94dd9f5f59794aa556acb00a72d80, type: 2}
+      objectReference: {fileID: 11400000, guid: 1593350b08b773c4a9eb815077ba2704, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
