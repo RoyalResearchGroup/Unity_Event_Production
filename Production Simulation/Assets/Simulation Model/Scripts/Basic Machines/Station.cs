@@ -57,9 +57,9 @@ public class Station : Module
         GetComponent<SpriteRenderer>().color = Color.white;
     }
 
-    public override void LateUpdate()
+    public override void NotifyEventBatch()
     {
-        base.LateUpdate();
+        base.NotifyEventBatch();
     }
 
 
@@ -68,7 +68,7 @@ public class Station : Module
         base.DispatchEvent();
 
         //Production time calculation: if the blueprint is not ready (different setup), add the setup time
-        float time = currentBlueprint.processingTime;
+        float time = currentBlueprint.DistributedProcessingTime(); 
         setupRatio = 0f;
         if (currentBlueprint != setupBlueprint)
         {
@@ -121,6 +121,10 @@ public class Station : Module
                 mod_out.UpdateCTRL(null);
             }
 
+            if(product.Resource != null)
+            {
+                return;
+            }
 
             //Check if there is an aviable input machine that could provide a new resource
             Module mod_in;
@@ -212,5 +216,40 @@ public class Station : Module
             return true;
         }
         return false;
+    }
+
+    public override ModuleInformation GetModuleInformation()
+    {
+        Resource peek = null;
+        if(product.Resource != null)
+        {
+            peek = product.Resource;
+        }
+
+        return new ModuleInformation(TYPE.STATION,GetSTATE(), peek, allowedResources, setupBlueprint, b_manager.GetProcessingTimes(), b_manager.blueprints, resourceBuffer);
+    }
+
+    public override List<Resource> GetAcceptedResources()
+    {
+        return allowedResources;
+    }
+
+    public override Resource GetOutputResource()
+    {
+        return product.Resource;
+    }
+
+    public override void ResetModule()
+    {
+        base.ResetModule();
+        //Debug.Log("RESET");
+        resourceBuffer.Clear();
+        product.Resource = null;
+        b_manager.UpdateAllowedResourcesAndBlueprints(resourceBuffer);
+        allowedResources = b_manager.GetAllowedResources();
+        currentBlueprint = null;
+        setupBlueprint = null;
+        GetComponent<SpriteRenderer>().color = Color.white;
+        DetermineState();
     }
 }

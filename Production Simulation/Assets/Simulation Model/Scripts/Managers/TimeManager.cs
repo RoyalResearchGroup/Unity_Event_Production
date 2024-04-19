@@ -5,7 +5,6 @@ using UnityEngine;
 
 public class TimeManager : MonoBehaviour
 {
-    [SerializeField]
     public float time {  get; set; }
     public float deltaTime = 0;
 
@@ -15,4 +14,9 @@ public class TimeManager : MonoBehaviour
         deltaTime = dt;
     }
 
+    public void ResetModule()
+    {
+        time = 0;
+        deltaTime = 0;
+    }
 }

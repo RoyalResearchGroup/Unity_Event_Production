@@ -1,14 +1,24 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using XCharts.Runtime;
 
 [RequireComponent(typeof(Drain))]
 public class DrainStatistics : Statistics
 {
     public float drainRate;
+    public float timePerProduct;
 
-    private void Update()
+    public void NotifyEventBatch()
     {
-        drainRate = GetComponent<Drain>().absoluteDrain / (t_manager.time+1);
+        if (!useStatistics) return;
+        drainRate = GetComponent<Drain>().absoluteDrain / (t_manager.time+0.000000001f);
+        timePerProduct = 1 / drainRate;
+    }
+
+    public override void ResetModule()
+    {
+        drainRate = 0;
+        timePerProduct = 0;   
     }
 }

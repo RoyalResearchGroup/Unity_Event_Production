@@ -2,14 +2,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu]
+[CreateAssetMenu(fileName = "NewStrategy", menuName = "Strategies/LFUStrategy")]
 public class LFUStrategy : Strategy
 {
-    public override GameObject act(GameObject caller, List<GameObject> options)
+    public override GameObject act(GameObject caller, List<ModuleInformation> m_info, bool callerInFront)
     {
-
-        // implement LFU
-
-        return base.act(caller, options);
+        //Implement here
+        return null;
     }
 }

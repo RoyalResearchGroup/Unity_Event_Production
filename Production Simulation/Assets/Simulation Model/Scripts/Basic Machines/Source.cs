@@ -1,12 +1,26 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.ComponentModel;
+using Unity.VisualScripting;
 using UnityEditor.Search;
 using UnityEngine;
+using UnityEngine.Serialization;
+using UnityEditor;
+
+enum Distribution
+{
+    Linear,
+    Normal,
+    Exponential
+}
 
 public class Source : Module
 {
-    public float creationRate;
+    [HideInInspector] public float[] parameters = new float[3] { 0.0f, 0.0f, 0.0f };
+    private float creationTime;
     public Resource creationType;
+    [SerializeField] private Distribution distribution = Distribution.Linear;
 
     public override void DetermineState()
     {
@@ -20,7 +34,7 @@ public class Source : Module
             if (resourceBuffer.Count > 0)
             {
 
-                if(resourceBuffer.Count < resourceBuffer.Limit)
+                if (resourceBuffer.Count < resourceBuffer.Limit)
                     SetSTATE(STATE.AVAILABLE);
                 else
                     SetSTATE(STATE.BLOCKED);
@@ -35,7 +49,8 @@ public class Source : Module
     public override void DispatchEvent()
     {
         base.DispatchEvent();
-        e_manager.EnqueueEvent(new Event(1 / creationRate, this, EVENTTYPE.CREATE));
+
+        e_manager.EnqueueEvent(new Event(DistributedCreationTime(), this, EVENTTYPE.CREATE));
     }
 
     public override void EventCallback(Event r_event)
@@ -47,6 +62,29 @@ public class Source : Module
         AddResource(obj);
     }
 
+    private float DistributedCreationTime()
+    {
+        switch (distribution)
+        {
+            case Distribution.Linear:
+                float range = parameters[2] - parameters[1];
+                creationTime = RandomFromDistribution.RandomLinear(parameters[0]) * range + parameters[1];
+                break;
+            case Distribution.Normal:
+                creationTime = RandomFromDistribution.RandomNormalDistribution(parameters[0], parameters[1]);
+                break;
+            case Distribution.Exponential:
+                creationTime = RandomFromDistribution.RandomFromExponentialDistribution(parameters[0],
+                    RandomFromDistribution.Direction_e.Right);
+                break;
+            default:
+                creationTime = float.PositiveInfinity;
+                break;
+        }
+
+        return creationTime;
+    }
+
 
 
     public override void Start()
@@ -56,17 +94,20 @@ public class Source : Module
         resourceBuffer = new LimitedQueue<ResourceObject>(1);
     }
 
-
-    public override void LateUpdate()
+    public void LateUpdate()
     {
-        base.LateUpdate();
-
         //If the buffer is not full
-        if(resourceBuffer.Count < resourceBuffer.Limit && GetSTATE()!=STATE.OCCUPIED) {
+        if (resourceBuffer.Count < resourceBuffer.Limit && GetSTATE() != STATE.OCCUPIED)
+        {
             //Dispatch the Event to spawn a resource
             DispatchEvent();
             DetermineState();
-        }   
+        }
+    }
+
+    public override void NotifyEventBatch()
+    {
+        base.NotifyEventBatch();
     }
 
 
@@ -84,7 +125,7 @@ public class Source : Module
     public override void UpdateCTRL(Module m)
     {
         //As long as we can find output objects and there are resources present, distribute them
-        while(resourceBuffer.Count > 0)
+        while (resourceBuffer.Count > 0)
         {
             //The source can only output resources, so no input model needed
             Module mod_out;
@@ -93,7 +134,7 @@ public class Source : Module
             Resource res_peek = resourceBuffer.Peek().Resource;
 
             //Get a candidate for output
-            mod_out = (Module) OutputCTRL(res_peek);
+            mod_out = (Module)OutputCTRL(res_peek);
 
             if (m != null)
             {
@@ -101,7 +142,7 @@ public class Source : Module
             }
 
             //There are no candidates, so break the loop and return.
-            if (mod_out == null) 
+            if (mod_out == null)
             {
                 //Determine state before leaving (likely blocked)
                 DetermineState();
@@ -115,12 +156,13 @@ public class Source : Module
             m = null;
         }
         //Dispatch a new Event creation
-        if(resourceBuffer.Count < resourceBuffer.Limit)
+        if (resourceBuffer.Count < resourceBuffer.Limit)
         {
             DispatchEvent();
             DetermineState();
         }
     }
+
 
     //Override the Gizmo color:
     // Visualize connections in editor mode
@@ -148,12 +190,87 @@ public class Source : Module
     public override bool IsOutputReady(List<Resource> r)
     {
         //Output readiness is based on the current state. If there are items in the buffer, they can be drawn
-        if(resourceBuffer.Count>0 && r.Contains(resourceBuffer.Peek().Resource))
+        if (resourceBuffer.Count > 0 && r.Contains(resourceBuffer.Peek().Resource))
         {
             return true;
         }
         return false;
     }
+
+    public override ModuleInformation GetModuleInformation()
+    {
+        List<float> tList = new List<float>{ creationTime };
+        return new ModuleInformation(TYPE.SOURCE, GetSTATE(), creationType, null, null, tList, null, resourceBuffer);
+    }
+
+    public override List<Resource> GetAcceptedResources()
+    {
+        return null;
+    }
+
+    public override Resource GetOutputResource()
+    {
+        return creationType;
+    }
+
+    public override void ResetModule()
+    {
+        base.ResetModule();
+        resourceBuffer.Clear();
+        DetermineState();
+    }
+
+
+
+    [CustomEditor(typeof(Source))]
+    [Serializable]
+    public class MyScriptEditor : Editor
+    {
+        private SerializedProperty parametersProp;
+
+        private void OnEnable()
+        {
+            parametersProp = serializedObject.FindProperty("parameters");
+        }
+
+        public override void OnInspectorGUI()
+        {
+            serializedObject.Update();
+            base.OnInspectorGUI();
+
+            // Reference the variables in the script
+            Source script = (Source)target;
+
+            // Ensure the label and the value are on the same line
+            EditorGUILayout.BeginHorizontal();
+
+            EditorGUI.BeginChangeCheck();
+
+            switch (script.distribution)
+            {
+                case Distribution.Linear:
+                    EditorGUILayout.PropertyField(parametersProp.GetArrayElementAtIndex(0), new GUIContent("Slope"));
+                    EditorGUILayout.EndHorizontal(); EditorGUILayout.BeginHorizontal();
+                    EditorGUILayout.PropertyField(parametersProp.GetArrayElementAtIndex(1), new GUIContent("Min"));
+                    EditorGUILayout.EndHorizontal(); EditorGUILayout.BeginHorizontal();
+                    EditorGUILayout.PropertyField(parametersProp.GetArrayElementAtIndex(2), new GUIContent("Max"));
+                    break;
+                case Distribution.Normal:
+                    EditorGUILayout.PropertyField(parametersProp.GetArrayElementAtIndex(0), new GUIContent("Mean"));
+                    EditorGUILayout.EndHorizontal(); EditorGUILayout.BeginHorizontal();
+                    EditorGUILayout.PropertyField(parametersProp.GetArrayElementAtIndex(1), new GUIContent("Standard Deviation"));
+                    break;
+                case Distribution.Exponential:
+                    EditorGUILayout.PropertyField(parametersProp.GetArrayElementAtIndex(0), new GUIContent("Exponent"));
+                    break;
+            }
+
+            if (EditorGUI.EndChangeCheck())
+            {
+                serializedObject.ApplyModifiedProperties();
+            }
+
+            EditorGUILayout.EndHorizontal();
+        }
+    }
 }
-
-

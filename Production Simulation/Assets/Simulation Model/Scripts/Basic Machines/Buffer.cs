@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class Buffer : Module
@@ -78,12 +79,7 @@ public class Buffer : Module
             Resource res_peek = resourceBuffer.Peek().Resource;
 
             //Get a candidate for output
-            mod_out = (Module)OutputCTRL(res_peek);
-
-            if (m != null)
-            {
-                mod_out = m;
-            }
+            mod_out = m != null ? m : (Module)OutputCTRL(res_peek);
 
             //If there no candidate, the out action failed
             if (mod_out == null)
@@ -131,4 +127,31 @@ public class Buffer : Module
         return resourceBuffer.Count;
     }
 
+    public override ModuleInformation GetModuleInformation()
+    {
+        Resource peek = null;
+        if(resourceBuffer.Count > 0)
+        {
+            peek = resourceBuffer.Peek().Resource;
+        }
+        return new ModuleInformation(TYPE.BUFFER,GetSTATE(), peek, allowedResources, null, null, null, null);
+    }
+
+    public override List<Resource> GetAcceptedResources()
+    {
+        return allowedResources;
+    }
+
+    public override Resource GetOutputResource()
+    {
+        return resourceBuffer.Peek().Resource;
+    }
+
+    public override void ResetModule()
+    {
+        base.ResetModule();
+        resourceBuffer.Clear();
+        absoluteFill = 0;
+        DetermineState ();
+    }
 }

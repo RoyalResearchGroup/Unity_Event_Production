@@ -19,16 +19,17 @@ public abstract class Module : SimulationObject
     //Event system: The modules schedule an event with the event manager
     [HideInInspector]
     protected EventManager e_manager;
-    private bool e_callback = false;
+    [HideInInspector]
+    protected ExperimentManager x_manager;
+    protected bool e_callback = false;
 
     //Has an event been dispatched and is pending?
     protected bool d_event = false;
 
-    public virtual void Start()
+    public override void Start()
     {
-        e_manager = GameObject.FindWithTag("EventManager").GetComponent<EventManager>();
-        //Fill the tamporal variable resource list
-        SetupLists();
+        base.Start();
+        e_manager = GetComponentInParent<EventManager>();
     }
 
 
@@ -38,7 +39,7 @@ public abstract class Module : SimulationObject
     /// <summary>
     /// IMPORTANT NOTE: We do this in the LateUpdate as the EventCallback is called in the update method. This means we can check possibly queued events in our local event queue for their state.
     /// </summary>
-    public virtual void LateUpdate()
+    public virtual void NotifyEventBatch()
     {
         //Check event queue. If the current state is managed in an event, we dont execute this function.
         //The occupied state means that the module is currently paused by the time specified in the dispatched event.
@@ -65,10 +66,12 @@ public abstract class Module : SimulationObject
             //We might prioritize Agents over simple connections (for now not relevant), take the first one aviable
             if(module.GetComponent<SimulationObject>().GetSTATE() == STATE.AGENT)
             {
-                Module target = module.GetComponent<Agent>().DetermineAction(gameObject, false);
+                Module target = module.GetComponent<BaseAgent>().DetermineAction(gameObject, false);
+                //Debug.Log(target);
                 
                 if (target && target.IsInputReady(r))
                 {
+                    //Debug.Log("Legal: " + target + " Caller: " + gameObject.name);
                     object_out = target.GetComponent<SimulationObject>();
                     // check if target is a valid target
                     if (Random.value < 1 / (successors.Count))
@@ -78,7 +81,19 @@ public abstract class Module : SimulationObject
                 }
                 else
                 {
-                    reportInacceptibleAgent();
+                    if(!target)
+                    {
+                        //No action taken, valid
+                        //Debug.Log("No action");
+                    }
+                    else
+                    {
+                        Debug.Log("Illegal output: " + target + " Caller: " + gameObject.name);
+                        //Callback for Agent Illegal Action
+
+                        x_manager.ResetScene();
+                        reportInacceptibleAgent();
+                    }
                 }
             }
             //Did we find a fitting module? It needs to be available and support the given resource
@@ -114,11 +129,13 @@ public abstract class Module : SimulationObject
             //We might prioritize Agents over simple connections (for now not relevant), take the first one aviable
             else if(module.GetComponent<SimulationObject>().GetSTATE() == STATE.AGENT)
             {
-                Module target = module.GetComponent<Agent>().DetermineAction(gameObject, false);
-                
+                Module target = module.GetComponent<BaseAgent>().DetermineAction(gameObject, true);
+                //Debug.Log(target);
+
                 if (target && target.IsOutputReady(r))
                 {
                     object_in = target.GetComponent<SimulationObject>();
+                    //Debug.Log("Legal: " + target + " Caller: " + gameObject.name);
                     // check if target is a valid target
                     if (Random.value < 1 / (successors.Count))
                     {
@@ -127,7 +144,16 @@ public abstract class Module : SimulationObject
                 }
                 else
                 {
-                    reportInacceptibleAgent();
+                    if (!target)
+                    {
+                        //No action taken, valid
+                        //Debug.Log("No action");
+                    }
+                    else
+                    {
+                        Debug.Log("Illegal input: " + target + " Caller: " + gameObject.name);
+                        reportInacceptibleAgent();
+                    }
                 }
             }
 
@@ -137,7 +163,9 @@ public abstract class Module : SimulationObject
 
     private void reportInacceptibleAgent()
     {
-        throw new InvalidDataException("Agent chose a module which is unable to accept the resource!");
+
+        //throw new InvalidDataException("Agent chose a module which is unable to accept the resource!");
+
         // Application.Quit();
     }
 
@@ -165,6 +193,22 @@ public abstract class Module : SimulationObject
         resourceBuffer.Enqueue(o);
     }
 
+    public LimitedQueue<ResourceObject> GetResourceBuffer()
+    {
+        return resourceBuffer;
+    }
+
+    public abstract List<Resource> GetAcceptedResources();
+    public abstract Resource GetOutputResource();
+
+    //Get current state information:
+    public abstract ModuleInformation GetModuleInformation();
+
+    public virtual void ResetModule()
+    {
+        d_event= false;
+        e_callback= false;
+    }
 
     /// <summary>
     ///DEBUG SECTION

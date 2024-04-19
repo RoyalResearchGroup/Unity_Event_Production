@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using UnityEngine;
 
 // Agent that follows heuristic strategies. If the strategy is stupid, this agent is also stupid.
-public class HeuristicAgent : Agent
+public class HeuristicAgent : BaseAgent
 {
     // The strategy that the agent uses
     [SerializeField] protected Strategy _strategy;
 
-    protected override GameObject Decide(GameObject caller, List<GameObject> options)
+    protected override GameObject Decide(GameObject caller, List<ModuleInformation> m_info, bool callerInFront)
     {
         if (_strategy == null)
         {
@@ -17,6 +17,6 @@ public class HeuristicAgent : Agent
             return null;
         }
 
-        return _strategy.act(caller, options);
+        return _strategy.act(caller, m_info, callerInFront);
     }
 }

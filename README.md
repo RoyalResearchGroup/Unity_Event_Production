@@ -2,9 +2,16 @@
 
 ## Scrum-Regeln
 ### Dailies
-**Jeden** Tag um 18 Uhr. Unangekündigtes Fehlen wird mit einem Strich bestraft.
+**Jeden** Tag um 14 Uhr. Unangekündigtes Fehlen wird mit einem Strich bestraft.
 
 *Sonderregel*: Keine Abmeldepflicht an Wochenenden und Feiertagen.
+
+*Ablauf*: 
+1. Beantwortung folgender Fragen?
+* Was habe ich heute gemacht? -> Aufzeigen anhand von Sprint Backlog 
+* Hatte ich dabei irgendwelche Probleme?
+* Was mache ich zukünftig?
+2. Über allgemeinen Stand reden!
 
 ### Status-Meeting
 Donnerstag, 12 Uhr mit Prof. Franz auf [Webex](https://thu.webex.com/meet/4LTEKD28ZSO19z5iI6lS0B73wMMBJTHW)
