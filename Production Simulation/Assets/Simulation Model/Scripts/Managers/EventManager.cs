@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 
 /// <summary>
@@ -28,6 +29,8 @@ public class EventManager : MonoBehaviour
     public bool createStatistic = true;
 
     private bool experimentRunning = false;
+
+    private bool prevLocked = false;
 
 
     private void Start()
@@ -72,9 +75,14 @@ public class EventManager : MonoBehaviour
 
                 //Some modules have to be notified that the event was processed (eg source, drain)
                 BroadcastMessage("NotifyEventBatch");
-                if(CheckDeadlock())
+
+                //check for deadlocks if running. If not, the agent is currently trying to find a decision!
+                if(experimentRunning)
                 {
-                    break;
+                    if (CheckDeadlock())
+                    {
+                        break;
+                    }
                 }
                 counter++;
             }
@@ -84,7 +92,7 @@ public class EventManager : MonoBehaviour
 
     public bool CheckDeadlock()
     {
-        if (m_events.PeekEvent() == null)
+        if (m_events.PeekEvent() == null && prevLocked)
         {
             // check if the experiment has succeeded
             // no, if the experiment would have succeeded the experiment would have stopped.
@@ -98,8 +106,14 @@ public class EventManager : MonoBehaviour
             GetComponent<ExperimentManager>().StopExperiment();
             return true;
         }
+        else if(m_events.PeekEvent() == null && !prevLocked)
+        {
+            prevLocked = true;
+        }
+        else { prevLocked = true; }
         return false;
     }
+    
 
     public void StartExperiment()
     {

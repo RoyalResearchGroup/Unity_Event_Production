@@ -109,18 +109,18 @@ public class RLAgent : BaseAgent
                 }
                 if(c == 0)
                 {
-                    mlAgent.AddReward(4.0f); //+ decStep*0.2f);
+                    mlAgent.AddReward(1.0f); //+ decStep*0.2f);
                     Debug.Log("None perfected!");
                     //mlAgent.EndEpisode();
                 }
                 else
                 {
-                    mlAgent.AddReward(1.1f * d - 1f * c);
+                    mlAgent.AddReward(0.5f);
                     //mlAgent.AddReward(obs.absoluteDrain * 0.5f);
 
                     if (c == d)
                     {
-                        mlAgent.AddReward(-15.0f - 0.2f * obs.absoluteDrain);
+                        mlAgent.AddReward(-12.0f);
                         //mlAgent.AddReward(obs.absoluteDrain * 0.3f);
                         GetComponentInParent<ExperimentManager>().StopExperiment();
                         mlAgent.EndEpisode();
@@ -137,7 +137,7 @@ public class RLAgent : BaseAgent
                 Module callerM = caller.GetComponent<Module>();
                 Module decisionM = m_info[output].module.GetComponent<Module>();
                 Debug.Log("Valid action selected");
-                mlAgent.AddReward(0.5f); // + decStep * 0.2f);
+                mlAgent.AddReward(1.0f); // + decStep * 0.2f);
                 //mlAgent.EndEpisode();
 
                 //Academy step here - Update might call the agent again!
@@ -174,7 +174,7 @@ public class RLAgent : BaseAgent
 
 
                 // add penalty
-                mlAgent.AddReward(-10.0f - 0.2f * obs.absoluteDrain);
+                mlAgent.AddReward(-10.0f);
                 //mlAgent.AddReward(obs.absoluteDrain * 0.2f);
                 //mlAgent.AddReward(obs.absoluteDrain * 0.5f);
                 mlAgent.EndEpisode();
@@ -233,8 +233,8 @@ public class RLAgent : BaseAgent
     public void ApplyDeadlockPenalty()
     {
         //Not too high, we dont want a random decision to be penalized
-        mlAgent.AddReward(-10.0f);
-        //mlAgent.AddReward(obs.absoluteDrain * 0.5f);
+        mlAgent.AddReward(-5.0f);
+        //mlAgent.AddReward((obs.absoluteDrain-maxDrain) * 0.75f);
         Debug.LogWarning("Deadlock detected!");
         if(maxDrain < obs.absoluteDrain )
         {
