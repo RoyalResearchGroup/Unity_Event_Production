@@ -10,5 +10,6 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 25a46903d75dd3a48a3765578edd28f2, type: 3}
-  m_Name: 01Strat
+  m_Name: Strat02
   m_EditorClassIdentifier: 
+  usedResources: []
