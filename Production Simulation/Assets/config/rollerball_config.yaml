@@ -2,9 +2,9 @@ behaviors:
   MLAgent:
     trainer_type: sac
     hyperparameters:
-      batch_size: 16
-      buffer_size: 8126
-      learning_rate: 3.0e-4
+      batch_size: 20
+      buffer_size: 10000
+      learning_rate: 4.0e-4
       buffer_init_steps: 500
       init_entcoef: 1.0
       save_replay_buffer: false

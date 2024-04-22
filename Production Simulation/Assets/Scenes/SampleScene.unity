@@ -1247,7 +1247,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   blueprints:
   - {fileID: 11400000, guid: 424d923850c6bdd4f8aaef8b1736ffb2, type: 2}
-  - {fileID: 11400000, guid: b1c94dd9f5f59794aa556acb00a72d80, type: 2}
+  - {fileID: 11400000, guid: 1593350b08b773c4a9eb815077ba2704, type: 2}
 --- !u!114 &732676999
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2074,7 +2074,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   blueprints:
   - {fileID: 11400000, guid: 424d923850c6bdd4f8aaef8b1736ffb2, type: 2}
-  - {fileID: 11400000, guid: b1c94dd9f5f59794aa556acb00a72d80, type: 2}
+  - {fileID: 11400000, guid: 1593350b08b773c4a9eb815077ba2704, type: 2}
 --- !u!114 &1590549969
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3077,7 +3077,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_BrainParameters:
     VectorObservationSize: 7
-    NumStackedVectorObservations: 5
+    NumStackedVectorObservations: 1
     m_ActionSpec:
       m_NumContinuousActions: 0
       BranchSizes: 07000000

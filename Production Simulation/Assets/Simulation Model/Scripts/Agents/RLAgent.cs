@@ -7,6 +7,15 @@ using Unity.MLAgents.Sensors;
 using Unity.MLAgents.Actuators;
 using System.Runtime.CompilerServices;
 
+
+
+class ActionStorage
+{
+    
+
+}
+
+
 [RequireComponent(typeof(MLInterface))]
 public class RLAgent : BaseAgent
 {
@@ -24,11 +33,25 @@ public class RLAgent : BaseAgent
     ActionSegment<int> discreteActions;
     bool actionsReceived = false;
 
+    /// <summary>
+    /// This is brutally stupid but the only workarround.
+    /// The RL agent will keep track of a specified number of last actions. if a deadlock occurs, the python backend 
+    /// will recieve "fake" steps to train the penalty of these.
+    /// </summary>
+    [SerializeField] private int actionstackSize = 10;
+
+    //Need to store the actions by storing the simulation state -> We can request the decisions again, if they match, we penalize them, if not, no reward/penalty
+    private List<ActionStorage> actionBuffer;
+    private bool inject = false;
+
+
     public override void Start()
     {
         base.Start();
         mlAgent = GetComponent<MLInterface>();
         e_manager = GetComponentInParent<EventManager>();
+
+        actionBuffer = new List<ActionStorage>();
     }
 
     /*public void NotifyEventBatch()
@@ -109,18 +132,18 @@ public class RLAgent : BaseAgent
                 }
                 if(c == 0)
                 {
-                    mlAgent.AddReward(1.0f); //+ decStep*0.2f);
+                    mlAgent.AddReward(0.4f); //+ decStep*0.2f);
                     Debug.Log("None perfected!");
                     //mlAgent.EndEpisode();
                 }
                 else
                 {
-                    mlAgent.AddReward(0.5f);
+                    mlAgent.AddReward(0.05f);
                     //mlAgent.AddReward(obs.absoluteDrain * 0.5f);
 
                     if (c == d)
                     {
-                        mlAgent.AddReward(-12.0f);
+                        mlAgent.AddReward(-0.5f);
                         //mlAgent.AddReward(obs.absoluteDrain * 0.3f);
                         GetComponentInParent<ExperimentManager>().StopExperiment();
                         mlAgent.EndEpisode();
@@ -137,7 +160,7 @@ public class RLAgent : BaseAgent
                 Module callerM = caller.GetComponent<Module>();
                 Module decisionM = m_info[output].module.GetComponent<Module>();
                 Debug.Log("Valid action selected");
-                mlAgent.AddReward(1.0f); // + decStep * 0.2f);
+                mlAgent.AddReward(0.1f); // + decStep * 0.2f);
                 //mlAgent.EndEpisode();
 
                 //Academy step here - Update might call the agent again!
@@ -174,7 +197,7 @@ public class RLAgent : BaseAgent
 
 
                 // add penalty
-                mlAgent.AddReward(-10.0f);
+                mlAgent.AddReward(-0.5f);
                 //mlAgent.AddReward(obs.absoluteDrain * 0.2f);
                 //mlAgent.AddReward(obs.absoluteDrain * 0.5f);
                 mlAgent.EndEpisode();
@@ -196,11 +219,16 @@ public class RLAgent : BaseAgent
 
     public void CollectObservations(VectorSensor sensor)
     {
+        //INJECTOR: Enables us to add fake inputs overriding the environments inputs
+        if (inject)
+        {
+
+            return;
+        }
+
+
         List<float> inputs = new List<float>();
 
-
-        //Blueprint priming
-        Dictionary<Blueprint, int> b_dict = new Dictionary<Blueprint, int>();
 
         //string str = "OBS: ";
         foreach (ModuleInformation info in m_info)
@@ -222,6 +250,8 @@ public class RLAgent : BaseAgent
                 default:
                     //float inp = System.Convert.ToSingle(info.valid && info.ready);
                     sensor.AddObservation(info.valid && info.ready);
+                    if(info.valid && info.ready) inputs.Add(1);
+                    else inputs.Add(0);
                     //str += info.valid && info.ready;
                     break;
             }
@@ -233,7 +263,7 @@ public class RLAgent : BaseAgent
     public void ApplyDeadlockPenalty()
     {
         //Not too high, we dont want a random decision to be penalized
-        mlAgent.AddReward(-5.0f);
+        mlAgent.AddReward(-0.5f);
         //mlAgent.AddReward((obs.absoluteDrain-maxDrain) * 0.75f);
         Debug.LogWarning("Deadlock detected!");
         if(maxDrain < obs.absoluteDrain )
