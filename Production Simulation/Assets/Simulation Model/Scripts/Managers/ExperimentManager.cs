@@ -7,10 +7,12 @@ using UnityEngine.SceneManagement;
 public class ExperimentManager : MonoBehaviour
 {
     public int iterations;
+    private int iterationCount;
     [Tooltip("Amount of experiments using the same random seed per iteration.")]
     public int epochs; //Epochs per iteration are the amount of experiments using the same random seed per iteration (useful for ML agents) -> increasing this will multiply the amount of iterations
+    public Experiment experimentTemplate;
 
-    public Experiment experiment;
+    private Experiment experiment;
 
     public List<Module> observationSpace;
 
@@ -22,12 +24,18 @@ public class ExperimentManager : MonoBehaviour
     public void StartExperiment()
     {
         running = true;
+        experiment = Instantiate(experimentTemplate);
         GetComponent<EventManager>().StartExperiment();
     }
 
     public void StopExperiment()
     {
         running = false;
+        iterationCount++;
+        if (iterationCount >= iterations)
+        {
+            Debug.Log("<color=green>Experiment succeeded!</color>");
+        }
         GetComponent<EventManager>().StopExperiment();
         ResetScene();
     }
@@ -41,7 +49,7 @@ public class ExperimentManager : MonoBehaviour
 
     private void Update()
     {
-        if (!running)
+        if (!running && iterationCount < iterations)
         {
             StartExperiment();
         }
@@ -52,7 +60,7 @@ public class ExperimentManager : MonoBehaviour
         if (!e_manager.createStatistic) return;
         if(experiment.EvaluateState(this, observationSpace))
         {
-            Debug.LogWarning("Experiment succeeded!");
+            Debug.LogWarning("Iteration completed!");
             StopExperiment();
         }
     }
