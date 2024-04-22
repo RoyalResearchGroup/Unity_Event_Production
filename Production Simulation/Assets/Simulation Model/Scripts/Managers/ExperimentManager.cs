@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using Random = UnityEngine.Random;
 
 public class ExperimentManager : MonoBehaviour
 {
@@ -23,6 +24,7 @@ public class ExperimentManager : MonoBehaviour
     //UI
     public void StartExperiment()
     {
+        Random.InitState((int)Random.Range(0f, 1000f));
         running = true;
         experiment = Instantiate(experimentTemplate);
         GetComponent<EventManager>().StartExperiment();

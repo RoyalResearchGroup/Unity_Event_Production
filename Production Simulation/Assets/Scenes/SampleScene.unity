@@ -580,8 +580,8 @@ MonoBehaviour:
   lineRenderer: {fileID: 7171977854619541312, guid: c5f5a07b8c399fd4783b291e500bcf9a, type: 3}
   UIPanel: {fileID: 0}
   parameters:
-  - 0.4
-  - 0.1
+  - 12
+  - 3
   - 0
   creationType: {fileID: 11400000, guid: b1729ac1cd965ad42aefb8d768c3faeb, type: 2}
   distribution: 1
@@ -1864,7 +1864,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   iterations: 100
   epochs: 0
-  experiment: {fileID: 11400000, guid: e1010b21f39776f498a0d9a1ecf2b308, type: 2}
+  experimentTemplate: {fileID: 11400000, guid: 376338410fb7de3408d564580bdf6a29, type: 2}
   observationSpace:
   - {fileID: 1668069853}
 --- !u!4 &1462354049 stripped
@@ -3043,7 +3043,7 @@ MonoBehaviour:
   - {fileID: 732676999}
   lineRenderer: {fileID: 7171977854619541312, guid: c5f5a07b8c399fd4783b291e500bcf9a, type: 3}
   UIPanel: {fileID: 0}
-  _strategy: {fileID: 11400000, guid: b5fe82659236c3b4a96971983aa20538, type: 2}
+  _strategy: {fileID: 11400000, guid: 81eaf726e943f3e43aab7a9f8a6a1782, type: 2}
 --- !u!1001 &2067064045
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3312,7 +3312,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3072050068962860056, guid: ae7a0aa567654ea4c87fad5fbfd43994, type: 3}
       propertyPath: 'parameters.Array.data[1]'
-      value: 0.1
+      value: 0.4
       objectReference: {fileID: 0}
     - target: {fileID: 3072050068962860056, guid: ae7a0aa567654ea4c87fad5fbfd43994, type: 3}
       propertyPath: 'connectedObjects.Array.data[0]'
