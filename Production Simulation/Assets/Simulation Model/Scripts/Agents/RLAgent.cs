@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Unity.MLAgents;
 using System;
+using System.Linq;
 using Unity.MLAgents.Sensors;
 using Unity.MLAgents.Actuators;
 using System.Runtime.CompilerServices;
@@ -94,7 +95,7 @@ public class RLAgent : BaseAgent
             if (output == m_info.Count)
             {
                 // no module selected (do nothing)
-                Debug.Log("Do nothing...");
+                //Debug.Log("Do nothing...");
 
                 //Get the number of currently working machines
                 int c = 0;
@@ -110,7 +111,7 @@ public class RLAgent : BaseAgent
                 if(c == 0)
                 {
                     mlAgent.AddReward(4.0f); //+ decStep*0.2f);
-                    Debug.Log("None perfected!");
+                    //Debug.Log("None perfected!");
                     //mlAgent.EndEpisode();
                 }
                 else
@@ -136,7 +137,7 @@ public class RLAgent : BaseAgent
                 //return m_info[output].module;
                 Module callerM = caller.GetComponent<Module>();
                 Module decisionM = m_info[output].module.GetComponent<Module>();
-                Debug.Log("Valid action selected");
+                //Debug.Log("Valid action selected");
                 mlAgent.AddReward(0.5f); // + decStep * 0.2f);
                 //mlAgent.EndEpisode();
 
@@ -228,6 +229,27 @@ public class RLAgent : BaseAgent
         }
         sensor.AddObservation(callerInFront);
         //Debug.Log(str);
+    }
+
+    public void UseStrategy(in ActionBuffers actionOut)
+    {
+        GameObject decision = _strategy.act(caller, m_info, callerInFront);
+        var actions = actionOut.DiscreteActions;
+        if (predecessors.Contains(decision))
+        {
+            actions[0] = predecessors.IndexOf(decision);
+        }
+        else if (successors.Contains(decision))
+        {
+            actions[0] = successors.IndexOf(decision) + predecessors.Count;
+        }
+        else if (decision == null)
+        {
+            actions[0] = successors.Count + predecessors.Count;
+        }
+        //Debug.Log("Action: " + actions[0]);
+
+        //actionsReceived = true;
     }
 
     public void ApplyDeadlockPenalty()
