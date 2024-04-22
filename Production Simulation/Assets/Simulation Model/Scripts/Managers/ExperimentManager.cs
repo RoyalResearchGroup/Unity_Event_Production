@@ -10,8 +10,9 @@ public class ExperimentManager : MonoBehaviour
     private int iterationCount;
     [Tooltip("Amount of experiments using the same random seed per iteration.")]
     public int epochs; //Epochs per iteration are the amount of experiments using the same random seed per iteration (useful for ML agents) -> increasing this will multiply the amount of iterations
+    public Experiment experimentTemplate;
 
-    public Experiment experiment;
+    private Experiment experiment;
 
     public List<Module> observationSpace;
 
@@ -23,6 +24,7 @@ public class ExperimentManager : MonoBehaviour
     public void StartExperiment()
     {
         running = true;
+        experiment = Instantiate(experimentTemplate);
         GetComponent<EventManager>().StartExperiment();
     }
 
