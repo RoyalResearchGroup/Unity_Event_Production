@@ -21,4 +21,9 @@ public class DrainStatistics : Statistics
         drainRate = 0;
         timePerProduct = 0;   
     }
+
+    public override void notifyStatisticsManager()
+    {
+
+    }
 }

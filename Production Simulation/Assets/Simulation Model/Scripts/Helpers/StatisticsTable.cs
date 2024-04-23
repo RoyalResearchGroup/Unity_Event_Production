@@ -4,9 +4,9 @@ using UnityEngine;
 
 public class StatisticsTable : MonoBehaviour
 {
-    private List<Statistic> statistics = new List<Statistic>();
+    private List<StatisticRow> statistics = new List<StatisticRow>();
 
-    public void addStatistic(Statistic statistic)
+    public void addStatistic(StatisticRow statistic)
     {
         statistics.Add(statistic);
     }

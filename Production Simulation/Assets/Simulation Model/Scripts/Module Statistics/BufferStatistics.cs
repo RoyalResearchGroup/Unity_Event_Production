@@ -56,4 +56,9 @@ public class BufferStatistics : Statistics
         aggregatedResources.Clear();
         bufferFill.Clear();
     }
+
+    public override void notifyStatisticsManager()
+    {
+        
+    }
 }
