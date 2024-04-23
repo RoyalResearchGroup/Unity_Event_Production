@@ -20,6 +20,7 @@ public class ExperimentManager : MonoBehaviour
     private bool running = false;
     private EventManager e_manager;
 
+
     //UI
     public void StartExperiment()
     {
@@ -30,10 +31,12 @@ public class ExperimentManager : MonoBehaviour
 
     public void StopExperiment()
     {
+        GetComponent<StatisticsManager>().extractStatistics();
         running = false;
         iterationCount++;
         if (iterationCount >= iterations)
         {
+            GetComponent<StatisticsManager>().exportStatistics();
             Debug.Log("<color=green>Experiment succeeded!</color>");
         }
         GetComponent<EventManager>().StopExperiment();

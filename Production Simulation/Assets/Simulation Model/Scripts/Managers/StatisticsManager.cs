@@ -1,28 +1,21 @@
+using System.IO;
 using UnityEngine;
 
 public class StatisticsManager : MonoBehaviour
 {
-    private StatisticsTable statisticsTable;
-    private StatisticRow statistic_row;
-    public StatisticsManager ()
-    {
-
-    }
+    private StatisticRow statistic_row = new StatisticRow();
     public void addStationStatistics(Module m, Vector4 machineUsage)
     {
-        statistic_row.addStatistic(m.name,  machineUsage.w, machineUsage.y, machineUsage.x, machineUsage.z);
+        statistic_row.addStatistic(m,  machineUsage.w, machineUsage.y, machineUsage.x, machineUsage.z);
     }
-    public void extractStatisticsOfExperimentEnd()
+    public void extractStatistics()
     {
         BroadcastMessage("notifyStatisticsManager");
-        statisticsTable.addStatistic(statistic_row);
-        statistic_row = new StatisticRow();
     }
 
-    public void extractStatisticsOfExperimentStep()
-    {
-        BroadcastMessage("notifyStatisticsManager");
-        statisticsTable.addStatistic(statistic_row);
-        statistic_row = new StatisticRow();
+    public void exportStatistics()
+    { 
+        string filePath = Path.Combine("Assets/results", "UwU_Ich_Will_Nicht_Mehr_.csv");
+        statistic_row.WriteToCSV(filePath);
     }
 }

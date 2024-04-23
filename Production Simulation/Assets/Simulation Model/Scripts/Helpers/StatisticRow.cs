@@ -1,59 +1,66 @@
+using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text;
 using UnityEngine;
 
-public class StatisticRow : MonoBehaviour
-{
-    private List<string> moduleNames = new List<string>();
-    private List<float> available = new List<float>();
-    private List<float> setup = new List<float>();
-    private List<float> blocked = new List<float>();
-    private List<float> occupied = new List<float>();
-    public void addStatistic(string _moduleNames, float _available, float _setup, float _blocked, float _occupied)
+public class StatisticRow
+{ 
+    private List<StatsPerModule> statsOfModules = new List<StatsPerModule>();
+    public void addStatistic(Module _module, float _available, float _setup, float _blocked, float _occupied)
     {
-        moduleNames.Add(_moduleNames);
-        available.Add(_available);
-        setup.Add(_setup);
-        blocked.Add(_blocked);
-        occupied.Add(_occupied);
+        if (!statsOfModules.Any(module => module.module == _module))
+        {
+            statsOfModules.Add(new StatsPerModule(_module, _available, _setup, _blocked, _occupied));
+        }
+        else
+        {
+            statsOfModules[statsOfModules.FindIndex(module => module.module == _module)].Add(_available, _setup, _blocked, _occupied);
+        }
     }
 
     public void WriteToCSV(string filePath)
     {
         StringBuilder csvContent = new StringBuilder();
-        csvContent.AppendLine("ModuleName,Available,Setup,Blocked,Occupied");
+        List<Module> moduleNames = statsOfModules.Select(module => module.module).ToList();
+        StringBuilder row = new StringBuilder();
 
-        for (int i = 0; i < moduleNames.Count; i++)
+        foreach (Module module in moduleNames)
         {
-            csvContent.AppendLine($"{moduleNames[i]},{available[i]},{setup[i]},{blocked[i]},{occupied[i]}");
+            csvContent.Append(module + ";;;;");
+        }
+        csvContent.AppendLine();
+
+        for (int i = 0; i < moduleNames.Count(); i++)
+        {
+            csvContent.Append("Available;Setup;Blocked;Occupied;");
+        }
+        csvContent.AppendLine();
+
+        for (int i = 0; i < statsOfModules[0].getCount(); i++)
+        {
+            foreach (var module in statsOfModules)
+            {
+                foreach (float value in module.getValuesInPosition(i))
+                {
+                    row.Append(value + ";");
+                }
+            }
+            csvContent.AppendLine(row.ToString());
+            row = new StringBuilder();
         }
 
+        csvContent.AppendLine("Average: ");
+        row = new StringBuilder();
+        foreach (var module in statsOfModules)
+        {
+            foreach (float value in module.getAverage())
+            {
+                row.Append(value + ";");
+            }
+        }
+        csvContent.AppendLine(row.ToString());
         File.WriteAllText(filePath, csvContent.ToString());
-    }
-
-    public List<string> GetModuleNames()
-    {
-        return moduleNames;
-    }
-
-    public List<float> GetAvailable()
-    {
-        return available;
-    }
-
-    public List<float> GetSetup()
-    {
-        return setup;
-    }
-
-    public List<float> GetBlocked()
-    {
-        return blocked;
-    }
-
-    public List<float> GetOccupied()
-    {
-        return occupied;
     }
 }

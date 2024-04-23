@@ -1772,6 +1772,7 @@ GameObject:
   - component: {fileID: 1311707035}
   - component: {fileID: 1311707037}
   - component: {fileID: 1311707038}
+  - component: {fileID: 1311707039}
   m_Layer: 0
   m_Name: ExperimentInstance
   m_TagString: EventManager
@@ -1864,9 +1865,21 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   iterations: 100
   epochs: 0
-  experiment: {fileID: 11400000, guid: e1010b21f39776f498a0d9a1ecf2b308, type: 2}
+  experimentTemplate: {fileID: 11400000, guid: 376338410fb7de3408d564580bdf6a29, type: 2}
   observationSpace:
   - {fileID: 1668069853}
+--- !u!114 &1311707039
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1311707033}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 63847acc1584d1e4e976087cd0de5a8e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!4 &1462354049 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 5252317540498491593, guid: d561281c0ae9ab846bec2125b25c75fa, type: 3}

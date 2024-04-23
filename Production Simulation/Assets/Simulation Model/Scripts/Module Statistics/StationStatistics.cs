@@ -76,8 +76,7 @@ public class StationStatistics : Statistics
 
     public override void notifyStatisticsManager()
     {
-        Module module = GetComponent<Module>();
         StatisticsManager statisticsManager = GetComponentInParent<StatisticsManager>();
-        statisticsManager.addStationStatistics(module, machineUsage);
+        statisticsManager.addStationStatistics(GetComponent<Module>(), machineUsage);
     }
 }
