@@ -59,6 +59,7 @@ public class BufferStatistics : Statistics
 
     public override void notifyStatisticsManager()
     {
-        
+        StatisticsManager statisticsManager = GetComponentInParent<StatisticsManager>();
+        statisticsManager.addBufferStatistics(GetComponent<Module>(), averageFill);
     }
 }

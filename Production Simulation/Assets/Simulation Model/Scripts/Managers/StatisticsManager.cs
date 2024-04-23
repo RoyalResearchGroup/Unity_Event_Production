@@ -3,10 +3,20 @@ using UnityEngine;
 
 public class StatisticsManager : MonoBehaviour
 {
-    private StatisticRow statistic_row = new StatisticRow();
+    private StatisticTable statistic_row = new StatisticTable();
     public void addStationStatistics(Module m, Vector4 machineUsage)
     {
-        statistic_row.addStatistic(m,  machineUsage.w, machineUsage.y, machineUsage.x, machineUsage.z);
+        statistic_row.addStationStatistic(m,  machineUsage.w, machineUsage.y, machineUsage.x, machineUsage.z);
+    }
+
+    public void addDrainStatistics(Module m, float drainrate, float timePerProduct)
+    {
+        statistic_row.addDrainStatistics(m, drainrate, timePerProduct);
+    }
+
+    public void addBufferStatistics(Module m, float averageFill)
+    {
+        statistic_row.addBufferStatistics(m, averageFill);
     }
     public void extractStatistics()
     {
@@ -15,7 +25,7 @@ public class StatisticsManager : MonoBehaviour
 
     public void exportStatistics()
     { 
-        string filePath = Path.Combine("Assets/results", "UwU_Ich_Will_Nicht_Mehr_.csv");
+        string filePath = Path.Combine("Assets/results", "UwU_Ich_Will_Nicht_Mehr.csv");
         statistic_row.WriteToCSV(filePath);
     }
 }

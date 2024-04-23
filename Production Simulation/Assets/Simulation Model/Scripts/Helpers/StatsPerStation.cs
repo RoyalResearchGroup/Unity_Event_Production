@@ -2,15 +2,15 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-public class StatsPerModule
+public class StatsPerStation
 {
-    public Module module { get; set; }
+    public Module module;
     private List<float> available = new List<float>();
     private List<float> setup = new List<float>();
     private List<float> blocked = new List<float>();
     private List<float> occupied = new List<float>();
 
-    public StatsPerModule(Module name, float _available, float _setup, float _blocked, float _occupied)
+    public StatsPerStation(Module name, float _available, float _setup, float _blocked, float _occupied)
     {
         module = name;
         available.Add(_available);
