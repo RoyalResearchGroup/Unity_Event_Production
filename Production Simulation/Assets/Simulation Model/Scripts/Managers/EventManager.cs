@@ -72,7 +72,7 @@ public class EventManager : MonoBehaviour
 
                 //Some modules have to be notified that the event was processed (eg source, drain)
                 BroadcastMessage("NotifyEventBatch");
-                if(CheckDeadlock())
+                if(experimentRunning && CheckDeadlock())
                 {
                     break;
                 }
