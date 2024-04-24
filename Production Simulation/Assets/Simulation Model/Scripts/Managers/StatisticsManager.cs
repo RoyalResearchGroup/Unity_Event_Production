@@ -1,14 +1,19 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Text;
 using UnityEngine;
 
 [RequireComponent(typeof(ExperimentManager))]
 public class StatisticsManager : MonoBehaviour
 {
+    [Tooltip("Directory where the results should be safed (root is 'Production Simulation'")]
+    public string directory;
     private ExperimentManager x_manager;
     private StatisticTable stationTable;
     private StatisticTable bufferTable;
     private StatisticTable drainTable;
+    private List<bool> experimentTable;
 
     private void Start()
     {
@@ -16,6 +21,7 @@ public class StatisticsManager : MonoBehaviour
         stationTable = new StatisticTable(x_manager.iterations);
         bufferTable = new StatisticTable(x_manager.iterations);
         drainTable = new StatisticTable(x_manager.iterations);
+        experimentTable = new List<bool>(x_manager.iterations);
     }
 
     public void addStationStatistics(Module m, Vector4 machineUsage)
@@ -32,18 +38,39 @@ public class StatisticsManager : MonoBehaviour
     {
         bufferTable.addBufferStatistics(m, averageFill);
     }
-    public void extractStatistics()
+    
+    public void extractStatistics(bool experimentSuccessful)
     {
         BroadcastMessage("notifyStatisticsManager");
+        experimentTable.Add(experimentSuccessful);
     }
 
     public void exportStatistics()
     { 
-        string filePath = Path.Combine("Assets/results", "stationUsage.csv");
+        string filePath = Path.Combine(directory, "stationUsage.csv");
         stationTable.WriteToCSV(filePath, TYPE.STATION);
-        filePath = Path.Combine("Assets/results", "bufferUsage.csv");
+        filePath = Path.Combine(directory, "bufferUsage.csv");
         bufferTable.WriteToCSV(filePath, TYPE.BUFFER);
-        filePath = Path.Combine("Assets/results", "drainUsage.csv");
+        filePath = Path.Combine(directory, "drainUsage.csv");
         drainTable.WriteToCSV(filePath, TYPE.DRAIN);
+        filePath = Path.Combine(directory, "experiments.csv");
+        ExportExperimentResults(filePath);
+    }
+
+    private void ExportExperimentResults(string filePath)
+    {
+        StringBuilder csvContent = new StringBuilder();
+
+        if (experimentTable.Count != 0)
+        {
+            csvContent.AppendLine("Success;");
+
+            foreach (var experiment in experimentTable)
+            {
+                csvContent.AppendLine("" + experiment + ";");
+            }
+            
+            File.WriteAllText(filePath, csvContent.ToString());
+        }
     }
 }

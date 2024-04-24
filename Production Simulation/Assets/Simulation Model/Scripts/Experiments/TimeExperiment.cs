@@ -37,10 +37,12 @@ public class TimeExperiment : Experiment
                     fullfilledDate = man.GetComponent<TimeManager>().time;
                     if (achievedDate)
                     {
+                        man.experimentSuccessful = true;
                         Debug.Log("<color=green>Time limit achieved!</color>");
                     }
                     else
                     {
+                        man.experimentSuccessful = false;
                         Debug.Log("<color=orange>Time limit failed!</color>");
                     }
                     //Calculate the expected time for the Amount requirement to be fullfilled

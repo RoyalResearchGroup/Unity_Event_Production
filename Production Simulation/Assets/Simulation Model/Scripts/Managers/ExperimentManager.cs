@@ -13,6 +13,7 @@ public class ExperimentManager : MonoBehaviour
     public Experiment experimentTemplate;
 
     private Experiment experiment;
+    public bool experimentSuccessful = false;
 
     public List<Module> observationSpace;
 
@@ -31,13 +32,13 @@ public class ExperimentManager : MonoBehaviour
 
     public void StopExperiment()
     {
-        GetComponent<StatisticsManager>().extractStatistics();
+        GetComponent<StatisticsManager>().extractStatistics(experimentSuccessful);
         running = false;
         iterationCount++;
         if (iterationCount >= iterations)
         {
             GetComponent<StatisticsManager>().exportStatistics();
-            Debug.Log("<color=green>Experiment succeeded!</color>");
+            Debug.Log("<color=green>Experiments succeeded!</color>");
         }
         GetComponent<EventManager>().StopExperiment();
         ResetScene();

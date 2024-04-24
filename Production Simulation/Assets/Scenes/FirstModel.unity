@@ -1862,9 +1862,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7343d801948627948b878c68e989b0e5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  iterations: 100
+  iterations: 1000
   epochs: 0
   experimentTemplate: {fileID: 11400000, guid: 376338410fb7de3408d564580bdf6a29, type: 2}
+  experimentSuccessful: 0
   observationSpace:
   - {fileID: 1668069853}
 --- !u!114 &1311707039
@@ -1879,6 +1880,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 63847acc1584d1e4e976087cd0de5a8e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  directory: Assets/results/Strat01
 --- !u!4 &1462354049 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 5252317540498491593, guid: d561281c0ae9ab846bec2125b25c75fa, type: 3}
