@@ -12,4 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e700af5cc1b1e3145b2540ef9ef39c9e, type: 3}
   m_Name: Strat01
   m_EditorClassIdentifier: 
-  usedResources: []
+  usedResources:
+  - {fileID: 11400000, guid: b1729ac1cd965ad42aefb8d768c3faeb, type: 2}
+  - {fileID: 11400000, guid: 0726eea8b00e33749b6a2a8a5599bd83, type: 2}

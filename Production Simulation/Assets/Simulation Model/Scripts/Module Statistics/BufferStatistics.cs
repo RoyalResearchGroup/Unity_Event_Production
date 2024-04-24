@@ -56,4 +56,10 @@ public class BufferStatistics : Statistics
         aggregatedResources.Clear();
         bufferFill.Clear();
     }
+
+    public override void notifyStatisticsManager()
+    {
+        StatisticsManager statisticsManager = GetComponentInParent<StatisticsManager>();
+        statisticsManager.addBufferStatistics(GetComponent<Module>(), averageFill);
+    }
 }

@@ -21,4 +21,10 @@ public class DrainStatistics : Statistics
         drainRate = 0;
         timePerProduct = 0;   
     }
+
+    public override void notifyStatisticsManager()
+    {
+        StatisticsManager statisticsManager = GetComponentInParent<StatisticsManager>();
+        statisticsManager.addDrainStatistics(GetComponent<Module>(), drainRate, timePerProduct);
+    }
 }

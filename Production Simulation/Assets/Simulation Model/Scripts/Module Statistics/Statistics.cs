@@ -19,4 +19,6 @@ public abstract class Statistics : MonoBehaviour
     }
 
     public abstract void ResetModule();
+
+    public abstract void notifyStatisticsManager();
 }
