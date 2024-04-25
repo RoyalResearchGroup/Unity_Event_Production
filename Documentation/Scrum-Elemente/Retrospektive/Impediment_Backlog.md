@@ -46,3 +46,16 @@
 * Keine Zielführende Tasks im Sprint Backlog => Unter Absprache Folgetasks erstellen
 * Daily nicht effektiv genutzt => Verschieben auf 14 Uhr
 
+## Retrospektive 25.04.2024
+* Dailies sind scheiße und bleiben scheiße => Zwei Fragen siehe unten, DAILY ERNST NEHMEN
+* Aufgaben bearbeitet die nicht mehr so relevant sind => bessere Absprache bei den Dailies und allg.
+* Meetings sind overkill für unser Projekt => Notwendigkeit, aber darauf achten dass sie nicht ausarten
+* Scrum-Board schlecht genutzt in den Dailies => Bei den Dailies immer Board aufmachen,
+* Scrum-Board allg. schlecht genutzt => Discord channel für board änderungen, JEDER darf das Board bearbeiten
+
+Format für Nachrichten im Channel: @(CREATE|UPDATE|DELETE) APE-<JIRA-Nummer>: <Kommentar>
+
+### Daily
+* Wie hat meine Arbeit das Projekt verändert?
+* Wie beeinflusst meine Arbeit das Projekt?
+
