@@ -91,4 +91,14 @@ public class Drain : Module
     {
         absoluteDrain = 0;  
     }
+
+    public override bool ResourceSetupBlueprint(Resource resource)
+    {
+        return true;    
+    }
+
+    public override Resource GetProduct()
+    {
+        return null;
+    }
 }

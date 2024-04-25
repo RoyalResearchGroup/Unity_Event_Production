@@ -222,7 +222,15 @@ public class Source : Module
         DetermineState();
     }
 
+    public override bool ResourceSetupBlueprint(Resource resource)
+    {
+        return true;
+    }
 
+    public override Resource GetProduct()
+    {
+        return resourceBuffer.Peek().Resource;
+    }
 
     [CustomEditor(typeof(Source))]
     [Serializable]

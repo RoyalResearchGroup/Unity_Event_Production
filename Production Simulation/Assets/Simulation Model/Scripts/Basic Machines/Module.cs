@@ -10,6 +10,7 @@ using UnityEditor.Tilemaps;
 using UnityEngine;
 using UnityEngine.Assertions;
 using Random = UnityEngine.Random;
+using UnityEngine.EventSystems;
 
 
 public abstract class Module : SimulationObject
@@ -90,8 +91,7 @@ public abstract class Module : SimulationObject
                     {
                         Debug.Log("Illegal output: " + target + " Caller: " + gameObject.name);
                         //Callback for Agent Illegal Action
-
-                        x_manager.ResetScene();
+                        //x_manager.ResetScene();
                         reportInacceptibleAgent();
                     }
                 }
@@ -209,6 +209,10 @@ public abstract class Module : SimulationObject
         d_event= false;
         e_callback= false;
     }
+
+    public abstract bool ResourceSetupBlueprint(Resource resource);
+
+    public abstract Resource GetProduct();
 
     /// <summary>
     ///DEBUG SECTION

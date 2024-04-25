@@ -856,7 +856,7 @@ Camera:
   far clip plane: 10000
   field of view: 60
   orthographic: 1
-  orthographic size: 3
+  orthographic size: 4.016353
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -881,7 +881,7 @@ Transform:
   m_GameObject: {fileID: 519420028}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1.563, y: 1.627, z: -20}
+  m_LocalPosition: {x: 7.8, y: 1.627, z: -20}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1788,7 +1788,7 @@ Transform:
   m_GameObject: {fileID: 1311707033}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 2.8318956, y: 2.0733764, z: -3.5091677}
+  m_LocalPosition: {x: 8.88, y: 2.0733764, z: -3.5091677}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -3047,6 +3047,7 @@ MonoBehaviour:
   UIPanel: {fileID: 0}
   obs: {fileID: 1668069853}
   _strategy: {fileID: 0}
+  actionstackSize: 3
 --- !u!114 &2028906113
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3076,7 +3077,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_BrainParameters:
-    VectorObservationSize: 7
+    VectorObservationSize: 18
     NumStackedVectorObservations: 1
     m_ActionSpec:
       m_NumContinuousActions: 0
@@ -3085,9 +3086,9 @@ MonoBehaviour:
     VectorActionDescriptions: []
     VectorActionSpaceType: 0
     hasUpgradedBrainParametersWithActionSpec: 1
-  m_Model: {fileID: 0}
+  m_Model: {fileID: 5022602860645237092, guid: 3f699814d1bf95949a0f46160264ed9a, type: 3}
   m_InferenceDevice: 2
-  m_BehaviorType: 0
+  m_BehaviorType: 2
   m_BehaviorName: MLAgent
   TeamId: 0
   m_UseChildSensors: 1

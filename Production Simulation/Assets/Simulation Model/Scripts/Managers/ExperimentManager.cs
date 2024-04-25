@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -21,6 +22,7 @@ public class ExperimentManager : MonoBehaviour
     //UI
     public void StartExperiment()
     {
+        UnityEngine.Random.InitState((int)UnityEngine.Random.Range(0f, 1000f));
         running = true;
         GetComponent<EventManager>().StartExperiment();
     }
@@ -52,7 +54,7 @@ public class ExperimentManager : MonoBehaviour
         if (!e_manager.createStatistic) return;
         if(experiment.EvaluateState(this, observationSpace))
         {
-            Debug.LogWarning("Experiment succeeded!");
+            Debug.LogWarning("<color=green>Experiment succeeded!</color>");
             StopExperiment();
         }
     }

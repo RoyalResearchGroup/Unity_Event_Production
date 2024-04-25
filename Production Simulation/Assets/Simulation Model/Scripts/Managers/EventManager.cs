@@ -41,10 +41,10 @@ public class EventManager : MonoBehaviour
 
     private void Update()
     {
-        if (!experimentRunning) return;
+        //if (!experimentRunning) return;
 
 
-        stepCounter++;
+        /*stepCounter++;
         if (stepCounter > 1/simSpeed)
         {
             stepCounter = 0;
@@ -53,9 +53,9 @@ public class EventManager : MonoBehaviour
         {
             return;
         }
-        int counter = 0;
-        while(counter < batchSize)
-        {
+        int counter = 0;*/
+        //while(counter < batchSize)
+        //{
             //Here, we process the first event in the list
             if (m_events.PeekEvent() != null)
             {
@@ -77,22 +77,26 @@ public class EventManager : MonoBehaviour
                 BroadcastMessage("NotifyEventBatch");
 
                 //check for deadlocks if running. If not, the agent is currently trying to find a decision!
-                if(experimentRunning)
+                /*if(experimentRunning)
                 {
                     if (CheckDeadlock())
                     {
                         break;
                     }
                 }
-                counter++;
+                counter++;*/
             }
-        }
+            else
+            {
+                CheckDeadlock();
+            }
+        //}
 
     }
 
     public bool CheckDeadlock()
     {
-        if (m_events.PeekEvent() == null && prevLocked)
+        if (m_events.PeekEvent() == null)
         {
             // check if the experiment has succeeded
             // no, if the experiment would have succeeded the experiment would have stopped.
@@ -101,16 +105,10 @@ public class EventManager : MonoBehaviour
             // then the simulation model is faulty.
 
             // We assume that the agent is responsible for this deadlock.
-            Debug.Log("Deadlock occurred!");
             BroadcastMessage("ApplyDeadlockPenalty");
             GetComponent<ExperimentManager>().StopExperiment();
             return true;
         }
-        else if(m_events.PeekEvent() == null && !prevLocked)
-        {
-            prevLocked = true;
-        }
-        else { prevLocked = true; }
         return false;
     }
     

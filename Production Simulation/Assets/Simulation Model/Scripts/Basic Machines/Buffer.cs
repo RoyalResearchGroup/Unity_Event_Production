@@ -154,4 +154,16 @@ public class Buffer : Module
         absoluteFill = 0;
         DetermineState ();
     }
+
+    public override bool ResourceSetupBlueprint(Resource resource)
+    {
+        return true;
+    }
+
+    public override Resource GetProduct()
+    {
+        if(resourceBuffer.Count > 0)
+            return resourceBuffer.Peek().Resource;
+        else return null;
+    }
 }

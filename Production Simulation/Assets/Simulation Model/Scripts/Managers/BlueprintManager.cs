@@ -153,4 +153,59 @@ public class BlueprintManager : MonoBehaviour
 
         return null; // Return null if no blueprint fully meets the requirements.
     }
+
+
+
+    /// <summary>
+    /// Checks if adding a single resource to existing resources can help in completing the blueprint in the future.
+    /// </summary>
+    /// <param name="blueprint">The blueprint to check against.</param>
+    /// <param name="currentResourceObjects">List of current resource objects already counted towards the blueprint.</param>
+    /// <param name="newResource">The new resource to add.</param>
+    /// <returns>True if adding the new resource does not exceed the blueprint's requirements and is required by the blueprint; otherwise, false.</returns>
+    public bool CanAddResourceToCompleteBlueprint(Blueprint blueprint, LimitedQueue<ResourceObject> currentResourceObjects, Resource newResource)
+    {
+        // Ensure that blueprint, blueprint's resources, and newResource are not null
+        if (blueprint == null || blueprint.resources == null || newResource == null)
+        {
+            //Debug.LogWarning("Blueprint and resources must not be null.");
+            return true;  // Safe fail, inputs are not valid
+        }
+
+        // Check if the new resource is part of the blueprint requirements.
+        if (!blueprint.resources.Any(r => r.resource == newResource))
+        {
+            return false;  // Return false immediately if the new resource is not required by the blueprint.
+        }
+
+        // Create a dictionary from the current resources objects to count each resource.
+        var resourceCounts = currentResourceObjects?.GroupBy(ro => ro.Resource)
+                                                   .ToDictionary(g => g.Key, g => g.Count()) ?? new Dictionary<Resource, int>();
+
+        // Add the new resource to the dictionary.
+        if (resourceCounts.ContainsKey(newResource))
+        {
+            resourceCounts[newResource]++;
+        }
+        else
+        {
+            resourceCounts[newResource] = 1;
+        }
+
+        // Check if the count of any resource exceeds its requirement in the blueprint.
+        foreach (var requirement in blueprint.resources)
+        {
+            if (resourceCounts.TryGetValue(requirement.resource, out int count))
+            {
+                // If the count of any resource exceeds its requirement, return false.
+                if (count > requirement.number)
+                {
+                    return false;
+                }
+            }
+        }
+
+        // If no resources exceed their required amount, return true because it's possible to complete the blueprint in the future.
+        return true;
+    }
 }

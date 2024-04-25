@@ -252,4 +252,24 @@ public class Station : Module
         GetComponent<SpriteRenderer>().color = Color.white;
         DetermineState();
     }
+
+    public override bool ResourceSetupBlueprint(Resource resource)
+    {
+        if(resource == null)
+            return false;
+
+        if (GetComponent<BlueprintManager>().CanAddResourceToCompleteBlueprint(setupBlueprint, resourceBuffer, resource))
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+    public override Resource GetProduct()
+    {
+        return product.Resource;
+    }
 }
