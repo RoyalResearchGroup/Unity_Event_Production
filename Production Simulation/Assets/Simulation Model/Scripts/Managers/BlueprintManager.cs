@@ -70,6 +70,7 @@ public class BlueprintManager : MonoBehaviour
     {
         // Aggregate resources from the current input buffer for comparison.
         var aggregatedResources = currentInputBuffer
+            //.Where(ro => ro.Resource != null)  // Filter out null Resources
             .GroupBy(ro => ro.Resource)
             .ToDictionary(group => group.Key, group => group.Count());
 
@@ -126,6 +127,7 @@ public class BlueprintManager : MonoBehaviour
     {
         // Aggregate resources from the current input buffer for comparison.
         var aggregatedResources = currentInputBuffer
+      //      .Where(ro => ro.Resource != null)  // Filter out null Resources
             .GroupBy(ro => ro.Resource)
             .ToDictionary(group => group.Key, group => group.Count());
 

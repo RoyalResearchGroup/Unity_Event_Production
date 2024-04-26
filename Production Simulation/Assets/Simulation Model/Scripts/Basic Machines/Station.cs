@@ -200,7 +200,7 @@ public class Station : Module
     public override bool IsInputReady(Resource r)
     {
         //This module is input ready if r matches at least one allowed resource and the machine is currently not producing anything and theres space in the resource buffer
-        if(allowedResources.Contains(r) && !d_event && resourceBuffer.Count < resourceBuffer.Limit)
+        if(allowedResources.Contains(r) && !d_event && resourceBuffer.Count < resourceBuffer.Limit && r!=null)
         {
             return true;
         }
@@ -211,7 +211,7 @@ public class Station : Module
     {
         //This module is output ready if there a product that matches a resource in the list and it is not producing anything atm (null if no product -> no match)
 
-        if(r.Contains(product.Resource) && !d_event)
+        if(r.Contains(product.Resource) && !d_event && product.Resource != null)
         {
             return true;
         }

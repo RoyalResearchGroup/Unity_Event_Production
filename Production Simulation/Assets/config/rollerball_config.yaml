@@ -21,3 +21,25 @@ behaviors:
     max_steps: 500000
     time_horizon: 64
     summary_freq: 1000
+  MLAgent2:
+    trainer_type: sac
+    hyperparameters:
+      batch_size: 512
+      buffer_size: 64000
+      learning_rate: 3.0e-4
+      buffer_init_steps: 200
+      init_entcoef: 0.5
+      save_replay_buffer: false
+      tau: 0.005
+      steps_per_update: 1
+    network_settings:
+      normalize: false
+      hidden_units: 512
+      num_layers: 3
+    reward_signals:
+      extrinsic:
+        gamma: 0.99
+        strength: 1.0
+    max_steps: 500000
+    time_horizon: 64
+    summary_freq: 100

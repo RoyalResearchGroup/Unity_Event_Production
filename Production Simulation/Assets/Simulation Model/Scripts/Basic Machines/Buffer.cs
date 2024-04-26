@@ -35,6 +35,7 @@ public class Buffer : Module
 
     public override bool IsInputReady(Resource r)
     {
+        if(r == null) return false;
         //Input always possible when space
         if (resourceBuffer.Count < resourceBuffer.Limit && allowedResources.Contains(r)) return true;
         return false;

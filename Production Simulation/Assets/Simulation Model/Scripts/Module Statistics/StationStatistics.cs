@@ -29,8 +29,10 @@ public class StationStatistics : Statistics
         var currentInputBuffer = GetComponent<Module>().GetResourceBuffer();
         // Aggregate resources from the current input buffer for comparison.
         var res = currentInputBuffer
+            //.Where(ro => ro.Resource != null)
             .GroupBy(ro => ro.Resource)
             .ToDictionary(group => group.Key, group => group.Count());
+
 
         foreach ( var kvp in res)
         {

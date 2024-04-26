@@ -39,6 +39,8 @@ public class ActionStorage
 public class RLAgent : BaseAgent
 {
     public Drain obs;
+
+    public bool train = true;
     
     // The strategy that the agent uses
     [SerializeField] protected Strategy _strategy;
@@ -95,132 +97,136 @@ public class RLAgent : BaseAgent
         mlAgent.RequestDecision();
         Academy.Instance.EnvironmentStep();
 
-
-        if (discreteActions.Length > 0)
-        {   
-            var output = discreteActions[0];
-            if(!inject)
+        if (train)
+        {
+            if (discreteActions.Length > 0)
             {
-                currentAction = actionBuffer.Count - 1;
-                actionBuffer[currentAction].SetOutput(output);
-            }
-
-            if (output == m_info.Count)
-            {
-                // no module selected (do nothing)
-                Debug.Log("Do nothing...");
-
-                //Get the number of currently working machines
-                int c = 0;
-                int d = 0;
-                foreach(ModuleInformation m in m_info)
+                var output = discreteActions[0];
+                if (!inject)
                 {
-                    if(m.valid && m.ready)
+                    currentAction = actionBuffer.Count - 1;
+                    actionBuffer[currentAction].SetOutput(output);
+                }
+
+                if (output == m_info.Count)
+                {
+                    // no module selected (do nothing)
+                    Debug.Log("Do nothing...");
+
+                    //Get the number of currently working machines
+                    int c = 0;
+                    int d = 0;
+                    foreach (ModuleInformation m in m_info)
                     {
-                        c++;
+                        if (m.valid && m.ready)
+                        {
+                            c++;
+                        }
+                        if (m.valid) d++;
                     }
-                    if (m.valid) d++;
-                }
-                if(c == 0)
-                {
-                    mlAgent.AddReward(1.0f);
-                    Debug.Log("None perfected!");
-                }
-                else
-                {
-                    mlAgent.AddReward(0.3f);
-
-                    if (c == d)
+                    if (c == 0)
                     {
-                        Debug.LogWarning("<color=yellow>None false</color>");
-                        mlAgent.AddReward(-1.0f);
-                        GetComponentInParent<ExperimentManager>().StopExperiment();
-                        //mlAgent.EndEpisode();
-                        ResetBuffer();
-                    }
-                }
-                mlAgent.EndEpisode();
-                //mlAgent.AddReward(0.0f);
-                e_manager.Pause(false);
-            }
-            else if (m_info[output].valid && m_info[output].ready)
-            {
-                // valid action received, return the corresponding module
-                Module callerM = caller.GetComponent<Module>();
-                Module decisionM = m_info[output].module.GetComponent<Module>();
-                Debug.Log("Valid action selected");
-                mlAgent.AddReward(0.1f);
-
-
-                //SPECIAL REWARDS FOR SPECIAL NEEDS
-                //______________________________________________________________
-                //Reward the agent for choosing diverse machines
-
-
-                //Reward agent for choosing machines that are setup for the resource in question
-
-
-                //Reward agent for choosing a machine that is fast
-
-                if (callerInFront)
-                {
-                    //Setup
-                    if (caller.GetComponent<Module>().ResourceSetupBlueprint(m_info[output].product))
-                    {
-                        mlAgent.AddReward(0.2f);
-                        //Debug.LogWarning("Bonus");
+                        mlAgent.AddReward(1.0f);
+                        Debug.Log("None perfected!");
                     }
                     else
                     {
-                        mlAgent.AddReward(-0.3f);
+                        mlAgent.AddReward(0.3f);
+
+                        if (c == d)
+                        {
+                            Debug.LogWarning("<color=yellow>None false</color>");
+                            mlAgent.AddReward(-1.0f);
+                            GetComponentInParent<ExperimentManager>().StopExperiment();
+                            //mlAgent.EndEpisode();
+                            ResetBuffer();
+                        }
                     }
+                    mlAgent.EndEpisode();
+                    //mlAgent.AddReward(0.0f);
+                    e_manager.Pause(false);
                 }
-                else
+                else if (m_info[output].valid && m_info[output].ready)
                 {
-                    if (m_info[output].module.GetComponent<Module>().ResourceSetupBlueprint(caller.GetComponent<Module>().GetProduct()))
+                    // valid action received, return the corresponding module
+                    Module callerM = caller.GetComponent<Module>();
+                    Module decisionM = m_info[output].module.GetComponent<Module>();
+                    Debug.Log("Valid action selected");
+                    mlAgent.AddReward(0.1f);
+
+
+                    //SPECIAL REWARDS FOR SPECIAL NEEDS
+                    //______________________________________________________________
+                    //Reward the agent for choosing diverse machines
+
+
+                    //Reward agent for choosing machines that are setup for the resource in question
+
+
+                    //Reward agent for choosing a machine that is fast
+
+                    if (callerInFront)
                     {
-                        mlAgent.AddReward(0.2f);
-                        //Debug.LogWarning("Bonus");
+                        //Setup
+                        if (caller.GetComponent<Module>().ResourceSetupBlueprint(m_info[output].product))
+                        {
+                            mlAgent.AddReward(0.2f);
+                            //Debug.LogWarning("Bonus");
+                        }
+                        else
+                        {
+                            mlAgent.AddReward(-0.3f);
+                        }
                     }
                     else
                     {
-                        mlAgent.AddReward(-0.3f);
+                        if (m_info[output].module.GetComponent<Module>().ResourceSetupBlueprint(caller.GetComponent<Module>().GetProduct()))
+                        {
+                            mlAgent.AddReward(0.2f);
+                            //Debug.LogWarning("Bonus");
+                        }
+                        else
+                        {
+                            mlAgent.AddReward(-0.3f);
+                        }
                     }
-                }
 
 
-                //______________________________________________________________
+                    //______________________________________________________________
 
-                if (callerInFront)
-                {
-                    // maybe the caller could not be ready to get input (if it is dogshit)
-                    decisionM.UpdateCTRL(callerM);
+                    if (callerInFront)
+                    {
+                        Debug.LogWarning("<color=green> Prod: </color>" + callerM.GetProduct() + gameObject+ "   "+ callerM);
+                        // maybe the caller could not be ready to get input (if it is dogshit)
+                        decisionM.UpdateCTRL(callerM);
+                    }
+                    else
+                    {
+                        Debug.LogWarning("<color=green> Prod: </color>" + decisionM.GetProduct() + callerM + "   " + gameObject);
+                        callerM.UpdateCTRL(decisionM);
+                    }
+                    mlAgent.EndEpisode();
+                    e_manager.Pause(false);
                 }
                 else
                 {
-                    callerM.UpdateCTRL(decisionM);
+                    // give penalty for invalid action
+                    Debug.LogWarning("<color=blue>Invalid action selected.</color>");
+
+
+                    // add penalty
+                    mlAgent.AddReward(-1.0f);
+                    mlAgent.EndEpisode();
+                    ResetBuffer();
+                    GetComponentInParent<ExperimentManager>().StopExperiment();
                 }
-                mlAgent.EndEpisode();
-                e_manager.Pause(false);
             }
             else
             {
-                // give penalty for invalid action
-                Debug.LogWarning("<color=blue>Invalid action selected.</color>");
-
-
-                // add penalty
-                mlAgent.AddReward(-1.0f);
-                mlAgent.EndEpisode();
-                ResetBuffer();
-                GetComponentInParent<ExperimentManager>().StopExperiment();
+                Debug.LogWarning("No actions received");
+                e_manager.Pause(false);
             }
-        }
-        else
-        {
-            Debug.LogWarning("No actions received");
-            e_manager.Pause(false);
-        }
+        } 
     }
     
 
@@ -283,6 +289,7 @@ public class RLAgent : BaseAgent
                 if (obsv) inputs.Add(1);
                 else inputs.Add(0);
             }
+
         }
 
         //Add a new Action to the buffer

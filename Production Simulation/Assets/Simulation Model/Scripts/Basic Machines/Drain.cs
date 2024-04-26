@@ -16,7 +16,8 @@ public class Drain : Module
 
     public override bool IsInputReady(Resource r)
     {
-        if(allowedResources.Contains(r)) return true;
+        if (r == null) return false;
+        if (allowedResources.Contains(r)) return true;
         return false;   
     }
 
