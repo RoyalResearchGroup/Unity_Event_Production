@@ -215,6 +215,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: ExperimentInstance (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 9116305635294834533, guid: e062e40e5825d3045ac59b5a792f3cfa, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -320,6 +324,26 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 6736007995144191816, guid: e062e40e5825d3045ac59b5a792f3cfa, type: 3}
+      propertyPath: m_Model
+      value: 
+      objectReference: {fileID: 5022602860645237092, guid: 3f699814d1bf95949a0f46160264ed9a, type: 3}
+    - target: {fileID: 6736007995144191816, guid: e062e40e5825d3045ac59b5a792f3cfa, type: 3}
+      propertyPath: m_BehaviorType
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6736007995144191816, guid: e062e40e5825d3045ac59b5a792f3cfa, type: 3}
+      propertyPath: m_InferenceDevice
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 7976108947488722992, guid: e062e40e5825d3045ac59b5a792f3cfa, type: 3}
+      propertyPath: iterations
+      value: 1000
+      objectReference: {fileID: 0}
+    - target: {fileID: 7976108947488722992, guid: e062e40e5825d3045ac59b5a792f3cfa, type: 3}
+      propertyPath: experimentTemplate
+      value: 
+      objectReference: {fileID: 11400000, guid: 376338410fb7de3408d564580bdf6a29, type: 2}
     - target: {fileID: 8367721313932236555, guid: e062e40e5825d3045ac59b5a792f3cfa, type: 3}
       propertyPath: m_LocalPosition.x
       value: 2.8318956
@@ -421,6 +445,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: ExperimentInstance (4)
       objectReference: {fileID: 0}
+    - target: {fileID: 9116305635294834533, guid: e062e40e5825d3045ac59b5a792f3cfa, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -477,6 +505,10 @@ PrefabInstance:
     - target: {fileID: 9116305635294834533, guid: e062e40e5825d3045ac59b5a792f3cfa, type: 3}
       propertyPath: m_Name
       value: ExperimentInstance (2)
+      objectReference: {fileID: 0}
+    - target: {fileID: 9116305635294834533, guid: e062e40e5825d3045ac59b5a792f3cfa, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -535,6 +567,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: ExperimentInstance (5)
       objectReference: {fileID: 0}
+    - target: {fileID: 9116305635294834533, guid: e062e40e5825d3045ac59b5a792f3cfa, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -592,6 +628,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: ExperimentInstance (7)
       objectReference: {fileID: 0}
+    - target: {fileID: 9116305635294834533, guid: e062e40e5825d3045ac59b5a792f3cfa, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -648,6 +688,10 @@ PrefabInstance:
     - target: {fileID: 9116305635294834533, guid: e062e40e5825d3045ac59b5a792f3cfa, type: 3}
       propertyPath: m_Name
       value: ExperimentInstance (3)
+      objectReference: {fileID: 0}
+    - target: {fileID: 9116305635294834533, guid: e062e40e5825d3045ac59b5a792f3cfa, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -773,6 +817,10 @@ PrefabInstance:
     - target: {fileID: 9116305635294834533, guid: e062e40e5825d3045ac59b5a792f3cfa, type: 3}
       propertyPath: m_Name
       value: ExperimentInstance (6)
+      objectReference: {fileID: 0}
+    - target: {fileID: 9116305635294834533, guid: e062e40e5825d3045ac59b5a792f3cfa, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
