@@ -302,7 +302,7 @@ public class RLAgent : BaseAgent
         mlAgent.EndEpisode();
 
         //We have to perform backtracking injection
-        //Inject(actionstackSize, -1.0f);
+        Inject(actionstackSize, -1.0f);
         //After, reset the action buffer as the episode concludes
         ResetBuffer();
     }
