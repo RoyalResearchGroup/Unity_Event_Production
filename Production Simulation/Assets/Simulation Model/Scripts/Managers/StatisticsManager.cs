@@ -46,14 +46,17 @@ public class StatisticsManager : MonoBehaviour
     }
 
     public void exportStatistics()
-    { 
-        string filePath = Path.Combine(directory, "stationUsage.csv");
+    {
+        string dir = String.Format("./Assets/results/{0}/{1}", directory, gameObject.layer);
+        Directory.CreateDirectory(dir);
+        
+        string filePath = Path.Combine(dir, "stationUsage.csv");
         stationTable.WriteToCSV(filePath, TYPE.STATION);
-        filePath = Path.Combine(directory, "bufferUsage.csv");
+        filePath = Path.Combine(dir, "bufferUsage.csv");
         bufferTable.WriteToCSV(filePath, TYPE.BUFFER);
-        filePath = Path.Combine(directory, "drainUsage.csv");
+        filePath = Path.Combine(dir, "drainUsage.csv");
         drainTable.WriteToCSV(filePath, TYPE.DRAIN);
-        filePath = Path.Combine(directory, "experiments.csv");
+        filePath = Path.Combine(dir, "experiments.csv");
         ExportExperimentResults(filePath);
     }
 
