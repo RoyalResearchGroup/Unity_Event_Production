@@ -5,12 +5,11 @@ using System.Linq;
 using Unity.VisualScripting;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "NewStrategy", menuName = "Strategies/Strategy01")]
-public class Strategy01 : Strategy
+[CreateAssetMenu(fileName = "NewStrategy", menuName = "Strategies/Strategy02")]
+public class Strategy02 : Strategy
 {
     [SerializeField]
     public List<Resource> usedResources = new List<Resource>();
-
     void OnEnable()
     {
         try
@@ -24,6 +23,7 @@ public class Strategy01 : Strategy
         catch (Exception e)
         {
             Debug.LogError("EXCEPTION: Add all to handle resources to strategy!!! -> Assets/Simulation Model/Scriptable Objects/Strategies");
+            //wrongAmountOfResources = false;
         }
     }
 
@@ -35,7 +35,6 @@ public class Strategy01 : Strategy
         List<string> predecessorNames = new List<string> { "BufferY", "BufferB" };
 
         GameObject target = null;
-
         foreach (ModuleInformation info in m_info)
         {
             if (info.valid)
@@ -77,6 +76,18 @@ public class Strategy01 : Strategy
                             ready_options.TryGetValue(successorNames[1], out target);
                         }
                     }
+                    else if (ready_options.ContainsKey(successorNames[2]) && ready_options.ContainsKey(successorNames[3]))
+                    {
+                        all_options.TryGetValue(successorNames[2], out GameObject gameObject0);
+                        all_options.TryGetValue(successorNames[3], out GameObject gameObject1);
+                        if (!(gameObject0.GetComponent<Module>().GetModuleInformation().product == usedResources[0]
+                            || gameObject1.GetComponent<Module>().GetModuleInformation().product == usedResources[0]
+                            || gameObject0.GetComponent<Module>().GetModuleInformation().resourceBuffer.Any(resourceObject => resourceObject.Resource == usedResources[0])
+                            || gameObject1.GetComponent<Module>().GetModuleInformation().resourceBuffer.Any(resourceObject => resourceObject.Resource == usedResources[0])))
+                        {
+                            ready_options.TryGetValue(successorNames[rand.Next(2) + 2], out target);
+                        }
+                    }
                     break;
                 case "BlueMU":
                     if (ready_options.ContainsKey(successorNames[2]) || ready_options.ContainsKey(successorNames[3]))
@@ -93,6 +104,18 @@ public class Strategy01 : Strategy
                         else if (ready_options.ContainsKey(successorNames[3]))
                         {
                             ready_options.TryGetValue(successorNames[3], out target);
+                        }
+                    }
+                    else if (ready_options.ContainsKey(successorNames[0]) && ready_options.ContainsKey(successorNames[1]))
+                    {
+                        all_options.TryGetValue(successorNames[0], out GameObject gameObject0);
+                        all_options.TryGetValue(successorNames[1], out GameObject gameObject1);
+                        if (!(gameObject0.GetComponent<Module>().GetModuleInformation().product == usedResources[1]
+                            || gameObject1.GetComponent<Module>().GetModuleInformation().product == usedResources[1]
+                            || gameObject0.GetComponent<Module>().GetModuleInformation().resourceBuffer.Any(resourceObject => resourceObject.Resource == usedResources[1])
+                            || gameObject1.GetComponent<Module>().GetModuleInformation().resourceBuffer.Any(resourceObject => resourceObject.Resource == usedResources[1])))
+                        {
+                            ready_options.TryGetValue(successorNames[rand.Next(2)], out target);
                         }
                     }
                     break;

@@ -266,7 +266,7 @@ public class Source : Module
                     EditorGUILayout.PropertyField(parametersProp.GetArrayElementAtIndex(2), new GUIContent("Max"));
                     break;
                 case Distribution.Normal:
-                    EditorGUILayout.PropertyField(parametersProp.GetArrayElementAtIndex(0), new GUIContent("Mean"));
+                    EditorGUILayout.PropertyField(parametersProp.GetArrayElementAtIndex(0), new GUIContent("MeanTime"));
                     EditorGUILayout.EndHorizontal(); EditorGUILayout.BeginHorizontal();
                     EditorGUILayout.PropertyField(parametersProp.GetArrayElementAtIndex(1), new GUIContent("Standard Deviation"));
                     break;

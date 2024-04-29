@@ -81,4 +81,10 @@ public class StationStatistics : Statistics
         aggregatedResources.Clear();
         resourceSum = 0;
     }
+
+    public override void notifyStatisticsManager()
+    {
+        StatisticsManager statisticsManager = GetComponentInParent<StatisticsManager>();
+        statisticsManager.addStationStatistics(GetComponent<Module>(), machineUsage);
+    }
 }

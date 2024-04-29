@@ -9,7 +9,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f290e5efce2dcca42ae9abda0a6b210d, type: 3}
-  m_Name: rate_1
+  m_Script: {fileID: 11500000, guid: e700af5cc1b1e3145b2540ef9ef39c9e, type: 3}
+  m_Name: Strat01
   m_EditorClassIdentifier: 
-  targetRate: 1.5
+  usedResources:
+  - {fileID: 11400000, guid: b1729ac1cd965ad42aefb8d768c3faeb, type: 2}
+  - {fileID: 11400000, guid: 0726eea8b00e33749b6a2a8a5599bd83, type: 2}
