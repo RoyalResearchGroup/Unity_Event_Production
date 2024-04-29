@@ -27,9 +27,15 @@ public class StationStatistics : Statistics
     {
         if (!useStatistics) return;
         var currentInputBuffer = GetComponent<Module>().GetResourceBuffer();
+
+        Resource dummyResource = (Resource)ScriptableObject.CreateInstance("Resource");
+        ResourceObject dummyObject = new ResourceObject(dummyResource);
+
         // Aggregate resources from the current input buffer for comparison.
         var res = currentInputBuffer
             //.Where(ro => ro.Resource != null)
+            //.Select(ro => ro.Resource ?? dummyObject.Resource)
+            .Where(ro => ro.Resource != null)
             .GroupBy(ro => ro.Resource)
             .ToDictionary(group => group.Key, group => group.Count());
 

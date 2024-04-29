@@ -24,21 +24,21 @@ behaviors:
   MLAgent2:
     trainer_type: sac
     hyperparameters:
-      batch_size: 512
+      batch_size: 128
       buffer_size: 64000
       learning_rate: 3.0e-4
-      buffer_init_steps: 200
+      buffer_init_steps: 0
       init_entcoef: 0.5
-      save_replay_buffer: false
+      save_replay_buffer: true
       tau: 0.005
       steps_per_update: 1
     network_settings:
       normalize: false
-      hidden_units: 512
-      num_layers: 3
+      hidden_units: 128
+      num_layers: 2
     reward_signals:
       extrinsic:
-        gamma: 0.99
+        gamma: 1.0
         strength: 1.0
     max_steps: 500000
     time_horizon: 64

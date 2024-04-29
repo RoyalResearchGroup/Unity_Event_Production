@@ -68,9 +68,13 @@ public class BlueprintManager : MonoBehaviour
 
     public void UpdateAllowedResourcesAndBlueprints(LimitedQueue<ResourceObject> currentInputBuffer)
     {
+        Resource dummyResource = (Resource)ScriptableObject.CreateInstance("Resource");
+        ResourceObject dummyObject = new ResourceObject(dummyResource);
+        
         // Aggregate resources from the current input buffer for comparison.
         var aggregatedResources = currentInputBuffer
-            //.Where(ro => ro.Resource != null)  // Filter out null Resources
+            //.Select(ro => ro.Resource ?? dummyObject.Resource)
+            .Where(ro => ro.Resource != null)// Filter out null Resources
             .GroupBy(ro => ro.Resource)
             .ToDictionary(group => group.Key, group => group.Count());
 
@@ -125,9 +129,13 @@ public class BlueprintManager : MonoBehaviour
 
     public Blueprint FindFirstBlueprintMeetingRequirements(LimitedQueue<ResourceObject> currentInputBuffer)
     {
+        Resource dummyResource = (Resource)ScriptableObject.CreateInstance("Resource");
+        ResourceObject dummyObject = new ResourceObject(dummyResource);
+
         // Aggregate resources from the current input buffer for comparison.
         var aggregatedResources = currentInputBuffer
-      //      .Where(ro => ro.Resource != null)  // Filter out null Resources
+            //.Select(ro => ro.Resource ?? dummyObject.Resource)  // Filter out null Resources
+            .Where(ro => ro.Resource != null)
             .GroupBy(ro => ro.Resource)
             .ToDictionary(group => group.Key, group => group.Count());
 

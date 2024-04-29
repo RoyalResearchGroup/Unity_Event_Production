@@ -1876,6 +1876,11 @@ MonoBehaviour:
   UIPanel: {fileID: 0}
   obs: {fileID: 1668069853}
   train: 1
+  optimizeSetup: 0
+  optimizeTime: 0
+  optimizeOccupation: 0
+  observeResources: 0
+  observeSetup: 0
   _strategy: {fileID: 0}
   actionstackSize: 3
 --- !u!114 &1233434405
@@ -1907,7 +1912,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_BrainParameters:
-    VectorObservationSize: 15
+    VectorObservationSize: 5
     NumStackedVectorObservations: 1
     m_ActionSpec:
       m_NumContinuousActions: 0
@@ -1920,7 +1925,7 @@ MonoBehaviour:
   m_InferenceDevice: 0
   m_BehaviorType: 0
   m_BehaviorName: MLAgent2
-  TeamId: 0
+  TeamId: 1
   m_UseChildSensors: 1
   m_UseChildActuators: 1
   m_ObservableAttributeHandling: 0
@@ -2074,6 +2079,7 @@ GameObject:
   - component: {fileID: 1311707035}
   - component: {fileID: 1311707037}
   - component: {fileID: 1311707038}
+  - component: {fileID: 1311707039}
   m_Layer: 0
   m_Name: ExperimentInstance
   m_TagString: EventManager
@@ -2171,6 +2177,18 @@ MonoBehaviour:
   experiment: {fileID: 11400000, guid: e1010b21f39776f498a0d9a1ecf2b308, type: 2}
   observationSpace:
   - {fileID: 1668069853}
+--- !u!114 &1311707039
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1311707033}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8a04690502954ce4baf739c44280b1b7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!4 &1462354049 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 5252317540498491593, guid: d561281c0ae9ab846bec2125b25c75fa, type: 3}
@@ -3480,7 +3498,12 @@ MonoBehaviour:
   lineRenderer: {fileID: 7171977854619541312, guid: c5f5a07b8c399fd4783b291e500bcf9a, type: 3}
   UIPanel: {fileID: 0}
   obs: {fileID: 1668069853}
-  train: 1
+  train: 0
+  optimizeSetup: 1
+  optimizeTime: 1
+  optimizeOccupation: 1
+  observeResources: 1
+  observeSetup: 1
   _strategy: {fileID: 0}
   actionstackSize: 3
 --- !u!114 &2028906113
