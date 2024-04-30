@@ -26,7 +26,7 @@ public class StatisticsManager : MonoBehaviour
 
     public void addStationStatistics(Module m, Vector4 machineUsage)
     {
-        stationTable.addStationStatistic(m,  machineUsage.w, machineUsage.y, machineUsage.x, machineUsage.z);
+        stationTable.addStationStatistic(m,  machineUsage.x, machineUsage.y, machineUsage.z, machineUsage.w);
     }
 
     public void addDrainStatistics(Module m, float drainrate, float timePerProduct)

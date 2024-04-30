@@ -41,7 +41,7 @@ public class EventManager : MonoBehaviour
 
     private void Update()
     {
-        //if (!experimentRunning) return;
+        if (!experimentRunning) return;
 
 
         /*stepCounter++;
