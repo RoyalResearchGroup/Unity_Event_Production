@@ -1,7 +1,7 @@
-## Install unity 2023.2.15f1
+## Install unity 2023.2.15
 - [install Unity Hub](https://unity.com/download)
 ![img_1.png](img_1.png)
-- Install version [2023.2.15](unityhub://2023.2.15f1/c5cbb0b314fa)
+- Install version 2023.2.15![img_4.png](img_4.png)
 
 ##  Install Anaconda 
 Download link -> [https://www.anaconda.com/download](https://www.anaconda.com/download)
