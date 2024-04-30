@@ -167,9 +167,7 @@ GameObject:
   - component: {fileID: 1453504531646061333}
   - component: {fileID: 8866997036552463771}
   - component: {fileID: 563838420421737554}
-  - component: {fileID: 6736007995144191816}
-  - component: {fileID: 3290563539998519019}
-  - component: {fileID: 420166012920626638}
+  - component: {fileID: 1357720334881000313}
   m_Layer: 0
   m_Name: Agent
   m_TagString: Untagged
@@ -268,7 +266,7 @@ SphereCollider:
   serializedVersion: 3
   m_Radius: 0.32
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &6736007995144191816
+--- !u!114 &1357720334881000313
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -277,53 +275,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 665206022672713961}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5d1c4e0b1822b495aa52bc52839ecb30, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_BrainParameters:
-    VectorObservationSize: 18
-    NumStackedVectorObservations: 1
-    m_ActionSpec:
-      m_NumContinuousActions: 0
-      BranchSizes: 07000000
-    VectorActionSize: 07000000
-    VectorActionDescriptions: []
-    VectorActionSpaceType: 0
-    hasUpgradedBrainParametersWithActionSpec: 1
-  m_Model: {fileID: 0}
-  m_InferenceDevice: 0
-  m_BehaviorType: 0
-  m_BehaviorName: MLAgent
-  TeamId: 0
-  m_UseChildSensors: 1
-  m_UseChildActuators: 1
-  m_ObservableAttributeHandling: 0
---- !u!114 &3290563539998519019
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 665206022672713961}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0035f1d2c479d694f9c9c249b9da9ac5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  agentParameters:
-    maxStep: 0
-  hasUpgradedFromAgentParameters: 1
-  MaxStep: 0
---- !u!114 &420166012920626638
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 665206022672713961}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d849f6e832f97f49f97081c7d38ce2e1, type: 3}
+  m_Script: {fileID: 11500000, guid: 77a0fc9fbe32a147482dcb1a04ac0960, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   connectedObjects:
@@ -333,15 +285,7 @@ MonoBehaviour:
   - {fileID: 5426440510606533654}
   lineRenderer: {fileID: 7171977854619541312, guid: c5f5a07b8c399fd4783b291e500bcf9a, type: 3}
   UIPanel: {fileID: 0}
-  obs: {fileID: 7042442394090395149}
-  train: 1
-  optimizeSetup: 1
-  optimizeTime: 1
-  optimizeOccupation: 1
-  observeResources: 1
-  observeSetup: 1
-  _strategy: {fileID: 0}
-  actionstackSize: 10
+  _strategy: {fileID: 11400000, guid: 7a9ff594114dafd4384d42972aa2bfd6, type: 2}
 --- !u!1 &778407566543121285
 GameObject:
   m_ObjectHideFlags: 0
@@ -713,7 +657,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   connectedObjects:
-  - {fileID: 420166012920626638}
+  - {fileID: 1357720334881000313}
   lineRenderer: {fileID: 7171977854619541312, guid: c5f5a07b8c399fd4783b291e500bcf9a, type: 3}
   UIPanel: {fileID: 5328805637804562312, guid: 1dee23f17dae4924492ce7b65c84d20d, type: 3}
   capacity: 5
@@ -2039,7 +1983,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   iterations: 125
   epochs: 0
-  experimentTemplate: {fileID: 11400000, guid: b23dce0ddc6e9424282584eb392cbbe2, type: 2}
+  experimentTemplate: {fileID: 11400000, guid: 376338410fb7de3408d564580bdf6a29, type: 2}
   experimentSuccessful: 0
   observationSpace:
   - {fileID: 7042442394090395149}
@@ -2668,7 +2612,7 @@ PrefabInstance:
     - target: {fileID: 3698676927356203186, guid: d561281c0ae9ab846bec2125b25c75fa, type: 3}
       propertyPath: 'connectedObjects.Array.data[0]'
       value: 
-      objectReference: {fileID: 420166012920626638}
+      objectReference: {fileID: 1357720334881000313}
     - target: {fileID: 3698676927356203186, guid: d561281c0ae9ab846bec2125b25c75fa, type: 3}
       propertyPath: 'connectedObjects.Array.data[1]'
       value: 
