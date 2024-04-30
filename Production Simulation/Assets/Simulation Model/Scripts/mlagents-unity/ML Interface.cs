@@ -44,6 +44,8 @@ public class MLInterface : Agent
         rlAgent.SetActions(actions.DiscreteActions);
     }
 
-
-
+    public override void Heuristic(in ActionBuffers actionsOut)
+    {
+        rlAgent.UseStrategy(actionsOut);
+    }
 }
