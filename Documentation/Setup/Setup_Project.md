@@ -3,7 +3,7 @@
 ![img_1.png](img_1.png)
 - Install version 2023.2.15![img_4.png](img_4.png)
 
-##  Install Anaconda 
+##  Install Anaconda (version : 24.3.0)
 Download link -> [https://www.anaconda.com/download](https://www.anaconda.com/download)
 ## Clone the Unity_Event_Production repository
 ```sh
