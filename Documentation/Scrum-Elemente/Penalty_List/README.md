@@ -1,9 +1,9 @@
 # AI_production_enhancement
 
-Malte: ||||
+Malte: ||||||
 
-Timo: ||||
+Timo: ||||||
 
-Marcel: |
+Marcel: |||
 
-Niklas: ||||
+Niklas: ||||||
