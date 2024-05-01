@@ -41,6 +41,7 @@ public class RLAgent : BaseAgent
     public Drain obs;
 
     //Training settings
+    [Header("Training Settings")]
     public bool train = true;
     public bool optimizeSetup = true;
     public bool optimizeTime = true;
@@ -49,6 +50,10 @@ public class RLAgent : BaseAgent
     public bool observeResources = true;
     public bool observeSetup = true;
 
+    [Header("Action Space Settings")]
+    public bool allowOptionalAction = true;
+
+    [Header("Strategy")]
     // The strategy that the agent uses
     [SerializeField] protected Strategy _strategy;
     MLInterface mlAgent;
@@ -64,6 +69,8 @@ public class RLAgent : BaseAgent
     /// will recieve "fake" steps to train the penalty of these.
     /// </summary>
     [SerializeField] private int actionstackSize = 10;
+    public int episodeLength = 10;
+    private int currentEpisode = 0;
 
     //Need to store the actions by storing the simulation state -> We can request the decisions again, if they match, we penalize them, if not, no reward/penalty
     private List<ActionStorage> actionBuffer;
@@ -126,17 +133,21 @@ public class RLAgent : BaseAgent
                 }
                 else
                 {
-                    mlAgent.AddReward(0.3f);
+                    if(allowOptionalAction)
+                        mlAgent.AddReward(0.2f);
+                        
 
-                    if (c == d)
+                    if (c == d || !allowOptionalAction)
                     {
                         if (train)
                             Debug.LogWarning("<color=yellow>None false</color>");
-                        mlAgent.AddReward(-1.0f);
+                        mlAgent.AddReward(-2.0f);
                         GetComponentInParent<ExperimentManager>().StopExperiment();
+                        GetComponentInParent<AgentManager>().EndEpisode();
                         ResetBuffer();
                     }
-                }              
+                }
+                //GetComponentInParent<AgentManager>().EndEpisode();
                 //mlAgent.EndEpisode();
             }
             else if (m_info[output].valid && m_info[output].ready)
@@ -146,7 +157,7 @@ public class RLAgent : BaseAgent
                 Module decisionM = m_info[output].module.GetComponent<Module>();
                 if (train)
                     Debug.Log("Valid action selected");
-                mlAgent.AddReward(0.8f);
+                mlAgent.AddReward(0.3f);
 
 
                 //SPECIAL REWARDS FOR SPECIAL NEEDS
@@ -166,44 +177,50 @@ public class RLAgent : BaseAgent
                         //Setup
                         if (caller.GetComponent<Module>().ResourceSetupBlueprint(m_info[output].product))
                         {
-                            mlAgent.AddReward(0.2f);
+                            mlAgent.AddReward(1.0f);
                             //Debug.LogWarning("Bonus");
                         }
                         else
                         {
-                            mlAgent.AddReward(-0.3f);
+                            mlAgent.AddReward(-1.0f);
                         }
                     }
                     else
                     {
                         if (m_info[output].module.GetComponent<Module>().ResourceSetupBlueprint(caller.GetComponent<Module>().GetProduct()))
                         {
-                            mlAgent.AddReward(0.2f);
+                            mlAgent.AddReward(1.0f);
                             //Debug.LogWarning("Bonus");
                         }
                         else
                         {
-                            mlAgent.AddReward(-0.3f);
+                            mlAgent.AddReward(-1.0f);
                         }
                     }
                 }
 
                 //mlAgent.EndEpisode();
-                GetComponentInParent<AgentManager>().EndEpisode();
+                //GetComponentInParent<AgentManager>().EndEpisode();
                 return m_info[output].module;
             }
             else
             {
                 // give penalty for invalid action
                 if (train)
-                    Debug.LogWarning("<color=blue>Invalid action selected.</color>");
+                {
+                    if(caller.GetComponent<Module>().GetProduct()!=null)
+                        Debug.LogWarning("<color=blue>Invalid action selected. </color>" + caller.name + " " + caller.GetComponent<Module>().GetProduct().name);
+                    else
+                        Debug.LogWarning("<color=blue>Invalid action selected. </color>" + caller.name + " null");
+                }
 
 
                 // add penalty
-                mlAgent.AddReward(-1.0f);
+                mlAgent.AddReward(-2.0f);
                 //mlAgent.EndEpisode();
                 ResetBuffer();
                 GetComponentInParent<ExperimentManager>().StopExperiment();
+                GetComponentInParent<AgentManager>().EndEpisode();
             }
         }
         else
@@ -211,7 +228,16 @@ public class RLAgent : BaseAgent
             if (train)
                 Debug.LogWarning("No actions received");
         }
-        GetComponentInParent<AgentManager>().EndEpisode();
+        //GetComponentInParent<AgentManager>().EndEpisode();
+        /*if(currentEpisode == episodeLength)
+        {
+            currentEpisode = 0;
+            mlAgent.EndEpisode();
+        }
+        else
+        {
+            currentEpisode++;
+        }*/
         return null;
     }
 
@@ -239,32 +265,28 @@ public class RLAgent : BaseAgent
         foreach (ModuleInformation info in m_info)
         {
             sensor.AddObservation(info.valid && info.ready);
+            //Used for the CA
+            if (info.valid && info.ready) inputs.Add(1);
+            else inputs.Add(0);
 
             float resourceObservation = 0f;
-
-            if(!info.ready)
-            {           
-                if(info.setup!=null)
-                {
-                    if (info.setup.product.r_name == "BlueMU")
+            if (observeResources)
+            {
+                if (!info.ready)
+                {           
+                    if(info.setup!=null)
                     {
-                        resourceObservation = 1f;
-                    }
-                    else
-                    {
-                        resourceObservation = -1f;
+                        if (info.setup.product.r_name == "BlueMU")
+                        {
+                            resourceObservation = 1f;
+                        }
+                        else
+                        {
+                            resourceObservation = -1f;
+                        }
                     }
                 }
-            }
-
-            if (observeResources) 
-            {
                 sensor.AddObservation(resourceObservation);
-
-
-                //Used for the CA
-                if (info.valid && info.ready) inputs.Add(1);
-                else inputs.Add(0);
                 inputs.Add(resourceObservation);
             }
 
@@ -292,17 +314,23 @@ public class RLAgent : BaseAgent
             actionBuffer.Add(new ActionStorage(inputs));
     }
 
+    public void ApplyFinishReward()
+    {
+        float rew = obs.absoluteDrain/GetComponentInParent<TimeManager>().time * 100.0f;
+        mlAgent.AddReward(rew);
+        mlAgent.EndEpisode();
+    }
 
 
     public void ApplyDeadlockPenalty()
     {
         if (train)
             Debug.LogWarning("<color=red>Deadlock detected!</color>");
-
+        mlAgent.AddReward(-100.0f);
         mlAgent.EndEpisode();
 
         //We have to perform backtracking injection
-        Inject(actionstackSize, -1.0f);
+        //Inject(actionstackSize, -1.0f);
         //After, reset the action buffer as the episode concludes
         ResetBuffer();
     }
@@ -336,21 +364,17 @@ public class RLAgent : BaseAgent
             try
             {
                 //0 cant be a problem for a deadlock (REPLACE LATER WITH IGNORE LIST
-                if (output == 0)
+                /*if (output == 0)
                 {
                     i--;
                     continue;
-                }
+                }*/
 
                 //Without penalizing 0, the penalties can be more aggressive
                 if(actionBuffer[currentAction].GetOutput() == output)
                 {
                     Debug.Log("Injection learned!");
                     mlAgent.AddReward(reward);
-                }
-                else
-                {
-                    mlAgent.AddReward(-0.01f);
                 }
             }
             catch (Exception e)
