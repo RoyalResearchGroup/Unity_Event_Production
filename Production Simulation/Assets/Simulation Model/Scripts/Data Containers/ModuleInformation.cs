@@ -27,12 +27,6 @@ public class ModuleInformation
     /// <summary>
     /// Needs Module type y, State s, Product resource type p, list of accepted input resources i, Setup Blueprint u, Process time list t.
     /// </summary>
-    /// <param name="y"></param>
-    /// <param name="s"></param>
-    /// <param name="p"></param>
-    /// <param name="i"></param>
-    /// <param name="u"></param>
-    /// <param name="t"></param>
     public ModuleInformation(TYPE y, STATE s, Resource p, List<Resource> i, Blueprint u, List<float> t, List<Blueprint> b, LimitedQueue<ResourceObject> rB)
     {
         type = y;

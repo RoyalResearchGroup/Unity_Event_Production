@@ -69,14 +69,12 @@ public class ExperimentManager : MonoBehaviour
         {
             Debug.LogWarning("Iteration completed!");
             BroadcastMessage("ApplyFinishReward");
-            //GetComponent<AgentManager>().EndEpisode();
             StopExperiment();
         }
     }
 
     public void ResetScene()
     {
-        //BroadcastMessage("CallbackIllegalAction");
         BroadcastMessage("ResetModule");
     }
 }

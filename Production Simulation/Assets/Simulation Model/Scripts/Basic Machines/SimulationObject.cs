@@ -21,6 +21,9 @@ public enum TYPE
     DRAIN
 }
 
+/// <summary>
+/// The base class for all Objects that are part of the simulation.
+/// </summary>
 public abstract class SimulationObject : MonoBehaviour
 {
     // A list of modules this one is connected to

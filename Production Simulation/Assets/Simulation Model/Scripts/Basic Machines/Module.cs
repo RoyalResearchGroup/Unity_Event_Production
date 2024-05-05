@@ -13,6 +13,9 @@ using Random = UnityEngine.Random;
 using UnityEngine.EventSystems;
 
 
+/// <summary>
+/// The Base class for all modules: Drain, Station, etc.
+/// </summary>
 public abstract class Module : SimulationObject
 {
     protected LimitedQueue<ResourceObject> resourceBuffer;
@@ -38,7 +41,7 @@ public abstract class Module : SimulationObject
     //__________________________________________________________________________
     //Update here: Update and event handling
     /// <summary>
-    /// IMPORTANT NOTE: We do this in the LateUpdate as the EventCallback is called in the update method. This means we can check possibly queued events in our local event queue for their state.
+    /// IMPORTANT NOTE: We do this in the NotifyEventBatch as the EventCallback is called in the update method. This means we can check possibly queued events in our local event queue for their state.
     /// </summary>
     public virtual void NotifyEventBatch()
     {
@@ -163,10 +166,7 @@ public abstract class Module : SimulationObject
 
     private void reportInacceptibleAgent()
     {
-
-        //throw new InvalidDataException("Agent chose a module which is unable to accept the resource!");
-
-        // Application.Quit();
+        //Nothing here yet.
     }
 
     //A scheduled event was performed, do the action (callback by the event system).
@@ -188,16 +188,19 @@ public abstract class Module : SimulationObject
         d_event = true;
     }
 
+    //Add a resource to the buffer
     public void AddResource(ResourceObject o)
     {
         resourceBuffer.Enqueue(o);
     }
 
+    //Get the resource buffer
     public LimitedQueue<ResourceObject> GetResourceBuffer()
     {
         return resourceBuffer;
     }
 
+    //Get all currently accepted resources and output resource (e.g. product), implemented by every module.
     public abstract List<Resource> GetAcceptedResources();
     public abstract Resource GetOutputResource();
 

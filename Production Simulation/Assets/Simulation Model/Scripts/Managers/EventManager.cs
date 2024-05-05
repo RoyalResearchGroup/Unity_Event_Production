@@ -30,8 +30,6 @@ public class EventManager : MonoBehaviour
 
     private bool experimentRunning = false;
 
-    private bool prevLocked = false;
-
 
     private void Start()
     {
@@ -44,7 +42,7 @@ public class EventManager : MonoBehaviour
         if (!experimentRunning) return;
 
 
-        /*stepCounter++;
+        stepCounter++;
         if (stepCounter > 1/simSpeed)
         {
             stepCounter = 0;
@@ -53,14 +51,13 @@ public class EventManager : MonoBehaviour
         {
             return;
         }
-        int counter = 0;*/
-        //while(counter < batchSize)
-        //{
+
+        int counter = 0;
+        while(counter < batchSize)
+        {
             //Here, we process the first event in the list
             if (m_events.PeekEvent() != null)
             {
-                //DEBUG
-                //Debug.Log(m_events.PrintEvents());
                 //Pop the first event
                 Event m_event = m_events.PopEvent();
                 //Notify the module it was dispatched from (generally just a state change)
@@ -73,24 +70,17 @@ public class EventManager : MonoBehaviour
                 m_timeManager.ProgressTime(m_event.m_executionTime);
 
 
-                //Some modules have to be notified that the event was processed (eg source, drain)
+                //Some modules have to be notified that the event was processed (eg source, station)
                 BroadcastMessage("NotifyEventBatch");
-
-                //check for deadlocks if running. If not, the agent is currently trying to find a decision!
-                /*if(experimentRunning)
-                {
-                    if (CheckDeadlock())
-                    {
-                        break;
-                    }
-                }
-                counter++;*/
+                counter++;
             }
             else
             {
+                //check for deadlocks if running. If not, the agent is currently trying to find a decision!
                 CheckDeadlock();
+                counter = batchSize;
             }
-        //}
+        }
 
     }
 
@@ -124,6 +114,7 @@ public class EventManager : MonoBehaviour
         stepCounter = 0;
         experimentRunning = false;
     }
+
     //Function to add an event to the manager from the modules
     public void EnqueueEvent(Event r_event)
     {
