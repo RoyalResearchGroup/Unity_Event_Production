@@ -31,8 +31,8 @@ public class Strategy01 : Strategy
     {
         Dictionary<string, GameObject> ready_options = new Dictionary<string, GameObject>();
         Dictionary<string, GameObject> all_options = new Dictionary<string, GameObject>();
-        List<string> successorNames = new List<string> { "MachineYB 1", "MachineYB 2", "MachineY", "MachineB" };
-        List<string> predecessorNames = new List<string> { "BufferY", "BufferB" };
+        List<string> successorNames = new List<string> { "Station 1", "Station 2", "Station 3", "Station 4" };
+        List<string> predecessorNames = new List<string> { "Buffer 1", "Buffer 2" };
 
         GameObject target = null;
 
