@@ -16,7 +16,8 @@ public class Drain : Module
 
     public override bool IsInputReady(Resource r)
     {
-        if(allowedResources.Contains(r)) return true;
+        if (r == null) return false;
+        if (allowedResources.Contains(r)) return true;
         return false;   
     }
 
@@ -90,5 +91,15 @@ public class Drain : Module
     public override void ResetModule()
     {
         absoluteDrain = 0;  
+    }
+
+    public override bool ResourceSetupBlueprint(Resource resource)
+    {
+        return true;    
+    }
+
+    public override Resource GetProduct()
+    {
+        return null;
     }
 }

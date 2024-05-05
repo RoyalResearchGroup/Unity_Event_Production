@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
+/// <summary>
+/// Not part of the manager layer, goes on the canvas
+/// </summary>
 public class UIManager : MonoBehaviour
 {
     public GameObject canvas;

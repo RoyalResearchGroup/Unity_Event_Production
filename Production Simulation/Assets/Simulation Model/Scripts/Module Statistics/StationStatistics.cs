@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
+/// <summary>
+/// Statistic extension component for the Station
+/// </summary>
 [RequireComponent(typeof(Station))]
 public class StationStatistics : Statistics
 {
@@ -27,10 +30,13 @@ public class StationStatistics : Statistics
     {
         if (!useStatistics) return;
         var currentInputBuffer = GetComponent<Module>().GetResourceBuffer();
+
         // Aggregate resources from the current input buffer for comparison.
         var res = currentInputBuffer
+            .Where(ro => ro.Resource != null)
             .GroupBy(ro => ro.Resource)
             .ToDictionary(group => group.Key, group => group.Count());
+
 
         foreach ( var kvp in res)
         {
@@ -72,5 +78,11 @@ public class StationStatistics : Statistics
         machineUsage = Vector4.zero;
         aggregatedResources.Clear();
         resourceSum = 0;
+    }
+
+    public override void notifyStatisticsManager()
+    {
+        StatisticsManager statisticsManager = GetComponentInParent<StatisticsManager>();
+        statisticsManager.addStationStatistics(GetComponent<Module>(), machineUsage);
     }
 }

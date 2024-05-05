@@ -3,17 +3,58 @@ using System.Collections.Generic;
 using UnityEngine;
 using Unity.MLAgents;
 using System;
+using System.Linq;
 using Unity.MLAgents.Sensors;
 using Unity.MLAgents.Actuators;
 using System.Runtime.CompilerServices;
+
+
+[System.Serializable]
+public class ActionStorage
+{
+    private List<float> input;
+    private int output;
+
+    public ActionStorage(List<float> input)
+    {
+        this.input = input;
+    }
+
+    public void SetOutput(int _output)
+    {
+        output = _output;
+    }
+    public int GetOutput()
+    {
+        return output;
+    }
+
+    public List<float> GetInput()
+    {
+        return input;
+    }
+}
+
 
 [RequireComponent(typeof(MLInterface))]
 public class RLAgent : BaseAgent
 {
     public Drain obs;
 
-    private int maxDrain = 0;
+    //Training settings
+    [Header("Training Settings")]
+    public bool train = true;
+    public bool optimizeSetup = true;
+    public bool optimizeTime = true;
+    public bool optimizeOccupation = true;
     
+    public bool observeResources = true;
+    public bool observeSetup = true;
+
+    [Header("Action Space Settings")]
+    public bool allowOptionalAction = true;
+
+    [Header("Strategy")]
     // The strategy that the agent uses
     [SerializeField] protected Strategy _strategy;
     MLInterface mlAgent;
@@ -22,19 +63,30 @@ public class RLAgent : BaseAgent
     bool callerInFront;
 
     ActionSegment<int> discreteActions;
-    bool actionsReceived = false;
+
+    /// <summary>
+    /// This is brutally stupid but the only workarround.
+    /// The RL agent will keep track of a specified number of last actions. if a deadlock occurs, the python backend 
+    /// will recieve "fake" steps to train the penalty of these.
+    /// </summary>
+    [SerializeField] private int actionstackSize = 10;
+    public int episodeLength = 10;
+    private int currentEpisode = 0;
+
+    //Need to store the actions by storing the simulation state -> We can request the decisions again, if they match, we penalize them, if not, no reward/penalty
+    private List<ActionStorage> actionBuffer;
+    private bool inject = false;
+    private int currentAction = -1;
+
 
     public override void Start()
     {
         base.Start();
         mlAgent = GetComponent<MLInterface>();
         e_manager = GetComponentInParent<EventManager>();
-    }
 
-    /*public void NotifyEventBatch()
-    {
-        Academy.Instance.EnvironmentStep();
-    }*/
+        actionBuffer = new List<ActionStorage>();
+    }
 
     public override Module DetermineAction(GameObject caller, bool callerInFront)
     {
@@ -45,212 +97,322 @@ public class RLAgent : BaseAgent
 
     protected override GameObject Decide(GameObject caller, List<ModuleInformation> m_info, bool callerInFront)
     {
-        /*if (_strategy == null)
-        {
-            // we call this civil disobedience
-            Debug.LogWarning("No strategy selected. Will do nothing...");
-            return null;
-        }
-
-        return _strategy.act(caller, m_info);*/
-
-        //Debug.Log("Observations: " + inputs.Count);
-        //bf.AppendObservation(inputs.ToArray());
-        e_manager.Pause(true);
-        //Academy.Instance.EnvironmentStep();
-        // Wait for the actions to be received using a coroutine
-        StartCoroutine(WaitForActions());
-        //WaitForActions();
-
-        return null;
-    }
-
-    
-    // Implement WaitForActions coroutine
-    IEnumerator WaitForActions()
-    {
         mlAgent.RequestDecision();
         Academy.Instance.EnvironmentStep();
 
-        while (!actionsReceived)
-        {
-            yield return new WaitForEndOfFrame();
-        }
-
         if (discreteActions.Length > 0)
         {
-            /*string outputString = "Continuous Actions: ";
-            foreach (var action in discreteActions)
-            {
-                outputString += action + " ";
-            }
-            Debug.Log("Action: " + outputString);*/
-            
             var output = discreteActions[0];
-            //Debug.Log("Action: " + output);
-
-            //mlAgent.AddReward(0.1f);
+            if (!inject && train)
+            {
+                currentAction = actionBuffer.Count - 1;
+                actionBuffer[currentAction].SetOutput(output);
+            }
 
             if (output == m_info.Count)
             {
                 // no module selected (do nothing)
-                Debug.Log("Do nothing...");
+                if (train)
+                    Debug.Log("Do nothing...");
 
                 //Get the number of currently working machines
                 int c = 0;
                 int d = 0;
-                foreach(ModuleInformation m in m_info)
+                foreach (ModuleInformation m in m_info)
                 {
-                    if(m.valid && m.ready)
+                    if (m.valid && m.ready)
                     {
                         c++;
                     }
                     if (m.valid) d++;
                 }
-                if(c == 0)
+                if (c == 0)
                 {
-                    mlAgent.AddReward(4.0f); //+ decStep*0.2f);
-                    Debug.Log("None perfected!");
-                    //mlAgent.EndEpisode();
+                    mlAgent.AddReward(1.0f);
+                    if(train)
+                        Debug.Log("None perfected!");
                 }
                 else
                 {
-                    mlAgent.AddReward(1.1f * d - 1f * c);
-                    //mlAgent.AddReward(obs.absoluteDrain * 0.5f);
+                    if(allowOptionalAction)
+                        mlAgent.AddReward(0.2f);
+                        
 
-                    if (c == d)
+                    if (c == d || !allowOptionalAction)
                     {
-                        mlAgent.AddReward(-15.0f - 0.2f * obs.absoluteDrain);
-                        //mlAgent.AddReward(obs.absoluteDrain * 0.3f);
+                        if (train)
+                            Debug.LogWarning("<color=yellow>None false</color>");
+                        mlAgent.AddReward(-2.0f);
                         GetComponentInParent<ExperimentManager>().StopExperiment();
-                        mlAgent.EndEpisode();
+                        GetComponentInParent<AgentManager>().EndEpisode();
+                        ResetBuffer();
                     }
-                    //mlAgent.EndEpisode();
                 }
-                //mlAgent.AddReward(0.0f);
-                e_manager.Pause(false);
+                //GetComponentInParent<AgentManager>().EndEpisode();
+                //mlAgent.EndEpisode();
             }
             else if (m_info[output].valid && m_info[output].ready)
             {
                 // valid action received, return the corresponding module
-                //return m_info[output].module;
                 Module callerM = caller.GetComponent<Module>();
                 Module decisionM = m_info[output].module.GetComponent<Module>();
-                Debug.Log("Valid action selected");
-                mlAgent.AddReward(0.5f); // + decStep * 0.2f);
+                if (train)
+                    Debug.Log("Valid action selected");
+                mlAgent.AddReward(0.3f);
+
+
+                //SPECIAL REWARDS FOR SPECIAL NEEDS
+                //______________________________________________________________
+                //Reward the agent for choosing diverse machines
+
+
+                //Reward agent for choosing machines that are setup for the resource in question
+
+
+                //Reward agent for choosing a machine that is fast
+
+                if (optimizeSetup)
+                {
+                    if (callerInFront)
+                    {
+                        //Setup
+                        if (caller.GetComponent<Module>().ResourceSetupBlueprint(m_info[output].product))
+                        {
+                            mlAgent.AddReward(1.0f);
+                            //Debug.LogWarning("Bonus");
+                        }
+                        else
+                        {
+                            mlAgent.AddReward(-1.0f);
+                        }
+                    }
+                    else
+                    {
+                        if (m_info[output].module.GetComponent<Module>().ResourceSetupBlueprint(caller.GetComponent<Module>().GetProduct()))
+                        {
+                            mlAgent.AddReward(1.0f);
+                            //Debug.LogWarning("Bonus");
+                        }
+                        else
+                        {
+                            mlAgent.AddReward(-1.0f);
+                        }
+                    }
+                }
+
                 //mlAgent.EndEpisode();
-
-                //Academy step here - Update might call the agent again!
-                //Academy.Instance.EnvironmentStep();
-
-                if (callerInFront)
-                {
-                    // maybe the caller could not be ready to get input (if it is dogshit)
-                    decisionM.UpdateCTRL(callerM);
-                    //decisionM.MoveToModule(callerM);
-                }
-                else
-                {
-                    callerM.UpdateCTRL(decisionM);
-                    //callerM.MoveToModule(decisionM);
-                }
-
-                //e_manager.CheckDeadlock();
-
-                e_manager.Pause(false);
+                //GetComponentInParent<AgentManager>().EndEpisode();
+                return m_info[output].module;
             }
             else
             {
                 // give penalty for invalid action
-                Debug.LogWarning("Invalid action selected.");
-
-                /*string str = "Observations: ";
-                foreach (var module in m_info)
+                if (train)
                 {
-                    str += (module.valid && module.ready) + " ";                    
+                    if(caller.GetComponent<Module>().GetProduct()!=null)
+                        Debug.LogWarning("<color=blue>Invalid action selected. </color>" + caller.name + " " + caller.GetComponent<Module>().GetProduct().name);
+                    else
+                        Debug.LogWarning("<color=blue>Invalid action selected. </color>" + caller.name + " null");
                 }
-                // give penalty for invalid action
-                Debug.LogWarning(str);*/
 
 
                 // add penalty
-                mlAgent.AddReward(-10.0f - 0.2f * obs.absoluteDrain);
-                //mlAgent.AddReward(obs.absoluteDrain * 0.2f);
-                //mlAgent.AddReward(obs.absoluteDrain * 0.5f);
-                mlAgent.EndEpisode();
+                mlAgent.AddReward(-2.0f);
+                //mlAgent.EndEpisode();
+                ResetBuffer();
                 GetComponentInParent<ExperimentManager>().StopExperiment();
+                GetComponentInParent<AgentManager>().EndEpisode();
             }
         }
         else
         {
-            Debug.LogWarning("No actions received");
-            e_manager.Pause(false);
+            if (train)
+                Debug.LogWarning("No actions received");
         }
-
-        // Reset the flag for the next decision
-        actionsReceived = false;
-        //e_manager.Pause(false);
-        //Academy.Instance.EnvironmentStep();
+        //GetComponentInParent<AgentManager>().EndEpisode();
+        /*if(currentEpisode == episodeLength)
+        {
+            currentEpisode = 0;
+            mlAgent.EndEpisode();
+        }
+        else
+        {
+            currentEpisode++;
+        }*/
+        return null;
     }
-    
+
+    public void NotifyEndEpisode()
+    {
+        mlAgent.EndEpisode();
+    }
 
     public void CollectObservations(VectorSensor sensor)
     {
+        //INJECTOR: Enables us to add fake inputs overriding the environments inputs
+        if (inject && train)
+        {
+            //The input now is the input saved in the action buffer
+            foreach (var i in actionBuffer[currentAction].GetInput()) 
+            {
+                sensor.AddObservation(i);
+            }
+            return;
+        }
+
+        //REGULAR: Fill the observations as well as create a new actionStorage object in the action buffer
         List<float> inputs = new List<float>();
 
-
-        //Blueprint priming
-        Dictionary<Blueprint, int> b_dict = new Dictionary<Blueprint, int>();
-
-        //string str = "OBS: ";
         foreach (ModuleInformation info in m_info)
         {
-            //Take the first valid option
-            switch (info.type)
+            sensor.AddObservation(info.valid && info.ready);
+            //Used for the CA
+            if (info.valid && info.ready) inputs.Add(1);
+            else inputs.Add(0);
+
+            float resourceObservation = 0f;
+            if (observeResources)
             {
-                /*case TYPE.SOURCE:
-                    break;
-                case TYPE.BUFFER:
-                    
-                    break;
-                case TYPE.STATION:
-                    
-                    break;
-                case TYPE.DRAIN:
-                    
-                    break;*/
-                default:
-                    //float inp = System.Convert.ToSingle(info.valid && info.ready);
-                    sensor.AddObservation(info.valid && info.ready);
-                    //str += info.valid && info.ready;
-                    break;
+                if (!info.ready)
+                {           
+                    if(info.setup!=null)
+                    {
+                        if (info.setup.product.r_name == "BlueMU")
+                        {
+                            resourceObservation = 1f;
+                        }
+                        else
+                        {
+                            resourceObservation = -1f;
+                        }
+                    }
+                }
+                sensor.AddObservation(resourceObservation);
+                inputs.Add(resourceObservation);
+            }
+
+            if (observeSetup)
+            {
+                if (callerInFront)
+                {
+                    bool obsv = caller.GetComponent<Module>().ResourceSetupBlueprint(info.product);
+                    sensor.AddObservation(obsv);
+                    if (obsv) inputs.Add(1);
+                    else inputs.Add(0);
+                }
+                else
+                {
+                    bool obsv = info.module.GetComponent<Module>().ResourceSetupBlueprint(caller.GetComponent<Module>().GetProduct());
+                    sensor.AddObservation(obsv);
+                    if (obsv) inputs.Add(1);
+                    else inputs.Add(0);
+                }
             }
         }
-        sensor.AddObservation(callerInFront);
-        //Debug.Log(str);
+
+        //Add a new Action to the buffer
+        if(train)
+            actionBuffer.Add(new ActionStorage(inputs));
+    }
+
+    public void ApplyFinishReward()
+    {
+        float rew = obs.absoluteDrain/GetComponentInParent<TimeManager>().time * 100.0f;
+        mlAgent.AddReward(rew);
+        mlAgent.EndEpisode();
+    }
+    
+    public void UseStrategy(in ActionBuffers actionOut)
+    {
+        GameObject decision = _strategy.act(caller, m_info, callerInFront);
+        var actions = actionOut.DiscreteActions;
+        if (predecessors.Contains(decision))
+        {
+            actions[0] = predecessors.IndexOf(decision);
+        }
+        else if (successors.Contains(decision))
+        {
+            actions[0] = successors.IndexOf(decision) + predecessors.Count;
+        }
+        else if (decision == null)
+        {
+            actions[0] = successors.Count + predecessors.Count;
+        }
+        //Debug.Log("Action: " + actions[0]);
+
+        //actionsReceived = true;
     }
 
     public void ApplyDeadlockPenalty()
     {
-        //Not too high, we dont want a random decision to be penalized
-        mlAgent.AddReward(-10.0f);
-        //mlAgent.AddReward(obs.absoluteDrain * 0.5f);
-        Debug.LogWarning("Deadlock detected!");
-        if(maxDrain < obs.absoluteDrain )
-        {
-            //mlAgent.AddReward(obs.absoluteDrain * 0.5f);
-            maxDrain = obs.absoluteDrain;
-        }
+        if (train)
+            Debug.LogWarning("<color=red>Deadlock detected!</color>");
+        mlAgent.AddReward(-100.0f);
         mlAgent.EndEpisode();
 
-
+        //We have to perform backtracking injection
+        //Inject(actionstackSize, -1.0f);
+        //After, reset the action buffer as the episode concludes
+        ResetBuffer();
     }
 
 
     public void SetActions(ActionSegment<int> acts)
     {
         discreteActions = acts;
-        actionsReceived = true;
+    }
+
+
+    //Backtracking Injection
+    public void Inject(int size, float reward)
+    {
+        //Debug.Log("<color=green> INJECTION!</color>");
+
+        if (currentAction < 0 || !train)
+        {
+            return;
+        }
+
+        inject = true;
+        //Perform the injection for the last <size> decisions
+        for(int i = 0; i < size; i++)
+        {
+            mlAgent.RequestDecision();
+            Academy.Instance.EnvironmentStep();
+            var output = discreteActions[0];
+
+            //Only do if the entry exists
+            try
+            {
+                //0 cant be a problem for a deadlock (REPLACE LATER WITH IGNORE LIST
+                /*if (output == 0)
+                {
+                    i--;
+                    continue;
+                }*/
+
+                //Without penalizing 0, the penalties can be more aggressive
+                if(actionBuffer[currentAction].GetOutput() == output)
+                {
+                    Debug.Log("Injection learned!");
+                    mlAgent.AddReward(reward);
+                }
+            }
+            catch (Exception e)
+            {
+                //Catchy catchy Marcel is edgy
+                break;
+            }
+        }
+        //End the injection episode
+        inject = false;
+        mlAgent.EndEpisode();
+    }
+
+    public void ResetBuffer()
+    {
+        actionBuffer.Clear();
+        currentAction = -1;
     }
 
 }

@@ -35,6 +35,7 @@ public class Buffer : Module
 
     public override bool IsInputReady(Resource r)
     {
+        if(r == null) return false;
         //Input always possible when space
         if (resourceBuffer.Count < resourceBuffer.Limit && allowedResources.Contains(r)) return true;
         return false;
@@ -153,5 +154,17 @@ public class Buffer : Module
         resourceBuffer.Clear();
         absoluteFill = 0;
         DetermineState ();
+    }
+
+    public override bool ResourceSetupBlueprint(Resource resource)
+    {
+        return true;
+    }
+
+    public override Resource GetProduct()
+    {
+        if(resourceBuffer.Count > 0)
+            return resourceBuffer.Peek().Resource;
+        else return null;
     }
 }

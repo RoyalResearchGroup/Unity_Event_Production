@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
+/// <summary>
+/// Statistic extension component for the Buffer
+/// </summary>
 public class BufferStatistics : Statistics
 {
     public float averageFill;
@@ -24,7 +27,6 @@ public class BufferStatistics : Statistics
         }
         else
         {
-            //Debug.Log(simObject.gameObject.GetComponent<Buffer>().GetRBufferFillDEBUG());
             bufferFill.Add(GetComponent<Buffer>().GetRBufferFillDEBUG(), t_manager.deltaTime);
         }
 
@@ -55,5 +57,11 @@ public class BufferStatistics : Statistics
         resourceSum = 0;
         aggregatedResources.Clear();
         bufferFill.Clear();
+    }
+
+    public override void notifyStatisticsManager()
+    {
+        StatisticsManager statisticsManager = GetComponentInParent<StatisticsManager>();
+        statisticsManager.addBufferStatistics(GetComponent<Module>(), averageFill);
     }
 }

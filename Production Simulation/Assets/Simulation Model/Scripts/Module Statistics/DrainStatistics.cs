@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using XCharts.Runtime;
 
+/// <summary>
+/// Statistic extension component for the Drain
+/// </summary>
 [RequireComponent(typeof(Drain))]
 public class DrainStatistics : Statistics
 {
@@ -20,5 +23,11 @@ public class DrainStatistics : Statistics
     {
         drainRate = 0;
         timePerProduct = 0;   
+    }
+
+    public override void notifyStatisticsManager()
+    {
+        StatisticsManager statisticsManager = GetComponentInParent<StatisticsManager>();
+        statisticsManager.addDrainStatistics(GetComponent<Module>(), drainRate, timePerProduct);
     }
 }
