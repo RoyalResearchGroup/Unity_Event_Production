@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Unity.MLAgents;
 using System;
+using System.Linq;
 using Unity.MLAgents.Sensors;
 using Unity.MLAgents.Actuators;
 using System.Runtime.CompilerServices;
@@ -292,7 +293,26 @@ public class RLAgent : BaseAgent
             actionBuffer.Add(new ActionStorage(inputs));
     }
 
+    public void UseStrategy(in ActionBuffers actionOut)
+    {
+        GameObject decision = _strategy.act(caller, m_info, callerInFront);
+        var actions = actionOut.DiscreteActions;
+        if (predecessors.Contains(decision))
+        {
+            actions[0] = predecessors.IndexOf(decision);
+        }
+        else if (successors.Contains(decision))
+        {
+            actions[0] = successors.IndexOf(decision) + predecessors.Count;
+        }
+        else if (decision == null)
+        {
+            actions[0] = successors.Count + predecessors.Count;
+        }
+        //Debug.Log("Action: " + actions[0]);
 
+        //actionsReceived = true;
+    }
 
     public void ApplyDeadlockPenalty()
     {
