@@ -10,7 +10,7 @@ public class RateExperiment : Experiment
     public override bool EvaluateState(ExperimentManager man, List<Module> observations)
     {
         //avg rate
-        float rate = 0;
+        /*float rate = 0;
         int drainCount = 0;
         foreach (Module m in observations)
         {
@@ -28,7 +28,7 @@ public class RateExperiment : Experiment
         if(rate >= targetRate)
         {
             return true;
-        }
+        }*/
         return false;
     }
 }

@@ -68,6 +68,8 @@ public class ExperimentManager : MonoBehaviour
         if(experiment.EvaluateState(this, observationSpace))
         {
             Debug.LogWarning("Iteration completed!");
+            BroadcastMessage("ApplyFinishReward");
+            //GetComponent<AgentManager>().EndEpisode();
             StopExperiment();
         }
     }

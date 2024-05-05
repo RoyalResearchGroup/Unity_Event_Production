@@ -312,7 +312,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   connectedObjects:
-  - {fileID: 1233434404}
+  - {fileID: 1648459137}
   lineRenderer: {fileID: 7171977854619541312, guid: c5f5a07b8c399fd4783b291e500bcf9a, type: 3}
   UIPanel: {fileID: 5328805637804562312, guid: 6295448bb40fd9449a312d564c0e37c4, type: 3}
 --- !u!212 &97882785
@@ -420,6 +420,50 @@ SphereCollider:
   serializedVersion: 3
   m_Radius: 0.32
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!1 &108950210
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 108950212}
+  - component: {fileID: 108950211}
+  m_Layer: 0
+  m_Name: Automation
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &108950211
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 108950210}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6020cc4f62be43abbf7f6ac758ae2b90, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!4 &108950212
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 108950210}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 6.55945, y: 1.7463022, z: -0.029813968}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &217692337
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -637,8 +681,8 @@ MonoBehaviour:
   lineRenderer: {fileID: 7171977854619541312, guid: c5f5a07b8c399fd4783b291e500bcf9a, type: 3}
   UIPanel: {fileID: 0}
   parameters:
-  - 12
-  - 3
+  - 0.6
+  - 0.3
   - 0
   creationType: {fileID: 11400000, guid: b1729ac1cd965ad42aefb8d768c3faeb, type: 2}
   distribution: 1
@@ -1380,7 +1424,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   connectedObjects:
-  - {fileID: 1233434404}
+  - {fileID: 1648459137}
   lineRenderer: {fileID: 7171977854619541312, guid: c5f5a07b8c399fd4783b291e500bcf9a, type: 3}
   UIPanel: {fileID: 5328805637804562312, guid: 6295448bb40fd9449a312d564c0e37c4, type: 3}
 --- !u!212 &732677000
@@ -1841,7 +1885,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1233434403
 Transform:
   m_ObjectHideFlags: 0
@@ -1875,14 +1919,16 @@ MonoBehaviour:
   lineRenderer: {fileID: 7171977854619541312, guid: c5f5a07b8c399fd4783b291e500bcf9a, type: 3}
   UIPanel: {fileID: 0}
   obs: {fileID: 1668069853}
-  train: 1
+  train: 0
   optimizeSetup: 0
   optimizeTime: 0
   optimizeOccupation: 0
   observeResources: 0
   observeSetup: 0
+  allowOptionalAction: 0
   _strategy: {fileID: 0}
-  actionstackSize: 3
+  actionstackSize: 1
+  episodeLength: 10
 --- !u!114 &1233434405
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1921,11 +1967,11 @@ MonoBehaviour:
     VectorActionDescriptions: []
     VectorActionSpaceType: 0
     hasUpgradedBrainParametersWithActionSpec: 1
-  m_Model: {fileID: 0}
-  m_InferenceDevice: 0
-  m_BehaviorType: 0
+  m_Model: {fileID: 5022602860645237092, guid: 212955b9ddb3ce84f8f6e7ed3ce53782, type: 3}
+  m_InferenceDevice: 1
+  m_BehaviorType: 2
   m_BehaviorName: MLAgent2
-  TeamId: 1
+  TeamId: 0
   m_UseChildSensors: 1
   m_UseChildActuators: 1
   m_ObservableAttributeHandling: 0
@@ -2080,6 +2126,7 @@ GameObject:
   - component: {fileID: 1311707037}
   - component: {fileID: 1311707038}
   - component: {fileID: 1311707039}
+  - component: {fileID: 1311707040}
   m_Layer: 0
   m_Name: ExperimentInstance
   m_TagString: EventManager
@@ -2172,9 +2219,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7343d801948627948b878c68e989b0e5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  iterations: 100
+  iterations: 1000000
   epochs: 0
-  experimentTemplate: {fileID: 11400000, guid: 376338410fb7de3408d564580bdf6a29, type: 2}
+  experimentTemplate: {fileID: 11400000, guid: b23dce0ddc6e9424282584eb392cbbe2, type: 2}
+  experimentSuccessful: 0
   observationSpace:
   - {fileID: 1668069853}
 --- !u!114 &1311707039
@@ -2189,6 +2237,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8a04690502954ce4baf739c44280b1b7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &1311707040
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1311707033}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 63847acc1584d1e4e976087cd0de5a8e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  directory: Dick
 --- !u!4 &1462354049 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 5252317540498491593, guid: d561281c0ae9ab846bec2125b25c75fa, type: 3}
@@ -2410,7 +2471,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   connectedObjects:
-  - {fileID: 1233434404}
+  - {fileID: 1648459137}
   lineRenderer: {fileID: 7171977854619541312, guid: c5f5a07b8c399fd4783b291e500bcf9a, type: 3}
   UIPanel: {fileID: 5328805637804562312, guid: 6295448bb40fd9449a312d564c0e37c4, type: 3}
 --- !u!212 &1590549970
@@ -2672,7 +2733,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &1648459136
 Transform:
   m_ObjectHideFlags: 0
@@ -2682,7 +2743,7 @@ Transform:
   m_GameObject: {fileID: 1648459135}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.26, y: -0.96, z: 3.509168}
+  m_LocalPosition: {x: 0.26, y: -0.86, z: 3.509168}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -2856,7 +2917,7 @@ MonoBehaviour:
   - {fileID: 1590549969}
   lineRenderer: {fileID: 7171977854619541312, guid: c5f5a07b8c399fd4783b291e500bcf9a, type: 3}
   UIPanel: {fileID: 0}
-  _strategy: {fileID: 11400000, guid: 465e76c10d9018744a0c3722f93a437c, type: 2}
+  _strategy: {fileID: 11400000, guid: 81eaf726e943f3e43aab7a9f8a6a1782, type: 2}
 --- !u!212 &1667689573
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -3499,14 +3560,16 @@ MonoBehaviour:
   lineRenderer: {fileID: 7171977854619541312, guid: c5f5a07b8c399fd4783b291e500bcf9a, type: 3}
   UIPanel: {fileID: 0}
   obs: {fileID: 1668069853}
-  train: 0
+  train: 1
   optimizeSetup: 1
   optimizeTime: 1
   optimizeOccupation: 1
   observeResources: 1
   observeSetup: 1
+  allowOptionalAction: 1
   _strategy: {fileID: 0}
   actionstackSize: 3
+  episodeLength: 1000000
 --- !u!114 &2028906113
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3545,9 +3608,9 @@ MonoBehaviour:
     VectorActionDescriptions: []
     VectorActionSpaceType: 0
     hasUpgradedBrainParametersWithActionSpec: 1
-  m_Model: {fileID: 5022602860645237092, guid: 3f699814d1bf95949a0f46160264ed9a, type: 3}
-  m_InferenceDevice: 1
-  m_BehaviorType: 2
+  m_Model: {fileID: 0}
+  m_InferenceDevice: 0
+  m_BehaviorType: 0
   m_BehaviorName: MLAgent
   TeamId: 0
   m_UseChildSensors: 1
@@ -3954,7 +4017,7 @@ PrefabInstance:
     - target: {fileID: 4174982596692924601, guid: d3c38f4475499064083b28af2330bfef, type: 3}
       propertyPath: 'connectedObjects.Array.data[0]'
       value: 
-      objectReference: {fileID: 1233434404}
+      objectReference: {fileID: 1648459137}
     - target: {fileID: 5865962122886976372, guid: d3c38f4475499064083b28af2330bfef, type: 3}
       propertyPath: blueprints.Array.size
       value: 2
@@ -3981,4 +4044,5 @@ SceneRoots:
   m_Roots:
   - {fileID: 519420032}
   - {fileID: 1943620002}
+  - {fileID: 108950212}
   - {fileID: 1311707034}
