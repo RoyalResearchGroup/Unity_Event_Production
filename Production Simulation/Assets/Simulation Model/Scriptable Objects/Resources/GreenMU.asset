@@ -13,4 +13,4 @@ MonoBehaviour:
   m_Name: GreenMU
   m_EditorClassIdentifier: 
   r_name: greenMU
-  r_color: {r: 0, g: 0, b: 0, a: 0}
+  r_color: {r: 0, g: 1, b: 0.0804081, a: 1}

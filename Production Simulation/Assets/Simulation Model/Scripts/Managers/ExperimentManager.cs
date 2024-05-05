@@ -1,8 +1,10 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using Random = UnityEngine.Random;
 
 public class ExperimentManager : MonoBehaviour
 {
@@ -13,6 +15,7 @@ public class ExperimentManager : MonoBehaviour
     public Experiment experimentTemplate;
 
     private Experiment experiment;
+    public bool experimentSuccessful = false;
 
     public List<Module> observationSpace;
 
@@ -24,6 +27,7 @@ public class ExperimentManager : MonoBehaviour
     //UI
     public void StartExperiment()
     {
+        Random.InitState((int)Random.Range(0f, 1000f));
         running = true;
         experiment = Instantiate(experimentTemplate);
         GetComponent<EventManager>().StartExperiment();
@@ -31,13 +35,13 @@ public class ExperimentManager : MonoBehaviour
 
     public void StopExperiment()
     {
-        GetComponent<StatisticsManager>().extractStatistics();
+        GetComponent<StatisticsManager>().extractStatistics(experimentSuccessful);
         running = false;
         iterationCount++;
         if (iterationCount >= iterations)
         {
             GetComponent<StatisticsManager>().exportStatistics();
-            Debug.Log("<color=green>Experiment succeeded!</color>");
+            Debug.Log("<color=green>Experiments succeeded!</color>");
         }
         GetComponent<EventManager>().StopExperiment();
         ResetScene();
@@ -64,13 +68,13 @@ public class ExperimentManager : MonoBehaviour
         if(experiment.EvaluateState(this, observationSpace))
         {
             Debug.LogWarning("Iteration completed!");
+            BroadcastMessage("ApplyFinishReward");
             StopExperiment();
         }
     }
 
     public void ResetScene()
     {
-        //BroadcastMessage("CallbackIllegalAction");
         BroadcastMessage("ResetModule");
     }
 }

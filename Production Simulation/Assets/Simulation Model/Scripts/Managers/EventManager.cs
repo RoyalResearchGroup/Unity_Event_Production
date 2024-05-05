@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 
 /// <summary>
@@ -50,14 +51,13 @@ public class EventManager : MonoBehaviour
         {
             return;
         }
+
         int counter = 0;
         while(counter < batchSize)
         {
             //Here, we process the first event in the list
             if (m_events.PeekEvent() != null)
             {
-                //DEBUG
-                //Debug.Log(m_events.PrintEvents());
                 //Pop the first event
                 Event m_event = m_events.PopEvent();
                 //Notify the module it was dispatched from (generally just a state change)
@@ -70,13 +70,15 @@ public class EventManager : MonoBehaviour
                 m_timeManager.ProgressTime(m_event.m_executionTime);
 
 
-                //Some modules have to be notified that the event was processed (eg source, drain)
+                //Some modules have to be notified that the event was processed (eg source, station)
                 BroadcastMessage("NotifyEventBatch");
-                if(experimentRunning && CheckDeadlock())
-                {
-                    break;
-                }
                 counter++;
+            }
+            else
+            {
+                //check for deadlocks if running. If not, the agent is currently trying to find a decision!
+                CheckDeadlock();
+                counter = batchSize;
             }
         }
 
@@ -93,13 +95,13 @@ public class EventManager : MonoBehaviour
             // then the simulation model is faulty.
 
             // We assume that the agent is responsible for this deadlock.
-            Debug.Log("Deadlock occurred!");
             BroadcastMessage("ApplyDeadlockPenalty");
             GetComponent<ExperimentManager>().StopExperiment();
             return true;
         }
         return false;
     }
+    
 
     public void StartExperiment()
     {
@@ -112,6 +114,7 @@ public class EventManager : MonoBehaviour
         stepCounter = 0;
         experimentRunning = false;
     }
+
     //Function to add an event to the manager from the modules
     public void EnqueueEvent(Event r_event)
     {

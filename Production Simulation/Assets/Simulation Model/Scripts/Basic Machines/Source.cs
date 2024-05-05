@@ -92,9 +92,11 @@ public class Source : Module
         base.Start();
         //init resource buffer with one slot
         resourceBuffer = new LimitedQueue<ResourceObject>(1);
+        DispatchEvent();
+        DetermineState();
     }
 
-    public void LateUpdate()
+    public void Update()
     {
         //If the buffer is not full
         if (resourceBuffer.Count < resourceBuffer.Limit && GetSTATE() != STATE.OCCUPIED)
@@ -146,7 +148,7 @@ public class Source : Module
             {
                 //Determine state before leaving (likely blocked)
                 DetermineState();
-                return;
+                break;
             }
 
             //Otherwise, we can move the resource
@@ -220,7 +222,15 @@ public class Source : Module
         DetermineState();
     }
 
+    public override bool ResourceSetupBlueprint(Resource resource)
+    {
+        return true;
+    }
 
+    public override Resource GetProduct()
+    {
+        return resourceBuffer.Peek().Resource;
+    }
 
     [CustomEditor(typeof(Source))]
     [Serializable]

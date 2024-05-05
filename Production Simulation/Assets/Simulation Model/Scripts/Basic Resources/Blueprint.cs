@@ -16,7 +16,7 @@ public class Blueprint : ScriptableObject
     public float setupTime;
     [SerializeField] private Distribution distribution = Distribution.Linear;
 
-    
+    //Stochastic: random creation of the processing time everytime when called
     public float DistributedProcessingTime()
     {
         switch (distribution)

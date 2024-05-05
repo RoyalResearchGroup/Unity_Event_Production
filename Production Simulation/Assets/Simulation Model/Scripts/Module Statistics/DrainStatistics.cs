@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using XCharts.Runtime;
 
+/// <summary>
+/// Statistic extension component for the Drain
+/// </summary>
 [RequireComponent(typeof(Drain))]
 public class DrainStatistics : Statistics
 {

@@ -16,7 +16,7 @@ public class Station : Module
 
 
     //DEBUG/STATS: Save the ratio of SETUP time to occupation time if setup is needed
-    //[HideInInspector]
+    [HideInInspector]
     public float setupRatio { get; set; } = 0f;
 
 
@@ -79,7 +79,7 @@ public class Station : Module
         //Enqueue the event
         e_manager.EnqueueEvent(new Event(time, this, EVENTTYPE.PROCESS));
         //DEBUG:
-        GetComponent<SpriteRenderer>().color = Color.yellow;
+        GetComponent<SpriteRenderer>().color = setupBlueprint.product.r_color; //Color.yellow;
     }
 
 
@@ -188,6 +188,7 @@ public class Station : Module
         }
     }
 
+    //Move a resource to a module.
     public override void MoveToModule(Module module)
     {
         ResourceObject res = product;
@@ -200,7 +201,7 @@ public class Station : Module
     public override bool IsInputReady(Resource r)
     {
         //This module is input ready if r matches at least one allowed resource and the machine is currently not producing anything and theres space in the resource buffer
-        if(allowedResources.Contains(r) && !d_event && resourceBuffer.Count < resourceBuffer.Limit)
+        if(allowedResources.Contains(r) && !d_event && resourceBuffer.Count < resourceBuffer.Limit && r!=null)
         {
             return true;
         }
@@ -211,13 +212,14 @@ public class Station : Module
     {
         //This module is output ready if there a product that matches a resource in the list and it is not producing anything atm (null if no product -> no match)
 
-        if(r.Contains(product.Resource) && !d_event)
+        if(r.Contains(product.Resource) && !d_event && product.Resource != null)
         {
             return true;
         }
         return false;
     }
 
+    //Returns the aggregated information package about this modules state
     public override ModuleInformation GetModuleInformation()
     {
         Resource peek = null;
@@ -242,7 +244,6 @@ public class Station : Module
     public override void ResetModule()
     {
         base.ResetModule();
-        //Debug.Log("RESET");
         resourceBuffer.Clear();
         product.Resource = null;
         b_manager.UpdateAllowedResourcesAndBlueprints(resourceBuffer);
@@ -251,5 +252,26 @@ public class Station : Module
         setupBlueprint = null;
         GetComponent<SpriteRenderer>().color = Color.white;
         DetermineState();
+    }
+
+    //Helper to determine if inputing a given resource will change the validity of the currently setup blueprint
+    public override bool ResourceSetupBlueprint(Resource resource)
+    {
+        if(resource == null)
+            return false;
+
+        if (GetComponent<BlueprintManager>().CanAddResourceToCompleteBlueprint(setupBlueprint, resourceBuffer, resource))
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+    public override Resource GetProduct()
+    {
+        return product.Resource;
     }
 }

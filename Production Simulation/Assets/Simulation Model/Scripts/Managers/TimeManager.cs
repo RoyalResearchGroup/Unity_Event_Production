@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
+/// <summary>
+/// Very simple, manages the simulation time
+/// </summary>
 public class TimeManager : MonoBehaviour
 {
     public float time {  get; set; }

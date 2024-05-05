@@ -12,6 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2001d2c2b3b3a744dba5bec2a36d8d6d, type: 3}
   m_Name: time100
   m_EditorClassIdentifier: 
-  expectedDate: 120
-  expectedAmount: 10
+  expectedDate: 240
+  expectedAmount: 20
   achievedDate: 0
