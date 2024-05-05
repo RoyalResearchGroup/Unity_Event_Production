@@ -249,13 +249,13 @@ Transform:
   m_GameObject: {fileID: 519420028}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1.88, y: 1.19, z: -273.7}
+  m_LocalPosition: {x: 1.33, y: 1, z: -273.7}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1001 &693434322
+--- !u!1001 &1937382279
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
@@ -263,26 +263,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 6736007995144191816, guid: e062e40e5825d3045ac59b5a792f3cfa, type: 3}
-      propertyPath: m_Model
-      value: 
-      objectReference: {fileID: 5022602860645237092, guid: 74f939efca01d4d4c8b8e18c4b4df9bc, type: 3}
-    - target: {fileID: 6736007995144191816, guid: e062e40e5825d3045ac59b5a792f3cfa, type: 3}
-      propertyPath: m_BehaviorType
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 6736007995144191816, guid: e062e40e5825d3045ac59b5a792f3cfa, type: 3}
-      propertyPath: m_InferenceDevice
-      value: 2
+    - target: {fileID: 918917215879833793, guid: e062e40e5825d3045ac59b5a792f3cfa, type: 3}
+      propertyPath: directory
+      value: RLAgent
       objectReference: {fileID: 0}
     - target: {fileID: 7976108947488722992, guid: e062e40e5825d3045ac59b5a792f3cfa, type: 3}
       propertyPath: iterations
       value: 1000
       objectReference: {fileID: 0}
-    - target: {fileID: 7976108947488722992, guid: e062e40e5825d3045ac59b5a792f3cfa, type: 3}
-      propertyPath: experimentTemplate
-      value: 
-      objectReference: {fileID: 11400000, guid: 376338410fb7de3408d564580bdf6a29, type: 2}
     - target: {fileID: 8367721313932236555, guid: e062e40e5825d3045ac59b5a792f3cfa, type: 3}
       propertyPath: m_LocalPosition.x
       value: 2.8318956
@@ -407,4 +395,4 @@ SceneRoots:
   - {fileID: 519420032}
   - {fileID: 1943620002}
   - {fileID: 296854645}
-  - {fileID: 693434322}
+  - {fileID: 1937382279}

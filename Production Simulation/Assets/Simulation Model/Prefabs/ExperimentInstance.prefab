@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 698794869412647657}
   - component: {fileID: 8644122174594247766}
   m_Layer: 0
-  m_Name: Assembler
+  m_Name: Montagestation
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -167,9 +167,9 @@ GameObject:
   - component: {fileID: 1453504531646061333}
   - component: {fileID: 8866997036552463771}
   - component: {fileID: 563838420421737554}
-  - component: {fileID: 6736007995144191816}
-  - component: {fileID: 3290563539998519019}
-  - component: {fileID: 420166012920626638}
+  - component: {fileID: 8487330763115352116}
+  - component: {fileID: 6257304300192847003}
+  - component: {fileID: 9007930676492061533}
   m_Layer: 0
   m_Name: Agent
   m_TagString: Untagged
@@ -268,7 +268,7 @@ SphereCollider:
   serializedVersion: 3
   m_Radius: 0.32
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &6736007995144191816
+--- !u!114 &8487330763115352116
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -290,15 +290,15 @@ MonoBehaviour:
     VectorActionDescriptions: []
     VectorActionSpaceType: 0
     hasUpgradedBrainParametersWithActionSpec: 1
-  m_Model: {fileID: 0}
-  m_InferenceDevice: 0
-  m_BehaviorType: 0
-  m_BehaviorName: MLAgent
+  m_Model: {fileID: 5022602860645237092, guid: 40c0ec13742c3994e81d2c368d940510, type: 3}
+  m_InferenceDevice: 2
+  m_BehaviorType: 2
+  m_BehaviorName: My Behavior
   TeamId: 0
   m_UseChildSensors: 1
   m_UseChildActuators: 1
   m_ObservableAttributeHandling: 0
---- !u!114 &3290563539998519019
+--- !u!114 &6257304300192847003
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -314,7 +314,7 @@ MonoBehaviour:
     maxStep: 0
   hasUpgradedFromAgentParameters: 1
   MaxStep: 0
---- !u!114 &420166012920626638
+--- !u!114 &9007930676492061533
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -491,7 +491,7 @@ GameObject:
   - component: {fileID: 7897127753490537903}
   - component: {fileID: 7196047790920719233}
   m_Layer: 0
-  m_Name: SourceY
+  m_Name: Quelle 1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -624,7 +624,7 @@ GameObject:
   - component: {fileID: 2096847293875152851}
   - component: {fileID: 6176119186404487959}
   m_Layer: 0
-  m_Name: BufferY
+  m_Name: Buffer 1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -713,7 +713,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   connectedObjects:
-  - {fileID: 420166012920626638}
+  - {fileID: 9007930676492061533}
   lineRenderer: {fileID: 7171977854619541312, guid: c5f5a07b8c399fd4783b291e500bcf9a, type: 3}
   UIPanel: {fileID: 5328805637804562312, guid: 1dee23f17dae4924492ce7b65c84d20d, type: 3}
   capacity: 5
@@ -925,7 +925,7 @@ GameObject:
   - component: {fileID: 5406487463421109435}
   - component: {fileID: 1613425511468663190}
   m_Layer: 0
-  m_Name: MachineYB 2
+  m_Name: Station 2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1634,7 +1634,7 @@ GameObject:
   - component: {fileID: 974012507035184965}
   - component: {fileID: 4223454798482987752}
   m_Layer: 0
-  m_Name: MachineY
+  m_Name: Station 3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1791,7 +1791,7 @@ GameObject:
   - component: {fileID: 6620181386747222492}
   - component: {fileID: 7760602991937265399}
   m_Layer: 0
-  m_Name: MachineB
+  m_Name: Station 4
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2039,7 +2039,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   iterations: 125
   epochs: 0
-  experimentTemplate: {fileID: 11400000, guid: b23dce0ddc6e9424282584eb392cbbe2, type: 2}
+  experimentTemplate: {fileID: 11400000, guid: 376338410fb7de3408d564580bdf6a29, type: 2}
   experimentSuccessful: 0
   observationSpace:
   - {fileID: 7042442394090395149}
@@ -2180,7 +2180,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2685061118968960323, guid: d3c38f4475499064083b28af2330bfef, type: 3}
       propertyPath: m_Name
-      value: MachineYB 1
+      value: Station 1
       objectReference: {fileID: 0}
     - target: {fileID: 4174982596692924601, guid: d3c38f4475499064083b28af2330bfef, type: 3}
       propertyPath: UIPanel
@@ -2326,7 +2326,7 @@ PrefabInstance:
       objectReference: {fileID: 11400000, guid: b9049b531c9906742bedc505b3d4bc77, type: 2}
     - target: {fileID: 8894204040613140974, guid: 3281a09b4e9056642a4db69721821af4, type: 3}
       propertyPath: m_Name
-      value: Drain
+      value: Ablage
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -2584,7 +2584,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4813677220037439527, guid: ae7a0aa567654ea4c87fad5fbfd43994, type: 3}
       propertyPath: m_Name
-      value: SourceB
+      value: Quelle 2
       objectReference: {fileID: 0}
     - target: {fileID: 6226823094064752126, guid: ae7a0aa567654ea4c87fad5fbfd43994, type: 3}
       propertyPath: m_Color.b
@@ -2647,7 +2647,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1242813428143798357, guid: d561281c0ae9ab846bec2125b25c75fa, type: 3}
       propertyPath: m_Name
-      value: BufferB
+      value: Buffer 2
       objectReference: {fileID: 0}
     - target: {fileID: 3698676927356203186, guid: d561281c0ae9ab846bec2125b25c75fa, type: 3}
       propertyPath: UIPanel
@@ -2668,7 +2668,7 @@ PrefabInstance:
     - target: {fileID: 3698676927356203186, guid: d561281c0ae9ab846bec2125b25c75fa, type: 3}
       propertyPath: 'connectedObjects.Array.data[0]'
       value: 
-      objectReference: {fileID: 420166012920626638}
+      objectReference: {fileID: 9007930676492061533}
     - target: {fileID: 3698676927356203186, guid: d561281c0ae9ab846bec2125b25c75fa, type: 3}
       propertyPath: 'connectedObjects.Array.data[1]'
       value: 
