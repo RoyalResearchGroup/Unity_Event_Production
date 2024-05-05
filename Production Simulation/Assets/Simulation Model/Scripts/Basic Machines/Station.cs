@@ -79,7 +79,7 @@ public class Station : Module
         //Enqueue the event
         e_manager.EnqueueEvent(new Event(time, this, EVENTTYPE.PROCESS));
         //DEBUG:
-        GetComponent<SpriteRenderer>().color = Color.yellow;
+        GetComponent<SpriteRenderer>().color = setupBlueprint.product.r_color; //Color.yellow;
     }
 
 
